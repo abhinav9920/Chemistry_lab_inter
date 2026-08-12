@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heat, Work & Energy Transfer | Telangana Intermediate Chemistry</title>
+<style>
+:root{
+  --bg:#f5f7fb; --panel:#ffffff; --ink:#172033; --muted:#667085;
+  --line:#d9deea; --accent:#2457d6; --accent2:#0f9d75; --warn:#c77700;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+header{padding:18px 24px;background:#fff;border-bottom:1px solid var(--line)}
+h1{margin:0;font-size:clamp(22px,3vw,34px)}
+.subtitle{color:var(--muted);margin-top:6px;font-size:15px}
+main{max-width:1300px;margin:auto;padding:18px;display:grid;grid-template-columns:1.35fr .85fr;gap:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 4px 16px rgba(20,30,55,.05)}
+.card h2{font-size:20px;margin:0 0 14px}
+.lab{min-height:520px;display:flex;flex-direction:column}
+.scene{position:relative;flex:1;min-height:390px;background:linear-gradient(#eef7ff,#f8fbff);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.wall{position:absolute;left:12%;right:12%;bottom:14%;height:11px;background:#687386;border-radius:5px}
+.cylinder{position:absolute;left:22%;right:22%;bottom:16%;height:60%;border:5px solid #7c879a;border-bottom-width:10px;border-radius:12px 12px 3px 3px;background:rgba(255,255,255,.35);overflow:hidden}
+.gas{position:absolute;left:5%;right:5%;bottom:0;height:62%;background:rgba(36,87,214,.08);border-radius:8px 8px 0 0}
+.piston{position:absolute;left:0;right:0;bottom:58%;height:18px;background:#4b5568;border-radius:5px;transition:bottom .15s ease}
+.rod{position:absolute;left:50%;transform:translateX(-50%);bottom:78%;width:10px;height:17%;background:#4b5568;border-radius:5px}
+.weight{position:absolute;left:50%;transform:translateX(-50%);bottom:93%;background:#4b5568;color:#fff;padding:7px 12px;border-radius:7px;font-size:13px;white-space:nowrap}
+.flame{position:absolute;left:7%;bottom:17%;font-size:52px;opacity:.15;transition:.2s}
+.arrow{position:absolute;font-size:14px;font-weight:bold}
+.heatArrow{left:9%;bottom:33%;color:#c77700}
+.workArrow{right:7%;bottom:52%;color:#2457d6}
+.particle{position:absolute;width:8px;height:8px;border-radius:50%;background:#2457d6;opacity:.82}
+.controls label{display:block;margin:14px 0 6px;font-weight:700}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.value{font-variant-numeric:tabular-nums;font-weight:700}
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.metric{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fbfcff}
+.metric .name{font-size:12px;color:var(--muted)}
+.metric .num{font-size:22px;font-weight:800;margin-top:3px}
+.explain{margin-top:14px;padding:13px;border-radius:12px;background:#f0f5ff;border:1px solid #cdd9fb;line-height:1.45}
+button{border:0;border-radius:10px;padding:11px 14px;font-weight:700;cursor:pointer;background:var(--accent);color:white}
+button.secondary{background:#eef1f7;color:var(--ink)}
+.buttons{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.challenge{margin-top:16px;border-left:5px solid var(--accent2);padding:12px 14px;background:#f2fbf7;border-radius:8px;line-height:1.45}
+.challenge strong{display:block;margin-bottom:5px}
+footer{max-width:1300px;margin:0 auto;padding:0 18px 22px;color:var(--muted);font-size:12px}
+@media(max-width:900px){main{grid-template-columns:1fr}.scene{min-height:430px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Heat, Work & Energy Transfer</h1>
+  <div class="subtitle">Telangana Intermediate Chemistry • Thermodynamics • Conceptual interactive simulation</div>
+</header>
+
+<main>
+<section class="card lab">
+  <h2>Explore a gas in a cylinder</h2>
+  <div class="scene" id="scene">
+    <div class="cylinder">
+      <div class="gas" id="gas"></div>
+      <div class="piston" id="piston"></div>
+      <div class="rod"></div>
+      <div class="weight" id="weight">External pressure</div>
+    </div>
+    <div class="wall"></div>
+    <div class="flame" id="flame">🔥</div>
+    <div class="arrow heatArrow">HEAT →</div>
+    <div class="arrow workArrow">WORK →</div>
+  </div>
+</section>
+
+<section class="card controls">
+  <h2>Touch controls</h2>
+
+  <label for="heat">Heat supplied, q</label>
+  <div class="row"><input id="heat" type="range" min="-100" max="200" value="0" step="5"><span class="value" id="heatVal">0 J</span></div>
+
+  <label for="volume">Piston position / volume change, ΔV</label>
+  <div class="row"><input id="volume" type="range" min="-40" max="40" value="0" step="1"><span class="value" id="volVal">0.0 L</span></div>
+
+  <label for="pressure">External pressure</label>
+  <div class="row"><input id="pressure" type="range" min="0.5" max="5" value="1" step="0.1"><span class="value" id="pressureVal">1.0 atm</span></div>
+
+  <div class="metrics">
+    <div class="metric"><div class="name">Heat transferred, q</div><div class="num" id="qMetric">0 J</div></div>
+    <div class="metric"><div class="name">Work, w</div><div class="num" id="wMetric">0 J</div></div>
+    <div class="metric"><div class="name">Energy change, ΔU</div><div class="num" id="uMetric">0 J</div></div>
+    <div class="metric"><div class="name">Conceptual temperature</div><div class="num" id="tMetric">300 K</div></div>
+  </div>
+
+  <div class="explain" id="explain">
+    Start by changing only one control. Ask yourself: <b>Where does the energy go?</b>
+  </div>
+
+  <div class="buttons">
+    <button id="reset">Reset</button>
+    <button class="secondary" id="heatOnly">Try: Heat only</button>
+    <button class="secondary" id="expand">Try: Expansion</button>
+  </div>
+
+  <div class="challenge">
+    <strong>Classroom challenge</strong>
+    Predict first: If heat is supplied while the piston is locked, will the system's internal energy increase? Now test your prediction.
+  </div>
+</section>
+</main>
+
+<footer>
+Conceptual model for classroom discussion. The displayed values are illustrative and are not intended as a substitute for a quantitative thermodynamics calculation.
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const heat = $("heat"), volume = $("volume"), pressure = $("pressure");
+const particles = [];
+const scene = $("scene");
+
+for(let i=0;i<34;i++){
+  const p=document.createElement("div");
+  p.className="particle";
+  scene.appendChild(p);
+  particles.push({el:p,x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.008,vy:(Math.random()-.5)*.008});
+}
+
+function update(){
+  const q=Number(heat.value);
+  const dV=Number(volume.value)/10; // L, illustrative
+  const P=Number(pressure.value);
+  const w=-P*dV*101.325; // J, using L·atm -> J
+  const dU=q+w;
+  const temp=Math.max(120,300+dU*0.18);
+
+  $("heatVal").textContent=q+" J";
+  $("volVal").textContent=dV.toFixed(1)+" L";
+  $("pressureVal").textContent=P.toFixed(1)+" atm";
+  $("qMetric").textContent=Math.round(q)+" J";
+  $("wMetric").textContent=Math.round(w)+" J";
+  $("uMetric").textContent=Math.round(dU)+" J";
+  $("tMetric").textContent=Math.round(temp)+" K";
+
+  // Map volume to piston position. Positive ΔV = piston rises.
+  const pistonBottom=58 + dV*0.65;
+  $("piston").style.bottom=Math.max(35,Math.min(82,pistonBottom))+"%";
+  $("rod").style.bottom=Math.max(55,Math.min(88,pistonBottom+20))+"%";
+  $("weight").style.bottom=Math.max(75,Math.min(99,pistonBottom+35))+"%";
+
+  const intensity=Math.max(.05,Math.min(1,Math.abs(q)/200));
+  $("flame").style.opacity=q>0 ? intensity : .05;
+
+  const speed=Math.max(.35,Math.min(2.5,1+dU/120));
+  particles.forEach(p=>{
+    p.x+=p.vx*speed; p.y+=p.vy*speed;
+    if(p.x<.04||p.x>.96)p.vx*=-1;
+    if(p.y<.10||p.y>.90)p.vy*=-1;
+    p.el.style.left=(22+5+p.x*46)+"%";
+    const bottom=(16+4+p.y*50);
+    p.el.style.bottom=bottom+"%";
+    p.el.style.transform=`scale(${0.75+Math.min(1.4,speed*.35)})`;
+  });
+
+  let text;
+  if(q===0 && Math.abs(dV)<0.01){
+    text="Nothing has been changed yet. Choose one control and observe what happens.";
+  } else if(q!==0 && Math.abs(dV)<0.01){
+    text = q>0
+      ? "Heat enters the system while the piston is fixed. No expansion work is done, so the supplied energy increases the system's internal energy."
+      : "Heat leaves the system while the piston is fixed. With no expansion work, the internal energy decreases.";
+  } else if(q===0 && dV!==0){
+    text = dV>0
+      ? "The gas expands against an external pressure. The system does work on the surroundings, so w is negative in the chemistry sign convention."
+      : "The gas is compressed by the surroundings. Work is done on the system, so w is positive in the chemistry sign convention.";
+  } else {
+    text = "Both heat transfer and work are occurring. The net energy change depends on both contributions: heat entering adds energy, while expansion work removes energy from the system.";
+  }
+  $("explain").innerHTML=text;
+}
+[heat,volume,pressure].forEach(x=>x.addEventListener("input",update));
+$("reset").onclick=()=>{heat.value=0;volume.value=0;pressure.value=1;update()};
+$("heatOnly").onclick=()=>{heat.value=100;volume.value=0;pressure.value=1;update()};
+$("expand").onclick=()=>{heat.value=0;volume.value=25;pressure.value=1;update()};
+update();
+</script>
+</body>
+</html>
