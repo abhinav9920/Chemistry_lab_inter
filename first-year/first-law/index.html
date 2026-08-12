@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>First Law of Thermodynamics</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
+header{background:#fff;padding:18px 22px;border-bottom:1px solid #d8dee9}header a{color:#2457d6;text-decoration:none;font-weight:700}
+main{max-width:1200px;margin:auto;padding:22px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.panel{background:#fff;border:1px solid #d8dee9;border-radius:18px;padding:20px}
+h1{margin:0;font-size:clamp(25px,3vw,38px)}h2{margin-top:0}.control{margin:20px 0}.label{display:flex;justify-content:space-between;font-weight:700;font-size:18px}
+input{width:100%;height:40px;accent-color:#2457d6}.small{color:#667085}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{text-align:center;border:1px solid #d8dee9;border-radius:12px;padding:14px}.num{font-size:27px;font-weight:800;margin-top:5px}
+.system{height:280px;background:#eef3f8;border:2px solid #263246;border-radius:16px;position:relative;overflow:hidden}.cylinder{position:absolute;left:50%;bottom:25px;transform:translateX(-50%);height:210px;width:210px;border:5px solid #263246;border-top:0;border-radius:0 0 18px 18px}.piston{position:absolute;left:50%;transform:translateX(-50%);width:200px;height:18px;background:#4b5563;border-radius:5px;transition:.2s}.gas{position:absolute;left:50%;bottom:35px;transform:translateX(-50%);width:190px;height:165px}.particle{position:absolute;width:8px;height:8px;border-radius:50%;background:#2457d6}.arrow{position:absolute;font-size:42px;font-weight:bold;z-index:2}.heat{left:20px;top:45%}.work{right:20px;top:45%}
+.challenge{margin-top:18px;padding:16px;background:#f8fafc;border:1px dashed #aab5c7;border-radius:14px}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}button{padding:13px 17px;border:0;border-radius:11px;font-size:16px;font-weight:700;cursor:pointer}.primary{background:#2457d6;color:#fff}.secondary{background:#e9eef7}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><a href="../">← Thermodynamics</a></header>
+<main>
+<div class="grid">
+<section class="panel">
+<h1>⚡ First Law of Thermodynamics</h1>
+<p class="small">Explore how heat and work change the internal energy of a system.</p>
+<div class="control"><div class="label"><span>Heat, q</span><span id="qv">+500 J</span></div><input id="q" type="range" min="-1000" max="1000" step="50" value="500"><div class="small">Positive: heat enters • Negative: heat leaves</div></div>
+<div class="control"><div class="label"><span>Work, w</span><span id="wv">−200 J</span></div><input id="w" type="range" min="-1000" max="1000" step="50" value="-200"><div class="small">Negative: system does work • Positive: work is done on system</div></div>
+<div class="metrics"><div class="metric">Heat q<div class="num" id="qm">+500 J</div></div><div class="metric">Work w<div class="num" id="wm">−200 J</div></div><div class="metric">Internal energy ΔU<div class="num" id="um">+300 J</div></div></div>
+<h2 style="margin-top:22px">Energy accounting</h2>
+<p style="font-size:21px;text-align:center;font-weight:800">ΔU = q + w</p>
+<div class="challenge"><b>🎯 Predict first</b><p id="question">A gas absorbs 500 J of heat and does 200 J of work. What is ΔU?</p><button class="secondary" onclick="answer()">Reveal answer</button><p id="ans"></p></div>
+<div class="buttons"><button class="primary" onclick="resetSim()">↺ Reset</button><button class="secondary" onclick="newChallenge()">🎯 New challenge</button></div>
+</section>
+<section class="panel">
+<h2>👀 Watch the system</h2>
+<div class="system"><div class="arrow heat" id="ha">🔥→</div><div class="arrow work" id="wa">→</div><div class="cylinder"></div><div class="gas" id="gas"></div><div class="piston" id="piston"></div></div>
+<p id="caption" class="small" style="text-align:center">Heat enters and the gas does work on the surroundings.</p>
+<h2>What should students notice?</h2>
+<ul><li>Heat and work transfer energy across the system boundary.</li><li>The algebraic signs matter.</li><li>ΔU tells us the net change in the system's internal energy.</li></ul>
+</section>
+</div>
+</main>
+<script>
+const q=document.getElementById('q'),w=document.getElementById('w');
+function f(n){return (n>0?'+':'')+n+' J'}
+function update(){let Q=+q.value,W=+w.value,U=Q+W;
+qv.textContent=f(Q);wv.textContent=f(W);qm.textContent=f(Q);wm.textContent=f(W);um.textContent=f(U);
+piston.style.bottom=(65+W/1000*70)+'px';
+ha.textContent=Q>0?'🔥→':Q<0?'←🔥':'';wa.textContent=W<0?'→':W>0?'←':'';
+caption.textContent=U>0?'The system gains internal energy.':U<0?'The system loses internal energy.':'The system has no net change in internal energy.'}
+q.oninput=w.oninput=update;
+for(let i=0;i<28;i++){let p=document.createElement('i');p.className='particle';p.style.left=Math.random()*92+'%';p.style.top=Math.random()*88+'%';gas.appendChild(p)}
+function resetSim(){q.value=500;w.value=-200;ans.textContent='';question.textContent='A gas absorbs 500 J of heat and does 200 J of work. What is ΔU?';update()}
+let challenges=[[600,-250,'A gas absorbs 600 J and does 250 J of work. What is ΔU?','ΔU = +350 J.'],[400,200,'A system absorbs 400 J while 200 J of work is done on it. What is ΔU?','ΔU = +600 J.'],[-300,-150,'A system releases 300 J and does 150 J of work. What is ΔU?','ΔU = −450 J.'],[500,0,'A system absorbs 500 J and does no work. What is ΔU?','ΔU = +500 J.']];
+let c=0;
+function newChallenge(){c=Math.floor(Math.random()*challenges.length);question.textContent=challenges[c][2];ans.textContent=''}
+function answer(){ans.textContent=challenges[c][3]}
+update();
+</script>
+</body></html>
