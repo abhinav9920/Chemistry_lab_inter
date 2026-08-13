@@ -9,36 +9,41 @@
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
 header{background:#fff;border-bottom:1px solid #d8dee9;padding:16px 20px}
 header a{color:#2457d6;text-decoration:none;font-weight:700}
-main{max-width:1150px;margin:auto;padding:22px 18px 40px}
+main{max-width:1180px;margin:auto;padding:22px 18px 40px}
 .hero,.panel{background:#fff;border:1px solid #d8dee9;border-radius:20px;padding:22px;box-shadow:0 5px 20px rgba(20,30,55,.05)}
 .hero{text-align:center;margin-bottom:18px}
 .hero h1{margin:0;font-size:clamp(30px,5vw,46px)}
 .hero p{color:#667085;margin:8px 0 0}
-.layout{display:grid;grid-template-columns:1.45fr .85fr;gap:18px}
+.layout{display:grid;grid-template-columns:1.35fr .95fr;gap:18px}
 .panel h2{margin:0 0 14px}
-.simbox{border:1px solid #d8dee9;border-radius:15px;background:#fafbfc;position:relative;overflow:hidden;height:480px}
+.simbox{border:1px solid #d8dee9;border-radius:15px;background:#fafbfc;overflow:hidden;height:480px}
 svg{width:100%;height:100%;display:block}
-.controls{display:grid;gap:16px}
+.controls{display:grid;gap:13px}
+.control{padding:12px;border:1px solid #e4e7ec;border-radius:13px}
 label{font-weight:700}
-input[type=range]{width:100%;margin-top:9px}
-.value{font-size:20px;font-weight:800;margin-top:4px}
-button{width:100%;padding:14px;border:0;border-radius:12px;background:#2457d6;color:#fff;font-size:16px;font-weight:800;cursor:pointer;margin-top:9px}
+input[type=range]{width:100%;margin-top:8px}
+.value{font-size:19px;font-weight:800;margin-top:4px}
+.heat{border-left:5px solid #e05a47}.work{border-left:5px solid #2457d6}.energy{border-left:5px solid #2f855a}
+button{width:100%;padding:12px;border:0;border-radius:11px;background:#2457d6;color:#fff;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px}
 button.secondary{background:#eef1f5;color:#172033}
 .status{text-align:center;padding:14px;border-radius:14px;background:#f0f4ff;margin-top:14px}
-.status .big{font-size:25px;font-weight:900}
-.equation{text-align:center;font-size:23px;font-weight:800;margin:15px 0}
+.status .big{font-size:27px;font-weight:900}
+.equation{text-align:center;font-size:23px;font-weight:800;margin:16px 0}
+.example-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.example{background:#f8fafc;border:1px solid #e4e7ec;border-radius:10px;padding:10px;cursor:pointer}
+.example b{display:block;margin-bottom:3px}
 .note{color:#667085;font-size:13px;line-height:1.5}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;margin-top:12px}
-.dot{width:11px;height:11px;border-radius:50%;display:inline-block}
-@media(max-width:800px){.layout{grid-template-columns:1fr}.simbox{height:420px}}
+@media(max-width:850px){.layout{grid-template-columns:1fr}}
+@media(max-width:550px){.example-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header><a href="../">← Thermodynamics</a></header>
+
 <main>
 <section class="hero">
 <h1>⚡ First Law of Thermodynamics</h1>
-<p>Explore how heat, work and internal energy are related.</p>
+<p>Explore the relationship between heat, work and internal energy.</p>
 </section>
 
 <div class="layout">
@@ -51,7 +56,6 @@ button.secondary{background:#eef1f5;color:#172033}
 <rect id="gasRegion" x="205" y="212" width="350" height="208" fill="#e8f1ff" opacity=".85"/>
 <g id="particles"></g>
 
-<!-- Piston: transform moves the entire piston -->
 <g id="piston">
 <rect x="180" y="190" width="400" height="22" rx="4" fill="#667085" stroke="#344054" stroke-width="3"/>
 <rect x="330" y="170" width="100" height="20" rx="5" fill="#667085"/>
@@ -73,42 +77,74 @@ button.secondary{background:#eef1f5;color:#172033}
 <text x="380" y="468" text-anchor="middle" font-size="16" font-weight="700">Gas particles stay below the piston</text>
 </svg>
 </div>
-<div class="legend">
-<span><i class="dot" style="background:#2457d6"></i> Gas particles</span>
-<span>Particles move with the gas volume</span>
-</div>
 </section>
 
 <section class="panel">
-<h2>Control the Work</h2>
-<label for="work">Work, W</label>
+<h2>Control the System</h2>
+
+<div class="control heat">
+<label for="heat">🔥 Heat, q</label>
+<input id="heat" type="range" min="-150" max="150" value="0" step="10">
+<div class="value"><span id="heatVal">0</span> kJ</div>
+</div>
+
+<div class="control work">
+<label for="work">⚡ Work, W</label>
 <input id="work" type="range" min="-100" max="100" value="0" step="10">
 <div class="value"><span id="workVal">0</span> kJ</div>
+</div>
 
 <div class="status" id="status"></div>
 
-<button onclick="setWork(60)">⬇️ Work done ON system (+60 kJ)</button>
-<button onclick="setWork(-60)">⬆️ Work done BY system (−60 kJ)</button>
-<button class="secondary" onclick="setWork(0)">Reset</button>
-
 <div class="equation">ΔU = q + W</div>
 
+<div class="control energy">
+<label>🔋 Internal Energy, ΔU</label>
+<div class="value"><span id="energyVal">0</span> kJ</div>
+</div>
+
+<div class="example-grid">
+<div class="example" onclick="example(100,0)">
+<b>🔥 Heat supplied</b>
+q = +100, W = 0
+</div>
+<div class="example" onclick="example(0,100)">
+<b>⬇️ Compression</b>
+q = 0, W = +100
+</div>
+<div class="example" onclick="example(100,-40)">
+<b>🔥 Expansion + heat</b>
+q = +100, W = −40
+</div>
+<div class="example" onclick="example(-100,-50)">
+<b>❄️ Cooling + expansion</b>
+q = −100, W = −50
+</div>
+<div class="example" onclick="example(100,-100)">
+<b>⚖️ ΔU = 0</b>
+q = +100, W = −100
+</div>
+<div class="example" onclick="example(0,0)">
+<b>↺ Reset</b>
+q = 0, W = 0
+</div>
+</div>
+
 <p class="note">
-<b>Sign convention used here:</b> positive work means work is done <b>on</b> the system,
-so the piston moves downward and the gas is compressed. Negative work means work is done
-<b>by</b> the system, so the piston moves upward and the gas expands.
-</p>
-<p class="note">
-All gas particles are constrained to remain inside the cylinder and below the piston.
-When the piston moves, the particles remain within the changing gas volume.
+<b>Sign convention:</b> positive q means heat is supplied to the system.
+Positive W means work is done on the system, so the piston moves down.
+Negative W means work is done by the system, so the piston moves up.
 </p>
 </section>
 </div>
 </main>
 
 <script>
-const slider=document.getElementById("work");
+const heatSlider=document.getElementById("heat");
+const workSlider=document.getElementById("work");
+const heatVal=document.getElementById("heatVal");
 const workVal=document.getElementById("workVal");
+const energyVal=document.getElementById("energyVal");
 const status=document.getElementById("status");
 const piston=document.getElementById("piston");
 const gasRegion=document.getElementById("gasRegion");
@@ -116,90 +152,65 @@ const particlesGroup=document.getElementById("particles");
 const downArrow=document.getElementById("downArrow");
 const upArrow=document.getElementById("upArrow");
 
-const PISTON_X=180, PISTON_BASE=190, GAS_X=205, GAS_W=350;
-const BOTTOM=413;
+const PISTON_BASE=190,GAS_X=205,GAS_W=350,BOTTOM=413;
 const particles=[];
 
-function rand(a,b){return a+Math.random()*(b-a);}
+function rand(a,b){return a+Math.random()*(b-a)}
 
 for(let i=0;i<36;i++){
-    const el=document.createElementNS("http://www.w3.org/2000/svg","circle");
-    el.setAttribute("r","4.5");
-    el.setAttribute("fill","#2457d6");
-    particlesGroup.appendChild(el);
-    particles.push({
-        el,
-        x:rand(10,GAS_W-10),
-        y:rand(10,200),
-        vx:(Math.random()<.5?-1:1)*rand(.35,1.1),
-        vy:(Math.random()<.5?-1:1)*rand(.35,1.1)
-    });
+ const el=document.createElementNS("http://www.w3.org/2000/svg","circle");
+ el.setAttribute("r","4.5");el.setAttribute("fill","#2457d6");
+ particlesGroup.appendChild(el);
+ particles.push({el,x:rand(10,GAS_W-10),y:rand(10,200),
+ vx:(Math.random()<.5?-1:1)*rand(.35,1.1),
+ vy:(Math.random()<.5?-1:1)*rand(.35,1.1)});
 }
 
 let pistonY=PISTON_BASE;
 
 function particleMotion(){
-    const top=pistonY+29;
-    const bottom=BOTTOM;
-    const left=10, right=GAS_W-10;
-    const height=Math.max(20,bottom-top);
-
-    particles.forEach(p=>{
-        p.x+=p.vx;
-        p.y+=p.vy;
-
-        if(p.x<left){p.x=left;p.vx=Math.abs(p.vx)}
-        if(p.x>right){p.x=right;p.vx=-Math.abs(p.vx)}
-        if(p.y<0){p.y=0;p.vy=Math.abs(p.vy)}
-        if(p.y>height){p.y=height;p.vy=-Math.abs(p.vy)}
-
-        p.el.setAttribute("cx",GAS_X+p.x);
-        p.el.setAttribute("cy",top+p.y);
-    });
-
-    requestAnimationFrame(particleMotion);
+ const top=pistonY+29,height=Math.max(20,BOTTOM-top);
+ particles.forEach(p=>{
+  p.x+=p.vx;p.y+=p.vy;
+  if(p.x<10){p.x=10;p.vx=Math.abs(p.vx)}
+  if(p.x>GAS_W-10){p.x=GAS_W-10;p.vx=-Math.abs(p.vx)}
+  if(p.y<0){p.y=0;p.vy=Math.abs(p.vy)}
+  if(p.y>height){p.y=height;p.vy=-Math.abs(p.vy)}
+  p.el.setAttribute("cx",GAS_X+p.x);
+  p.el.setAttribute("cy",top+p.y);
+ });
+ requestAnimationFrame(particleMotion);
 }
 
 function update(){
-    const W=Number(slider.value);
-    workVal.textContent=W;
+ const q=Number(heatSlider.value),W=Number(workSlider.value),U=q+W;
+ heatVal.textContent=q;workVal.textContent=W;energyVal.textContent=U;
 
-    /* Positive W: compression, piston DOWN.
-       Negative W: expansion, piston UP. */
-    const target =
-        W>0 ? PISTON_BASE + (W/100)*140 :
-        W<0 ? PISTON_BASE + (W/100)*95 :
-        PISTON_BASE;
+ const target=W>0?PISTON_BASE+(W/100)*140:W<0?PISTON_BASE+(W/100)*95:PISTON_BASE;
+ pistonY=target;
+ piston.setAttribute("transform",`translate(0,${pistonY-PISTON_BASE})`);
+ gasRegion.setAttribute("y",pistonY+22);
+ gasRegion.setAttribute("height",Math.max(10,BOTTOM-(pistonY+22)));
 
-    pistonY=target;
-    piston.setAttribute("transform",`translate(0,${pistonY-PISTON_BASE})`);
-
-    gasRegion.setAttribute("y",pistonY+22);
-    gasRegion.setAttribute("height",Math.max(10,BOTTOM-(pistonY+22)));
-
-    if(W>0){
-        status.innerHTML=`<div class="big">W = +${W} kJ</div><div>Work is done <b>ON</b> the system → piston moves down.</div>`;
-        downArrow.setAttribute("opacity","1");
-        upArrow.setAttribute("opacity","0");
-    }else if(W<0){
-        status.innerHTML=`<div class="big">W = ${W} kJ</div><div>Work is done <b>BY</b> the system → piston moves up.</div>`;
-        downArrow.setAttribute("opacity","0");
-        upArrow.setAttribute("opacity","1");
-    }else{
-        status.innerHTML=`<div class="big">W = 0 kJ</div><div>No piston displacement.</div>`;
-        downArrow.setAttribute("opacity","0");
-        upArrow.setAttribute("opacity","0");
-    }
+ if(W>0){
+  status.innerHTML=`<div class="big">W = +${W} kJ</div><div>Work is done <b>ON</b> the system → compression → piston moves down.</div>`;
+  downArrow.setAttribute("opacity","1");upArrow.setAttribute("opacity","0");
+ }else if(W<0){
+  status.innerHTML=`<div class="big">W = ${W} kJ</div><div>Work is done <b>BY</b> the system → expansion → piston moves up.</div>`;
+  downArrow.setAttribute("opacity","0");upArrow.setAttribute("opacity","1");
+ }else{
+  status.innerHTML=`<div class="big">W = 0 kJ</div><div>No piston displacement.</div>`;
+  downArrow.setAttribute("opacity","0");upArrow.setAttribute("opacity","0");
+ }
 }
 
-function setWork(value){
-    slider.value=value;
-    update();
+function example(q,w){
+ heatSlider.value=q;workSlider.value=w;update();
 }
 
-slider.addEventListener("input",update);
-update();
-particleMotion();
+heatSlider.addEventListener("input",update);
+workSlider.addEventListener("input",update);
+update();particleMotion();
 </script>
 </body>
 </html>
