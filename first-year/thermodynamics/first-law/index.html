@@ -1,58 +1,205 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>First Law of Thermodynamics</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Law of Thermodynamics | Interactive Simulation</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
-header{background:#fff;padding:18px 22px;border-bottom:1px solid #d8dee9}header a{color:#2457d6;text-decoration:none;font-weight:700}
-main{max-width:1200px;margin:auto;padding:22px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.panel{background:#fff;border:1px solid #d8dee9;border-radius:18px;padding:20px}
-h1{margin:0;font-size:clamp(25px,3vw,38px)}h2{margin-top:0}.control{margin:20px 0}.label{display:flex;justify-content:space-between;font-weight:700;font-size:18px}
-input{width:100%;height:40px;accent-color:#2457d6}.small{color:#667085}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{text-align:center;border:1px solid #d8dee9;border-radius:12px;padding:14px}.num{font-size:27px;font-weight:800;margin-top:5px}
-.system{height:280px;background:#eef3f8;border:2px solid #263246;border-radius:16px;position:relative;overflow:hidden}.cylinder{position:absolute;left:50%;bottom:25px;transform:translateX(-50%);height:210px;width:210px;border:5px solid #263246;border-top:0;border-radius:0 0 18px 18px}.piston{position:absolute;left:50%;transform:translateX(-50%);width:200px;height:18px;background:#4b5563;border-radius:5px;transition:.2s}.gas{position:absolute;left:50%;bottom:35px;transform:translateX(-50%);width:190px;height:165px}.particle{position:absolute;width:8px;height:8px;border-radius:50%;background:#2457d6}.arrow{position:absolute;font-size:42px;font-weight:bold;z-index:2}.heat{left:20px;top:45%}.work{right:20px;top:45%}
-.challenge{margin-top:18px;padding:16px;background:#f8fafc;border:1px dashed #aab5c7;border-radius:14px}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}button{padding:13px 17px;border:0;border-radius:11px;font-size:16px;font-weight:700;cursor:pointer}.primary{background:#2457d6;color:#fff}.secondary{background:#e9eef7}
-@media(max-width:800px){.grid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
+header{background:#fff;border-bottom:1px solid #d8dee9;padding:16px 20px}
+header a{color:#2457d6;text-decoration:none;font-weight:700}
+main{max-width:1150px;margin:auto;padding:22px 18px 40px}
+.hero,.panel{background:#fff;border:1px solid #d8dee9;border-radius:20px;padding:22px;box-shadow:0 5px 20px rgba(20,30,55,.05)}
+.hero{text-align:center;margin-bottom:18px}
+.hero h1{margin:0;font-size:clamp(30px,5vw,46px)}
+.hero p{color:#667085;margin:8px 0 0}
+.layout{display:grid;grid-template-columns:1.45fr .85fr;gap:18px}
+.panel h2{margin:0 0 14px}
+.simbox{border:1px solid #d8dee9;border-radius:15px;background:#fafbfc;position:relative;overflow:hidden;height:480px}
+svg{width:100%;height:100%;display:block}
+.controls{display:grid;gap:16px}
+label{font-weight:700}
+input[type=range]{width:100%;margin-top:9px}
+.value{font-size:20px;font-weight:800;margin-top:4px}
+button{width:100%;padding:14px;border:0;border-radius:12px;background:#2457d6;color:#fff;font-size:16px;font-weight:800;cursor:pointer;margin-top:9px}
+button.secondary{background:#eef1f5;color:#172033}
+.status{text-align:center;padding:14px;border-radius:14px;background:#f0f4ff;margin-top:14px}
+.status .big{font-size:25px;font-weight:900}
+.equation{text-align:center;font-size:23px;font-weight:800;margin:15px 0}
+.note{color:#667085;font-size:13px;line-height:1.5}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;margin-top:12px}
+.dot{width:11px;height:11px;border-radius:50%;display:inline-block}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.simbox{height:420px}}
 </style>
 </head>
 <body>
 <header><a href="../">← Thermodynamics</a></header>
 <main>
-<div class="grid">
-<section class="panel">
+<section class="hero">
 <h1>⚡ First Law of Thermodynamics</h1>
-<p class="small">Explore how heat and work change the internal energy of a system.</p>
-<div class="control"><div class="label"><span>Heat, q</span><span id="qv">+500 J</span></div><input id="q" type="range" min="-1000" max="1000" step="50" value="500"><div class="small">Positive: heat enters • Negative: heat leaves</div></div>
-<div class="control"><div class="label"><span>Work, w</span><span id="wv">−200 J</span></div><input id="w" type="range" min="-1000" max="1000" step="50" value="-200"><div class="small">Negative: system does work • Positive: work is done on system</div></div>
-<div class="metrics"><div class="metric">Heat q<div class="num" id="qm">+500 J</div></div><div class="metric">Work w<div class="num" id="wm">−200 J</div></div><div class="metric">Internal energy ΔU<div class="num" id="um">+300 J</div></div></div>
-<h2 style="margin-top:22px">Energy accounting</h2>
-<p style="font-size:21px;text-align:center;font-weight:800">ΔU = q + w</p>
-<div class="challenge"><b>🎯 Predict first</b><p id="question">A gas absorbs 500 J of heat and does 200 J of work. What is ΔU?</p><button class="secondary" onclick="answer()">Reveal answer</button><p id="ans"></p></div>
-<div class="buttons"><button class="primary" onclick="resetSim()">↺ Reset</button><button class="secondary" onclick="newChallenge()">🎯 New challenge</button></div>
+<p>Explore how heat, work and internal energy are related.</p>
 </section>
+
+<div class="layout">
 <section class="panel">
-<h2>👀 Watch the system</h2>
-<div class="system"><div class="arrow heat" id="ha">🔥→</div><div class="arrow work" id="wa">→</div><div class="cylinder"></div><div class="gas" id="gas"></div><div class="piston" id="piston"></div></div>
-<p id="caption" class="small" style="text-align:center">Heat enters and the gas does work on the surroundings.</p>
-<h2>What should students notice?</h2>
-<ul><li>Heat and work transfer energy across the system boundary.</li><li>The algebraic signs matter.</li><li>ΔU tells us the net change in the system's internal energy.</li></ul>
+<h2>Interactive Piston–Gas Model</h2>
+<div class="simbox">
+<svg viewBox="0 0 760 500" aria-label="Interactive piston gas simulation">
+<rect x="190" y="55" width="380" height="385" rx="4" fill="#eef1f5" stroke="#344054" stroke-width="4"/>
+<rect x="190" y="420" width="380" height="20" fill="#98a2b3"/>
+<rect id="gasRegion" x="205" y="212" width="350" height="208" fill="#e8f1ff" opacity=".85"/>
+<g id="particles"></g>
+
+<!-- Piston: transform moves the entire piston -->
+<g id="piston">
+<rect x="180" y="190" width="400" height="22" rx="4" fill="#667085" stroke="#344054" stroke-width="3"/>
+<rect x="330" y="170" width="100" height="20" rx="5" fill="#667085"/>
+<text x="380" y="185" text-anchor="middle" font-size="13" fill="white" font-weight="700">PISTON</text>
+</g>
+
+<g id="downArrow" opacity="0">
+<line x1="625" y1="125" x2="625" y2="205" stroke="#2457d6" stroke-width="5"/>
+<polygon points="625,220 612,198 638,198" fill="#2457d6"/>
+<text x="625" y="250" text-anchor="middle" font-size="15" font-weight="700">Piston moves down</text>
+</g>
+
+<g id="upArrow" opacity="0">
+<line x1="625" y1="245" x2="625" y2="165" stroke="#2457d6" stroke-width="5"/>
+<polygon points="625,150 612,172 638,172" fill="#2457d6"/>
+<text x="625" y="280" text-anchor="middle" font-size="15" font-weight="700">Piston moves up</text>
+</g>
+
+<text x="380" y="468" text-anchor="middle" font-size="16" font-weight="700">Gas particles stay below the piston</text>
+</svg>
+</div>
+<div class="legend">
+<span><i class="dot" style="background:#2457d6"></i> Gas particles</span>
+<span>Particles move with the gas volume</span>
+</div>
+</section>
+
+<section class="panel">
+<h2>Control the Work</h2>
+<label for="work">Work, W</label>
+<input id="work" type="range" min="-100" max="100" value="0" step="10">
+<div class="value"><span id="workVal">0</span> kJ</div>
+
+<div class="status" id="status"></div>
+
+<button onclick="setWork(60)">⬇️ Work done ON system (+60 kJ)</button>
+<button onclick="setWork(-60)">⬆️ Work done BY system (−60 kJ)</button>
+<button class="secondary" onclick="setWork(0)">Reset</button>
+
+<div class="equation">ΔU = q + W</div>
+
+<p class="note">
+<b>Sign convention used here:</b> positive work means work is done <b>on</b> the system,
+so the piston moves downward and the gas is compressed. Negative work means work is done
+<b>by</b> the system, so the piston moves upward and the gas expands.
+</p>
+<p class="note">
+All gas particles are constrained to remain inside the cylinder and below the piston.
+When the piston moves, the particles remain within the changing gas volume.
+</p>
 </section>
 </div>
 </main>
+
 <script>
-const q=document.getElementById('q'),w=document.getElementById('w');
-function f(n){return (n>0?'+':'')+n+' J'}
-function update(){let Q=+q.value,W=+w.value,U=Q+W;
-qv.textContent=f(Q);wv.textContent=f(W);qm.textContent=f(Q);wm.textContent=f(W);um.textContent=f(U);
-piston.style.bottom=(65+W/1000*70)+'px';
-ha.textContent=Q>0?'🔥→':Q<0?'←🔥':'';wa.textContent=W<0?'→':W>0?'←':'';
-caption.textContent=U>0?'The system gains internal energy.':U<0?'The system loses internal energy.':'The system has no net change in internal energy.'}
-q.oninput=w.oninput=update;
-for(let i=0;i<28;i++){let p=document.createElement('i');p.className='particle';p.style.left=Math.random()*92+'%';p.style.top=Math.random()*88+'%';gas.appendChild(p)}
-function resetSim(){q.value=500;w.value=-200;ans.textContent='';question.textContent='A gas absorbs 500 J of heat and does 200 J of work. What is ΔU?';update()}
-let challenges=[[600,-250,'A gas absorbs 600 J and does 250 J of work. What is ΔU?','ΔU = +350 J.'],[400,200,'A system absorbs 400 J while 200 J of work is done on it. What is ΔU?','ΔU = +600 J.'],[-300,-150,'A system releases 300 J and does 150 J of work. What is ΔU?','ΔU = −450 J.'],[500,0,'A system absorbs 500 J and does no work. What is ΔU?','ΔU = +500 J.']];
-let c=0;
-function newChallenge(){c=Math.floor(Math.random()*challenges.length);question.textContent=challenges[c][2];ans.textContent=''}
-function answer(){ans.textContent=challenges[c][3]}
+const slider=document.getElementById("work");
+const workVal=document.getElementById("workVal");
+const status=document.getElementById("status");
+const piston=document.getElementById("piston");
+const gasRegion=document.getElementById("gasRegion");
+const particlesGroup=document.getElementById("particles");
+const downArrow=document.getElementById("downArrow");
+const upArrow=document.getElementById("upArrow");
+
+const PISTON_X=180, PISTON_BASE=190, GAS_X=205, GAS_W=350;
+const BOTTOM=413;
+const particles=[];
+
+function rand(a,b){return a+Math.random()*(b-a);}
+
+for(let i=0;i<36;i++){
+    const el=document.createElementNS("http://www.w3.org/2000/svg","circle");
+    el.setAttribute("r","4.5");
+    el.setAttribute("fill","#2457d6");
+    particlesGroup.appendChild(el);
+    particles.push({
+        el,
+        x:rand(10,GAS_W-10),
+        y:rand(10,200),
+        vx:(Math.random()<.5?-1:1)*rand(.35,1.1),
+        vy:(Math.random()<.5?-1:1)*rand(.35,1.1)
+    });
+}
+
+let pistonY=PISTON_BASE;
+
+function particleMotion(){
+    const top=pistonY+29;
+    const bottom=BOTTOM;
+    const left=10, right=GAS_W-10;
+    const height=Math.max(20,bottom-top);
+
+    particles.forEach(p=>{
+        p.x+=p.vx;
+        p.y+=p.vy;
+
+        if(p.x<left){p.x=left;p.vx=Math.abs(p.vx)}
+        if(p.x>right){p.x=right;p.vx=-Math.abs(p.vx)}
+        if(p.y<0){p.y=0;p.vy=Math.abs(p.vy)}
+        if(p.y>height){p.y=height;p.vy=-Math.abs(p.vy)}
+
+        p.el.setAttribute("cx",GAS_X+p.x);
+        p.el.setAttribute("cy",top+p.y);
+    });
+
+    requestAnimationFrame(particleMotion);
+}
+
+function update(){
+    const W=Number(slider.value);
+    workVal.textContent=W;
+
+    /* Positive W: compression, piston DOWN.
+       Negative W: expansion, piston UP. */
+    const target =
+        W>0 ? PISTON_BASE + (W/100)*140 :
+        W<0 ? PISTON_BASE + (W/100)*95 :
+        PISTON_BASE;
+
+    pistonY=target;
+    piston.setAttribute("transform",`translate(0,${pistonY-PISTON_BASE})`);
+
+    gasRegion.setAttribute("y",pistonY+22);
+    gasRegion.setAttribute("height",Math.max(10,BOTTOM-(pistonY+22)));
+
+    if(W>0){
+        status.innerHTML=`<div class="big">W = +${W} kJ</div><div>Work is done <b>ON</b> the system → piston moves down.</div>`;
+        downArrow.setAttribute("opacity","1");
+        upArrow.setAttribute("opacity","0");
+    }else if(W<0){
+        status.innerHTML=`<div class="big">W = ${W} kJ</div><div>Work is done <b>BY</b> the system → piston moves up.</div>`;
+        downArrow.setAttribute("opacity","0");
+        upArrow.setAttribute("opacity","1");
+    }else{
+        status.innerHTML=`<div class="big">W = 0 kJ</div><div>No piston displacement.</div>`;
+        downArrow.setAttribute("opacity","0");
+        upArrow.setAttribute("opacity","0");
+    }
+}
+
+function setWork(value){
+    slider.value=value;
+    update();
+}
+
+slider.addEventListener("input",update);
 update();
+particleMotion();
 </script>
-</body></html>
+</body>
+</html>
