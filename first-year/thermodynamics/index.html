@@ -1,101 +1,641 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thermodynamics | Chemistry Classroom</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
-header{background:#fff;border-bottom:1px solid #d8dee9;padding:18px 22px}
-.top{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:15px}
-.back{color:#2457d6;text-decoration:none;font-weight:700}
-.badge{font-size:13px;color:#667085}
-main{max-width:1200px;margin:auto;padding:28px 20px}
-.hero{background:#fff;border:1px solid #d8dee9;border-radius:22px;padding:30px;margin-bottom:22px;box-shadow:0 6px 22px rgba(20,30,55,.05)}
-.hero h1{margin:0;font-size:clamp(32px,5vw,52px)}
-.hero p{font-size:18px;color:#667085;margin:10px 0 0;line-height:1.5}
-.section{margin:25px 0}
-.section h2{font-size:25px;margin:0 0 14px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.card{display:block;background:#fff;border:1px solid #d8dee9;border-radius:18px;padding:23px;text-decoration:none;color:inherit;min-height:170px;box-shadow:0 4px 16px rgba(20,30,55,.04);transition:.15s}
-.card:hover{transform:translateY(-3px);box-shadow:0 9px 25px rgba(20,30,55,.1)}
-.icon{font-size:38px}.card h3{font-size:22px;margin:10px 0 7px}.card p{color:#667085;line-height:1.5;margin:0}
-.available{display:inline-block;margin-top:13px;padding:6px 9px;border-radius:8px;background:#e9f7ef;color:#18794e;font-size:11px;font-weight:800}
-.soon{display:inline-block;margin-top:13px;padding:6px 9px;border-radius:8px;background:#f0f2f5;color:#667085;font-size:11px;font-weight:800}
-.lesson{background:#fff;border:1px solid #d8dee9;border-radius:18px;padding:23px}
-.lesson-title{font-size:22px;font-weight:800;margin-bottom:4px}
-.lesson-sub{color:#667085;margin-bottom:18px}
-.lesson-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.lesson-btn{display:block;text-decoration:none;color:inherit;background:#f7f9fc;border:1px solid #d8dee9;border-radius:14px;padding:18px}
-.lesson-btn strong{display:block;font-size:17px;margin-bottom:6px}.lesson-btn span{color:#667085;font-size:14px}
-footer{text-align:center;color:#667085;font-size:13px;padding:10px 20px 30px}
-@media(max-width:800px){.grid,.lesson-grid{grid-template-columns:1fr}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Thermodynamics | Chemistry Interactive Lab</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        /* ---------- HEADER ---------- */
+
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #d8dee9;
+            padding: 18px 25px;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-link {
+            color: #2457d6;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ---------- MAIN ---------- */
+
+        main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px 20px 50px;
+        }
+
+        /* ---------- HERO ---------- */
+
+        .hero {
+            background: #ffffff;
+            border: 1px solid #d8dee9;
+            border-radius: 22px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(20, 30, 55, 0.05);
+        }
+
+        .hero-icon {
+            font-size: 50px;
+            margin-bottom: 8px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(32px, 5vw, 50px);
+        }
+
+        .hero p {
+            margin: 10px 0 0;
+            font-size: 19px;
+            color: #667085;
+        }
+
+        /* ---------- SECTION ---------- */
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 26px;
+            margin: 0 0 15px;
+        }
+
+        /* ---------- RESOURCE GRID ---------- */
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        /* ---------- RESOURCE CARD ---------- */
+
+        .resource-card {
+            display: block;
+            background: #ffffff;
+            border: 1px solid #d8dee9;
+            border-radius: 18px;
+            padding: 24px;
+            min-height: 160px;
+
+            text-decoration: none;
+            color: inherit;
+
+            box-shadow: 0 4px 15px rgba(20, 30, 55, 0.04);
+
+            transition:
+                transform 0.15s ease,
+                box-shadow 0.15s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 9px 25px rgba(20, 30, 55, 0.10);
+        }
+
+        .resource-icon {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .resource-card h3 {
+            margin: 5px 0 8px;
+            font-size: 22px;
+        }
+
+        .resource-card p {
+            margin: 0;
+            color: #667085;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* ---------- STATUS ---------- */
+
+        .status {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .available {
+            background: #e9f7ef;
+            color: #18794e;
+        }
+
+        .coming-soon {
+            background: #eef1f5;
+            color: #667085;
+        }
+
+        /* ---------- FOOTER ---------- */
+
+        footer {
+            text-align: center;
+            color: #667085;
+            font-size: 13px;
+            padding: 15px 20px 30px;
+        }
+
+        /* ---------- MOBILE / SMALL SCREEN ---------- */
+
+        @media (max-width: 750px) {
+
+            .resource-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 25px 18px;
+            }
+
+            .resource-card {
+                min-height: auto;
+            }
+
+        }
+
+    </style>
 </head>
+
 <body>
 
-<header>
-<div class="top">
-<a class="back" href="../">← First Year Chemistry</a>
-<div class="badge">GJC Narsapur • Chemistry Classroom</div>
-</div>
-</header>
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-<main>
+    <header>
 
-<section class="hero">
-<h1>🔥 Thermodynamics</h1>
-<p>First Year Chemistry • Interactive Classroom Dashboard</p>
+        <div class="header-container">
+
+            <a
+                class="back-link"
+                href="../"
+            >
+                ← First Year Chemistry
+            </a>
+
+        </div>
+
+    </header>
 
 
-<section class="section">
-<h2>🎮 Interactive Simulations</h2>
-<div class="grid">
-<a class="card" href="heat-work-energy/">
-<div class="icon">🔥</div>
-<h3>Heat, Work &amp; Energy Transfer</h3>
-<p>Explore a gas-cylinder model and investigate how heat and work are associated with energy transfer.</p>
-<span class="available">AVAILABLE</span>
-</a>
-<a class="card" href="first-law/">
-<div class="icon">⚡</div>
-<h3>First Law of Thermodynamics</h3>
-<p>Manipulate heat and work and observe the change in internal energy using ΔU = q + w.</p>
-<span class="available">AVAILABLE</span>
-</a>
-</div>
-</section>
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
 
-<section class="section">
-<h2>📊 Presentations</h2>
-<div class="grid">
-<div class="card"><div class="icon">📊</div><h3>Thermodynamics — Introduction</h3><p>Classroom presentation introducing thermodynamic systems, surroundings, heat and energy.</p><span class="soon">COMING SOON</span></div>
-<div class="card"><div class="icon">📊</div><h3>First Law of Thermodynamics</h3><p>Presentation with examples, sign conventions and classroom questions.</p><span class="soon">COMING SOON</span></div>
-</div>
-</section>
+    <main>
 
-<section class="section">
-<h2>📖 Study Material</h2>
-<div class="grid">
-<div class="card"><div class="icon">📖</div><h3>Chapter Notes</h3><p>Complete First Year Thermodynamics notes.</p><span class="soon">COMING SOON</span></div>
-<div class="card"><div class="icon">📋</div><h3>Formula Sheet</h3><p>Important thermodynamics equations and sign conventions.</p><span class="soon">COMING SOON</span></div>
-</div>
-</section>
 
-<section class="section">
-<h2>📝 Practice &amp; Assessment</h2>
-<div class="grid">
-<div class="card"><div class="icon">📝</div><h3>Worksheets</h3><p>Classroom activities and numerical problems.</p><span class="soon">COMING SOON</span></div>
-<div class="card"><div class="icon">🧠</div><h3>Quick Quiz</h3><p>Short interactive questions for checking understanding during class.</p><span class="soon">COMING SOON</span></div>
-</div>
-</section>
+        <!-- =================================================
+             HERO
+        ================================================== -->
 
-</main>
+        <section class="hero">
 
-<footer>
-Chemistry Interactive Lab • Telangana Intermediate • GJC Narsapur
-</footer>
+            <div class="hero-icon">
+                🔥
+            </div>
+
+            <h1>
+                THERMODYNAMICS
+            </h1>
+
+            <p>
+                First Year Chemistry
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             INTERACTIVE SIMULATIONS
+        ================================================== -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                🎮 Interactive Simulations
+            </h2>
+
+
+            <div class="resource-grid">
+
+
+                <!-- Heat & Work -->
+
+                <a
+                    class="resource-card"
+                    href="heat-work-energy/"
+                >
+
+                    <div class="resource-icon">
+                        🔥
+                    </div>
+
+                    <h3>
+                        Heat &amp; Work
+                    </h3>
+
+                    <p>
+                        Explore heat, work and energy transfer
+                        using an interactive gas-cylinder model.
+                    </p>
+
+                    <span class="status available">
+                        AVAILABLE
+                    </span>
+
+                </a>
+
+
+
+                <!-- First Law -->
+
+                <a
+                    class="resource-card"
+                    href="first-law/"
+                >
+
+                    <div class="resource-icon">
+                        ⚡
+                    </div>
+
+                    <h3>
+                        First Law of Thermodynamics
+                    </h3>
+
+                    <p>
+                        Investigate the relationship between
+                        heat, work and internal energy.
+                    </p>
+
+                    <span class="status available">
+                        AVAILABLE
+                    </span>
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PRESENTATIONS
+        ================================================== -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                📊 Presentations
+            </h2>
+
+
+            <div class="resource-grid">
+
+
+                <!-- Thermodynamics Introduction -->
+
+                <a
+                    class="resource-card"
+                    href="presentations/thermodynamics-introduction.pptx"
+                >
+
+                    <div class="resource-icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Thermodynamics — Introduction
+                    </h3>
+
+                    <p>
+                        Introduction to thermodynamics and
+                        its applications in chemistry.
+                    </p>
+
+                    <span class="status coming-soon">
+                        COMING SOON
+                    </span>
+
+                </a>
+
+
+
+                <!-- First Law Presentation -->
+
+                <a
+                    class="resource-card"
+                    href="presentations/first-law.pptx"
+                >
+
+                    <div class="resource-icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        First Law of Thermodynamics
+                    </h3>
+
+                    <p>
+                        Presentation covering the First Law,
+                        sign conventions and examples.
+                    </p>
+
+                    <span class="status coming-soon">
+                        COMING SOON
+                    </span>
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STUDY MATERIAL
+        ================================================== -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                📖 Study Material
+            </h2>
+
+
+            <div class="resource-grid">
+
+
+                <!-- Chapter Notes -->
+
+                <a
+                    class="resource-card"
+                    href="notes/thermodynamics-notes.pdf"
+                >
+
+                    <div class="resource-icon">
+                        📖
+                    </div>
+
+                    <h3>
+                        Chapter Notes
+                    </h3>
+
+                    <p>
+                        Complete Thermodynamics chapter
+                        notes for Intermediate students.
+                    </p>
+
+                    <span class="status coming-soon">
+                        COMING SOON
+                    </span>
+
+                </a>
+
+
+
+                <!-- Formula Sheet -->
+
+                <a
+                    class="resource-card"
+                    href="notes/formula-sheet.pdf"
+                >
+
+                    <div class="resource-icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Formula Sheet
+                    </h3>
+
+                    <p>
+                        Important equations and
+                        thermodynamic relations.
+                    </p>
+
+                    <span class="status coming-soon">
+                        COMING SOON
+                    </span>
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PRACTICE & ASSESSMENT
+        ================================================== -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                📝 Practice &amp; Assessment
+            </h2>
+
+
+            <div class="resource-grid">
+
+
+                <!-- Worksheets -->
+
+                <a
+                    class="resource-card"
+                    href="worksheets/thermodynamics-worksheet.pdf"
+                >
+
+                    <div class="resource-icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Worksheets
+                    </h3>
+
+                    <p>
+                        Practice questions, numerical problems
+                        and classroom activities.
+                    </p>
+
+                    <span class="status coming-soon">
+                        COMING SOON
+                    </span>
+
+                </a>
+
+
+
+                <!-- Quick Quiz -->
+
+                <a
+                    class="resource-card"
+                    href="quiz/"
+                >
+
+                    <div class="resource-icon">
+                        🧠
+                    </div>
+
+                    <h3>
+                        Quick Quiz
+                    </h3>
+
+                    <p>
+                        Short interactive questions to
+                        check conceptual understanding.
+                    </p>
+
+                    <span class="status coming-soon">
+                        COMING SOON
+                    </span>
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             OTHER RESOURCES
+        ================================================== -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                🧪 Other Resources
+            </h2>
+
+
+            <div class="resource-grid">
+
+
+                <!-- Important Questions -->
+
+                <a
+                    class="resource-card"
+                    href="important-questions/"
+                >
+
+                    <div class="resource-icon">
+                        ❓
+                    </div>
+
+                    <h3>
+                        Important Questions
+                    </h3>
+
+                    <p>
+                        Important conceptual and examination-oriented
+                        questions from the chapter.
+                    </p>
+
+                    <span class="status coming-soon">
+                        COMING SOON
+                    </span>
+
+                </a>
+
+
+
+                <!-- Previous Papers -->
+
+                <a
+                    class="resource-card"
+                    href="previous-papers/"
+                >
+
+                    <div class="resource-icon">
+                        📚
+                    </div>
+
+                    <h3>
+                        Previous Papers
+                    </h3>
+
+                    <p>
+                        Previous examination questions
+                        related to Thermodynamics.
+                    </p>
+
+                    <span class="status coming-soon">
+                        COMING SOON
+                    </span>
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        Chemistry Interactive Lab
+        •
+        Telangana Intermediate
+        •
+        GJC Narsapur
+
+    </footer>
+
 
 </body>
 </html>
