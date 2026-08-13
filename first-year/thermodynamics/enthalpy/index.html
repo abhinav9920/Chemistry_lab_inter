@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enthalpy | Interactive Simulation</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
+header{background:#fff;border-bottom:1px solid #d8dee9;padding:16px 20px}
+header a{color:#2457d6;text-decoration:none;font-weight:700}
+main{max-width:1100px;margin:auto;padding:22px 18px 40px}
+.hero,.panel{background:#fff;border:1px solid #d8dee9;border-radius:20px;padding:22px;box-shadow:0 5px 20px rgba(20,30,55,.05)}
+.hero{text-align:center;margin-bottom:18px}.hero h1{margin:0;font-size:clamp(30px,5vw,46px)}.hero p{color:#667085}
+.layout{display:grid;grid-template-columns:1.5fr .8fr;gap:18px}.panel h2{margin-top:0}
+.energy-box{height:390px;border:1px solid #d8dee9;border-radius:15px;position:relative;background:#fafbfc;overflow:hidden}
+.axis-y{position:absolute;left:48px;top:20px;bottom:42px;border-left:2px solid #344054}
+.axis-x{position:absolute;left:48px;right:20px;bottom:42px;border-bottom:2px solid #344054}
+.axis-y:before{content:"Energy";position:absolute;left:-10px;top:-3px;transform:translateX(-100%);font-weight:700}
+.axis-x:after{content:"Reaction progress";position:absolute;right:0;bottom:-28px;font-weight:700}
+.line{position:absolute;height:4px;background:#344054;border-radius:4px}
+.curve{position:absolute;left:80px;top:55px;width:65%;height:190px;border-top:4px solid #344054;border-radius:50% 50% 0 0;transform:skewX(-12deg)}
+.label{position:absolute;font-weight:700;font-size:14px}
+.delta{position:absolute;border-left:3px dashed #2457d6;width:3px}
+.controls{display:grid;gap:15px}label{font-weight:700}input{width:100%;margin-top:8px}.value{font-size:20px;font-weight:800;margin-top:4px}
+.formula{text-align:center;font-size:22px;font-weight:800;margin:15px}.result{text-align:center;padding:15px;border-radius:14px;background:#f0f4ff}.result .big{font-size:27px;font-weight:900}
+button{width:100%;padding:14px;border:0;border-radius:12px;background:#2457d6;color:#fff;font-size:16px;font-weight:800;cursor:pointer;margin-top:10px}
+button.secondary{background:#eef1f5;color:#172033}.challenge{margin-top:18px;border-top:1px solid #e4e7ec;padding-top:18px}.challenge p{line-height:1.5}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.energy-box{height:330px}}
+</style>
+</head>
+<body>
+<header><a href="../">← Thermodynamics</a></header>
+<main>
+<section class="hero">
+<h1>🔥 Enthalpy</h1>
+<p>Interactive energy profile — understand ΔH, exothermic and endothermic reactions.</p>
+</section>
+
+<div class="layout">
+<section class="panel">
+<h2>Energy Profile</h2>
+<div class="energy-box">
+<div class="axis-y"></div><div class="axis-x"></div>
+<div id="reactLine" class="line"></div><div id="prodLine" class="line"></div>
+<div class="curve"></div>
+<div id="reactLabel" class="label"></div><div id="prodLabel" class="label"></div>
+<div id="delta" class="delta"></div>
+</div>
+<div class="formula">ΔH = H<sub>products</sub> − H<sub>reactants</sub></div>
+<div id="result" class="result"></div>
+</section>
+
+<section class="panel">
+<h2>Change the Energies</h2>
+<div class="controls">
+<div><label>Reactant energy</label><input id="react" type="range" min="50" max="500" value="300"><div class="value"><span id="reactVal">300</span> kJ mol⁻¹</div></div>
+<div><label>Product energy</label><input id="prod" type="range" min="50" max="500" value="150"><div class="value"><span id="prodVal">150</span> kJ mol⁻¹</div></div>
+</div>
+<button onclick="preset('exo')">🔥 Exothermic Example</button>
+<button onclick="preset('endo')">❄️ Endothermic Example</button>
+<button class="secondary" onclick="preset('zero')">ΔH = 0 Example</button>
+
+<div class="challenge">
+<h2>🎯 Predict</h2>
+<p>If reactants have <b>250 kJ mol⁻¹</b> and products have <b>400 kJ mol⁻¹</b>, is the reaction exothermic or endothermic?</p>
+<button class="secondary" onclick="reveal()">Reveal Answer</button>
+<div id="answer"></div>
+</div>
+</section>
+</div>
+</main>
+
+<script>
+const r=document.getElementById("react"),p=document.getElementById("prod");
+function update(){
+ let R=+r.value,P=+p.value,D=P-R,min=50,max=500,bottom=305,height=250;
+ let y=e=>bottom-(e-min)/(max-min)*height,yr=y(R),yp=y(P);
+ document.getElementById("reactVal").textContent=R;
+ document.getElementById("prodVal").textContent=P;
+ let a=document.getElementById("reactLine"),b=document.getElementById("prodLine");
+ a.style.left="80px";a.style.top=yr+"px";a.style.width="27%";
+ b.style.left="58%";b.style.top=yp+"px";b.style.width="25%";
+ let rl=document.getElementById("reactLabel"),pl=document.getElementById("prodLabel");
+ rl.style.left="65px";rl.style.top=(yr-25)+"px";rl.textContent="Reactants: "+R;
+ pl.style.right="20px";pl.style.top=(yp-25)+"px";pl.textContent="Products: "+P;
+ let d=document.getElementById("delta");d.style.right="30px";d.style.top=Math.min(yr,yp)+"px";d.style.height=Math.abs(yr-yp)+"px";
+ document.getElementById("result").innerHTML="<div class='big'>ΔH = "+(D>=0?"+":"")+D+" kJ mol⁻¹</div><div>"+(D<0?"🔥 Exothermic — heat is released":"❄️ Endothermic — heat is absorbed")+"</div>";
+}
+function preset(x){if(x==="exo"){r.value=300;p.value=150}if(x==="endo"){r.value=150;p.value=300}if(x==="zero"){r.value=250;p.value=250}update()}
+function reveal(){document.getElementById("answer").innerHTML="<p><b>ΔH = 400 − 250 = +150 kJ mol⁻¹</b><br>Therefore, it is <b>endothermic</b>; heat is absorbed.</p>"}
+r.addEventListener("input",update);p.addEventListener("input",update);update();
+</script>
+</body>
+</html>
