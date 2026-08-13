@@ -5,64 +5,133 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Enthalpy | Interactive Simulation</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
 header{background:#fff;border-bottom:1px solid #d8dee9;padding:16px 20px}
 header a{color:#2457d6;text-decoration:none;font-weight:700}
-main{max-width:1100px;margin:auto;padding:22px 18px 40px}
+main{max-width:1150px;margin:auto;padding:22px 18px 40px}
 .hero,.panel{background:#fff;border:1px solid #d8dee9;border-radius:20px;padding:22px;box-shadow:0 5px 20px rgba(20,30,55,.05)}
-.hero{text-align:center;margin-bottom:18px}.hero h1{margin:0;font-size:clamp(30px,5vw,46px)}.hero p{color:#667085}
-.layout{display:grid;grid-template-columns:1.5fr .8fr;gap:18px}.panel h2{margin-top:0}
-.energy-box{height:390px;border:1px solid #d8dee9;border-radius:15px;position:relative;background:#fafbfc;overflow:hidden}
-.axis-y{position:absolute;left:48px;top:20px;bottom:42px;border-left:2px solid #344054}
-.axis-x{position:absolute;left:48px;right:20px;bottom:42px;border-bottom:2px solid #344054}
-.axis-y:before{content:"Energy";position:absolute;left:-10px;top:-3px;transform:translateX(-100%);font-weight:700}
-.axis-x:after{content:"Reaction progress";position:absolute;right:0;bottom:-28px;font-weight:700}
-.line{position:absolute;height:4px;background:#344054;border-radius:4px}
-.curve{position:absolute;left:80px;top:55px;width:65%;height:190px;border-top:4px solid #344054;border-radius:50% 50% 0 0;transform:skewX(-12deg)}
-.label{position:absolute;font-weight:700;font-size:14px}
-.delta{position:absolute;border-left:3px dashed #2457d6;width:3px}
-.controls{display:grid;gap:15px}label{font-weight:700}input{width:100%;margin-top:8px}.value{font-size:20px;font-weight:800;margin-top:4px}
-.formula{text-align:center;font-size:22px;font-weight:800;margin:15px}.result{text-align:center;padding:15px;border-radius:14px;background:#f0f4ff}.result .big{font-size:27px;font-weight:900}
-button{width:100%;padding:14px;border:0;border-radius:12px;background:#2457d6;color:#fff;font-size:16px;font-weight:800;cursor:pointer;margin-top:10px}
-button.secondary{background:#eef1f5;color:#172033}.challenge{margin-top:18px;border-top:1px solid #e4e7ec;padding-top:18px}.challenge p{line-height:1.5}
-@media(max-width:800px){.layout{grid-template-columns:1fr}.energy-box{height:330px}}
+.hero{text-align:center;margin-bottom:18px}
+.hero h1{margin:0;font-size:clamp(30px,5vw,46px)}
+.hero p{color:#667085;margin:8px 0 0}
+.layout{display:grid;grid-template-columns:1.55fr .8fr;gap:18px}
+.panel h2{margin:0 0 14px}
+.chart-wrap{border:1px solid #d8dee9;border-radius:15px;background:#fff;padding:8px;overflow:hidden}
+svg{width:100%;height:auto;display:block}
+.controls{display:grid;gap:16px}
+label{font-weight:700}
+input[type=range]{width:100%;margin-top:9px}
+.value{font-size:20px;font-weight:800;margin-top:4px}
+button{width:100%;padding:14px;border:0;border-radius:12px;background:#2457d6;color:#fff;font-size:16px;font-weight:800;cursor:pointer;margin-top:9px}
+button.secondary{background:#eef1f5;color:#172033}
+.formula{text-align:center;font-size:22px;font-weight:800;margin:15px 0}
+.result{text-align:center;padding:15px;border-radius:14px;background:#f0f4ff}
+.result .big{font-size:28px;font-weight:900}
+.challenge{margin-top:18px;border-top:1px solid #e4e7ec;padding-top:18px}
+.challenge p{line-height:1.5}
+.note{margin-top:14px;color:#667085;font-size:13px;line-height:1.45}
+@media(max-width:800px){.layout{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header><a href="../">← Thermodynamics</a></header>
+
 <main>
 <section class="hero">
 <h1>🔥 Enthalpy</h1>
-<p>Interactive energy profile — understand ΔH, exothermic and endothermic reactions.</p>
+<p>Interactive reaction-energy profile — understand ΔH, exothermic and endothermic reactions.</p>
 </section>
 
 <div class="layout">
 <section class="panel">
-<h2>Energy Profile</h2>
-<div class="energy-box">
-<div class="axis-y"></div><div class="axis-x"></div>
-<div id="reactLine" class="line"></div><div id="prodLine" class="line"></div>
-<div class="curve"></div>
-<div id="reactLabel" class="label"></div><div id="prodLabel" class="label"></div>
-<div id="delta" class="delta"></div>
+<h2>Reaction Energy Profile</h2>
+
+<div class="chart-wrap">
+<svg viewBox="0 0 820 500" role="img" aria-label="Interactive reaction energy profile">
+    <!-- axes -->
+    <line x1="85" y1="40" x2="85" y2="420" stroke="#344054" stroke-width="2"/>
+    <line x1="85" y1="420" x2="775" y2="420" stroke="#344054" stroke-width="2"/>
+
+    <!-- axis labels -->
+    <text x="35" y="55" font-size="18" font-weight="700">Energy</text>
+    <text x="610" y="465" font-size="18" font-weight="700">Reaction progress</text>
+
+    <!-- continuous reaction curve -->
+    <path id="profile"
+          d="M 120 270
+             C 180 270, 190 160, 270 115
+             C 350 70, 390 95, 445 170
+             C 485 225, 500 270, 560 270
+             C 625 270, 665 270, 730 270"
+          fill="none"
+          stroke="#344054"
+          stroke-width="6"
+          stroke-linecap="round"/>
+
+    <!-- reactant/product horizontal guide lines -->
+    <line id="reactGuide" x1="120" x2="730" y1="270" y2="270"
+          stroke="#98a2b3" stroke-width="2" stroke-dasharray="7 7"/>
+    <line id="prodGuide" x1="560" x2="730" y1="270" y2="270"
+          stroke="#98a2b3" stroke-width="2" stroke-dasharray="7 7"/>
+
+    <!-- labels -->
+    <text id="reactText" x="105" y="250" font-size="18" font-weight="700">Reactants</text>
+    <text id="prodText" x="610" y="250" font-size="18" font-weight="700">Products</text>
+
+    <!-- energy level markers -->
+    <circle id="reactDot" cx="120" cy="270" r="7"/>
+    <circle id="prodDot" cx="730" cy="270" r="7"/>
+
+    <!-- ΔH arrow -->
+    <line id="deltaLine" x1="760" x2="760" y1="270" y2="270"
+          stroke="#2457d6" stroke-width="4"/>
+    <polygon id="arrowTop" points="760,270 751,284 769,284" />
+    <polygon id="arrowBottom" points="760,270 751,256 769,256" />
+    <text id="deltaText" x="625" y="310" font-size="18" font-weight="700">ΔH</text>
+
+    <!-- activation energy -->
+    <line id="eaLine" x1="445" x2="445" y1="170" y2="270"
+          stroke="#667085" stroke-width="3" stroke-dasharray="6 6"/>
+    <text x="455" y="215" font-size="16" font-weight="700">Ea</text>
+</svg>
 </div>
+
 <div class="formula">ΔH = H<sub>products</sub> − H<sub>reactants</sub></div>
 <div id="result" class="result"></div>
+
+<p class="note">
+The reaction path is continuous: reactants rise to the transition state and then fall to products.
+The vertical difference between the reactant and product levels represents ΔH.
+</p>
 </section>
 
 <section class="panel">
 <h2>Change the Energies</h2>
+
 <div class="controls">
-<div><label>Reactant energy</label><input id="react" type="range" min="50" max="500" value="300"><div class="value"><span id="reactVal">300</span> kJ mol⁻¹</div></div>
-<div><label>Product energy</label><input id="prod" type="range" min="50" max="500" value="150"><div class="value"><span id="prodVal">150</span> kJ mol⁻¹</div></div>
+<div>
+<label for="react">Reactant energy</label>
+<input id="react" type="range" min="50" max="500" value="300">
+<div class="value"><span id="reactVal">300</span> kJ mol⁻¹</div>
 </div>
+
+<div>
+<label for="prod">Product energy</label>
+<input id="prod" type="range" min="50" max="500" value="150">
+<div class="value"><span id="prodVal">150</span> kJ mol⁻¹</div>
+</div>
+</div>
+
 <button onclick="preset('exo')">🔥 Exothermic Example</button>
 <button onclick="preset('endo')">❄️ Endothermic Example</button>
 <button class="secondary" onclick="preset('zero')">ΔH = 0 Example</button>
 
 <div class="challenge">
 <h2>🎯 Predict</h2>
-<p>If reactants have <b>250 kJ mol⁻¹</b> and products have <b>400 kJ mol⁻¹</b>, is the reaction exothermic or endothermic?</p>
+<p>
+If reactants have <b>250 kJ mol⁻¹</b> and products have
+<b>400 kJ mol⁻¹</b>, is the reaction exothermic or endothermic?
+</p>
 <button class="secondary" onclick="reveal()">Reveal Answer</button>
 <div id="answer"></div>
 </div>
@@ -71,24 +140,137 @@ button.secondary{background:#eef1f5;color:#172033}.challenge{margin-top:18px;bor
 </main>
 
 <script>
-const r=document.getElementById("react"),p=document.getElementById("prod");
-function update(){
- let R=+r.value,P=+p.value,D=P-R,min=50,max=500,bottom=305,height=250;
- let y=e=>bottom-(e-min)/(max-min)*height,yr=y(R),yp=y(P);
- document.getElementById("reactVal").textContent=R;
- document.getElementById("prodVal").textContent=P;
- let a=document.getElementById("reactLine"),b=document.getElementById("prodLine");
- a.style.left="80px";a.style.top=yr+"px";a.style.width="27%";
- b.style.left="58%";b.style.top=yp+"px";b.style.width="25%";
- let rl=document.getElementById("reactLabel"),pl=document.getElementById("prodLabel");
- rl.style.left="65px";rl.style.top=(yr-25)+"px";rl.textContent="Reactants: "+R;
- pl.style.right="20px";pl.style.top=(yp-25)+"px";pl.textContent="Products: "+P;
- let d=document.getElementById("delta");d.style.right="30px";d.style.top=Math.min(yr,yp)+"px";d.style.height=Math.abs(yr-yp)+"px";
- document.getElementById("result").innerHTML="<div class='big'>ΔH = "+(D>=0?"+":"")+D+" kJ mol⁻¹</div><div>"+(D<0?"🔥 Exothermic — heat is released":"❄️ Endothermic — heat is absorbed")+"</div>";
+const react = document.getElementById("react");
+const prod = document.getElementById("prod");
+
+const reactVal = document.getElementById("reactVal");
+const prodVal = document.getElementById("prodVal");
+
+const profile = document.getElementById("profile");
+const reactGuide = document.getElementById("reactGuide");
+const prodGuide = document.getElementById("prodGuide");
+
+const reactText = document.getElementById("reactText");
+const prodText = document.getElementById("prodText");
+
+const reactDot = document.getElementById("reactDot");
+const prodDot = document.getElementById("prodDot");
+
+const deltaLine = document.getElementById("deltaLine");
+const arrowTop = document.getElementById("arrowTop");
+const arrowBottom = document.getElementById("arrowBottom");
+const deltaText = document.getElementById("deltaText");
+
+function energyToY(e){
+    const min = 50;
+    const max = 500;
+    const top = 80;
+    const bottom = 390;
+    return bottom - ((e-min)/(max-min))*(bottom-top);
 }
-function preset(x){if(x==="exo"){r.value=300;p.value=150}if(x==="endo"){r.value=150;p.value=300}if(x==="zero"){r.value=250;p.value=250}update()}
-function reveal(){document.getElementById("answer").innerHTML="<p><b>ΔH = 400 − 250 = +150 kJ mol⁻¹</b><br>Therefore, it is <b>endothermic</b>; heat is absorbed.</p>"}
-r.addEventListener("input",update);p.addEventListener("input",update);update();
+
+function update(){
+
+    const R = Number(react.value);
+    const P = Number(prod.value);
+    const D = P - R;
+
+    reactVal.textContent = R;
+    prodVal.textContent = P;
+
+    const yr = energyToY(R);
+    const yp = energyToY(P);
+
+    /*
+      The reaction curve has three important regions:
+      reactants -> transition state -> products.
+      We keep the transition-state shape continuous while
+      shifting the two energy levels.
+    */
+
+    const peakY = Math.min(65, Math.min(yr,yp)-70);
+
+    profile.setAttribute(
+        "d",
+        `M 120 ${yr}
+         C 190 ${yr}, 210 ${peakY+70}, 290 ${peakY+30}
+         C 365 ${peakY-5}, 405 ${peakY+20}, 445 ${peakY+65}
+         C 490 ${peakY+115}, 505 ${yp}, 560 ${yp}
+         C 625 ${yp}, 665 ${yp}, 730 ${yp}`
+    );
+
+    reactGuide.setAttribute("y1",yr);
+    reactGuide.setAttribute("y2",yr);
+
+    prodGuide.setAttribute("y1",yp);
+    prodGuide.setAttribute("y2",yp);
+
+    reactText.setAttribute("y",yr-18);
+    prodText.setAttribute("y",yp-18);
+
+    reactDot.setAttribute("cy",yr);
+    prodDot.setAttribute("cy",yp);
+
+    const x = 755;
+    deltaLine.setAttribute("x1",x);
+    deltaLine.setAttribute("x2",x);
+
+    const y1 = Math.min(yr,yp);
+    const y2 = Math.max(yr,yp);
+
+    deltaLine.setAttribute("y1",y1);
+    deltaLine.setAttribute("y2",y2);
+
+    if(D < 0){
+        arrowTop.setAttribute("points",`${x},${y1} ${x-9},${y1+14} ${x+9},${y1+14}`);
+        arrowBottom.setAttribute("points",`${x},${y2} ${x-9},${y2-14} ${x+9},${y2-14}`);
+        deltaText.setAttribute("y",(y1+y2)/2);
+    }else{
+        arrowTop.setAttribute("points",`${x},${y1} ${x-9},${y1+14} ${x+9},${y1+14}`);
+        arrowBottom.setAttribute("points",`${x},${y2} ${x-9},${y2-14} ${x+9},${y2-14}`);
+        deltaText.setAttribute("y",(y1+y2)/2);
+    }
+
+    deltaText.textContent = "ΔH";
+
+    document.getElementById("result").innerHTML =
+        `<div class="big">ΔH = ${D>=0?"+":""}${D} kJ mol⁻¹</div>
+         <div>${D<0
+            ? "🔥 Exothermic — heat is released"
+            : D>0
+              ? "❄️ Endothermic — heat is absorbed"
+              : "⚖️ ΔH = 0 — no enthalpy change"}</div>`;
+}
+
+function preset(type){
+    if(type==="exo"){
+        react.value=300;
+        prod.value=150;
+    }
+
+    if(type==="endo"){
+        react.value=150;
+        prod.value=300;
+    }
+
+    if(type==="zero"){
+        react.value=250;
+        prod.value=250;
+    }
+
+    update();
+}
+
+function reveal(){
+    document.getElementById("answer").innerHTML =
+        `<p><b>ΔH = 400 − 250 = +150 kJ mol⁻¹</b><br>
+        Therefore, the reaction is <b>endothermic</b>; heat is absorbed.</p>`;
+}
+
+react.addEventListener("input",update);
+prod.addEventListener("input",update);
+
+update();
 </script>
 </body>
 </html>
