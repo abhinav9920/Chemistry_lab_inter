@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hess's Law | Interactive Simulation</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
+header{background:#fff;border-bottom:1px solid #d8dee9;padding:16px 20px}header a{color:#2457d6;text-decoration:none;font-weight:700}
+main{max-width:1180px;margin:auto;padding:22px 18px 42px}.hero,.panel{background:#fff;border:1px solid #d8dee9;border-radius:20px;padding:22px;box-shadow:0 5px 20px rgba(20,30,55,.05)}
+.hero{text-align:center;margin-bottom:18px}.hero h1{margin:0;font-size:clamp(30px,5vw,46px)}.hero p{color:#667085;line-height:1.5}
+.layout{display:grid;grid-template-columns:1.5fr .85fr;gap:18px}.panel h2{margin:0 0 14px}.diagram{border:1px solid #d8dee9;border-radius:15px;background:#fafbfc;overflow:hidden}svg{width:100%;height:auto;display:block}
+.control{padding:13px;border:1px solid #e4e7ec;border-radius:13px;margin-bottom:13px}label{font-weight:700}input[type=range]{width:100%;margin-top:9px}.value{font-size:19px;font-weight:800;margin-top:4px}
+.result{padding:15px;border-radius:14px;background:#f0f4ff;text-align:center}.result .big{font-size:27px;font-weight:900}.formula{text-align:center;font-size:23px;font-weight:800;margin:15px 0}
+button{width:100%;padding:12px;border:0;border-radius:11px;background:#2457d6;color:#fff;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px}button.secondary{background:#eef1f5;color:#172033}
+.note{color:#667085;font-size:13px;line-height:1.55}.badge{display:inline-block;padding:5px 9px;border-radius:99px;background:#eef1f5;font-size:12px;font-weight:800;margin-bottom:8px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><a href="../">← Thermodynamics</a></header>
+<main>
+<section class="hero"><h1>⚖️ Hess's Law</h1><p>Explore how the enthalpy change of a reaction is independent of the path taken.</p></section>
+
+<div class="layout">
+<section class="panel">
+<h2>Energy Pathway</h2>
+<div class="diagram">
+<svg viewBox="0 0 820 560" aria-label="Hess law energy pathway diagram">
+<!-- Direct path -->
+<path d="M145 125 C300 125 430 125 665 125" fill="none" stroke="#344054" stroke-width="4" stroke-dasharray="10 8"/>
+<polygon points="665,125 647,116 647,134" fill="#344054"/>
+<!-- Indirect path -->
+<path d="M145 125 C190 125 205 275 270 275" fill="none" stroke="#2457d6" stroke-width="5"/>
+<path d="M270 275 C390 275 520 275 665 125" fill="none" stroke="#2457d6" stroke-width="5"/>
+<polygon points="665,125 646,123 656,140" fill="#2457d6"/>
+<!-- states -->
+<rect x="75" y="95" width="140" height="60" rx="12" fill="#fff" stroke="#344054" stroke-width="3"/>
+<text x="145" y="121" text-anchor="middle" font-size="18" font-weight="800">A</text><text x="145" y="143" text-anchor="middle" font-size="13">Initial state</text>
+<rect x="200" y="245" width="140" height="60" rx="12" fill="#fff" stroke="#2457d6" stroke-width="3"/>
+<text x="270" y="271" text-anchor="middle" font-size="18" font-weight="800">B</text><text x="270" y="293" text-anchor="middle" font-size="13">Intermediate</text>
+<rect x="595" y="95" width="140" height="60" rx="12" fill="#fff" stroke="#344054" stroke-width="3"/>
+<text x="665" y="121" text-anchor="middle" font-size="18" font-weight="800">C</text><text x="665" y="143" text-anchor="middle" font-size="13">Final state</text>
+<!-- labels -->
+<text id="directLabel" x="405" y="105" text-anchor="middle" font-size="17" font-weight="800">ΔH₁</text>
+<text id="step1Label" x="235" y="205" text-anchor="middle" font-size="16" font-weight="800">ΔH₂</text>
+<text id="step2Label" x="490" y="235" text-anchor="middle" font-size="16" font-weight="800">ΔH₃</text>
+<!-- equality -->
+<rect x="175" y="375" width="470" height="110" rx="16" fill="#f0f4ff" stroke="#d8dee9"/>
+<text x="410" y="408" text-anchor="middle" font-size="18" font-weight="700">Hess's Law</text>
+<text id="equation" x="410" y="447" text-anchor="middle" font-size="21" font-weight="900">ΔH₁ = ΔH₂ + ΔH₃</text>
+<text x="410" y="470" text-anchor="middle" font-size="13">Same initial and final states → same overall ΔH</text>
+<text x="410" y="525" text-anchor="middle" font-size="13">Dashed = direct path &nbsp;&nbsp; | &nbsp;&nbsp; Blue = indirect path</text>
+</svg>
+</div>
+<p class="note">The reaction may follow different paths, but if the initial and final states are the same, the overall enthalpy change is the same.</p>
+</section>
+
+<section class="panel">
+<span class="badge">INTERACTIVE</span><h2>Change the Reaction Steps</h2>
+<div class="control"><label for="h2">Step 1: ΔH₂</label><input id="h2" type="range" min="-200" max="200" value="80" step="10"><div class="value"><span id="h2Val">+80</span> kJ mol⁻¹</div></div>
+<div class="control"><label for="h3">Step 2: ΔH₃</label><input id="h3" type="range" min="-200" max="200" value="120" step="10"><div class="value"><span id="h3Val">+120</span> kJ mol⁻¹</div></div>
+<div class="result"><div>Overall enthalpy change</div><div class="big">ΔH = <span id="total">+200</span> kJ mol⁻¹</div></div>
+<div class="formula">ΔH<sub>overall</sub> = ΔH<sub>2</sub> + ΔH<sub>3</sub></div>
+<button onclick="example(80,120)">Example 1: +80 + +120</button>
+<button onclick="example(-100,60)">Example 2: −100 + +60</button>
+<button onclick="example(150,-150)">Example 3: +150 + −150</button>
+<button class="secondary" onclick="example(0,0)">Reset</button>
+<p class="note">The direct-path ΔH is automatically equal to the sum of the two indirect steps.</p>
+</section>
+</div>
+
+<section class="panel" style="margin-top:18px">
+<h2>🎯 Classroom Challenge</h2>
+<p><b>Question:</b> A reaction occurs in two steps. ΔH₁ = −120 kJ mol⁻¹ and ΔH₂ = +45 kJ mol⁻¹. What is the overall enthalpy change?</p>
+<button class="secondary" onclick="document.getElementById('answer').innerHTML='<b>Answer:</b> ΔH = −120 + 45 = −75 kJ mol⁻¹. The overall reaction is exothermic.'">Reveal Answer</button>
+<p id="answer"></p>
+</section>
+</main>
+
+<script>
+const h2=document.getElementById("h2"),h3=document.getElementById("h3");
+const h2Val=document.getElementById("h2Val"),h3Val=document.getElementById("h3Val"),total=document.getElementById("total");
+function fmt(n){return n>=0?"+"+n:n}
+function update(){
+ const a=Number(h2.value),b=Number(h3.value),t=a+b;
+ h2Val.textContent=fmt(a);h3Val.textContent=fmt(b);total.textContent=fmt(t);
+ document.getElementById("equation").textContent=`ΔH₁ = ${fmt(a)} + (${fmt(b)}) = ${fmt(t)} kJ mol⁻¹`;
+ document.getElementById("directLabel").textContent=`ΔH₁ = ${fmt(t)} kJ mol⁻¹`;
+ document.getElementById("step1Label").textContent=`ΔH₂ = ${fmt(a)}`;
+ document.getElementById("step2Label").textContent=`ΔH₃ = ${fmt(b)}`;
+}
+function example(a,b){h2.value=a;h3.value=b;update()}
+h2.addEventListener("input",update);h3.addEventListener("input",update);update();
+</script>
+</body>
+</html>
