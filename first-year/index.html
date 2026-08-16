@@ -16,96 +16,139 @@
 
 <style>
 
-body{
+body {
 
-    font-family:Arial;
+    font-family: Arial, sans-serif;
 
-    margin:0;
+    margin: 0;
 
-    background:#f4f7fb;
+    background: #f4f7fb;
 
-    color:#172033;
-
-}
-
-
-header{
-
-    background:#fff;
-
-    padding:22px;
+    color: #172033;
 
 }
 
 
-a{
+header {
 
-    color:#2457d6;
+    background: #fff;
 
-    text-decoration:none;
+    padding: 22px;
 
-    font-weight:bold;
-
-}
-
-
-main{
-
-    max-width:1000px;
-
-    margin:auto;
-
-    padding:25px;
+    border-bottom: 1px solid #e5e7eb;
 
 }
 
 
-.card{
+header a {
 
-    display:block;
+    color: #2457d6;
 
-    background:#fff;
+    text-decoration: none;
 
-    border:1px solid #ddd;
-
-    border-radius:16px;
-
-    padding:24px;
-
-    margin:15px 0;
-
-    color:inherit;
-
-    text-decoration:none;
+    font-weight: bold;
 
 }
 
 
-.card:hover{
+main {
+
+    max-width: 1000px;
+
+    margin: auto;
+
+    padding: 25px;
+
+}
+
+
+h1 {
+
+    margin-bottom: 25px;
+
+}
+
+
+/* Chapter Grid */
+
+.chapter-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 18px;
+
+}
+
+
+/* Chapter Cards */
+
+.card {
+
+    display: block;
+
+    background: #fff;
+
+    border: 1px solid #ddd;
+
+    border-radius: 16px;
+
+    padding: 24px;
+
+    color: inherit;
+
+    text-decoration: none;
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+
+}
+
+
+.card:hover {
+
+    transform: translateY(-3px);
 
     box-shadow:
-        0 5px 15px
-        rgba(0,0,0,0.08);
-
-    transform:
-        translateY(-2px);
+        0 6px 18px
+        rgba(0, 0, 0, 0.08);
 
 }
 
 
-.card h2{
+.card h2 {
 
-    margin-top:0;
+    margin-top: 0;
+
+    margin-bottom: 10px;
+
+}
+
+
+.card p {
+
+    color: #667085;
+
+    line-height: 1.5;
+
+    margin-bottom: 0;
 
 }
 
 
-.card p{
+/* Mobile */
 
-    color:#667085;
+@media (max-width: 700px) {
+
+    .chapter-grid {
+
+        grid-template-columns: 1fr;
+
+    }
 
 }
-
 
 </style>
 
@@ -136,32 +179,10 @@ main{
 </h1>
 
 
-<!-- Thermodynamics -->
-
-<a
-    class="card"
-    href="thermodynamics/"
->
-
-<h2>
-
-🔥 Thermodynamics
-
-</h2>
-
-<p>
-
-Heat, work, energy transfer,
-enthalpy and thermodynamic processes
-with interactive simulations.
-
-</p>
-
-</a>
+<div class="chapter-grid">
 
 
-
-<!-- Atomic Structure -->
+<!-- Chapter 1: Atomic Structure -->
 
 <a
     class="card"
@@ -186,7 +207,7 @@ and electronic structure.
 
 
 
-<!-- Periodic Table -->
+<!-- Chapter 2: Periodic Table -->
 
 <a
     class="card"
@@ -210,7 +231,7 @@ of elements and periodic properties.
 
 
 
-<!-- Chemical Bonding -->
+<!-- Chapter 3: Chemical Bonding -->
 
 <a
     class="card"
@@ -235,7 +256,7 @@ hybridisation.
 
 
 
-<!-- Stoichiometry -->
+<!-- Chapter 4: Stoichiometry -->
 
 <a
     class="card"
@@ -257,6 +278,34 @@ formulae and chemical equations.
 </p>
 
 </a>
+
+
+
+<!-- Chapter 5: Thermodynamics -->
+
+<a
+    class="card"
+    href="thermodynamics/"
+>
+
+<h2>
+
+🔥 Thermodynamics
+
+</h2>
+
+<p>
+
+Explore heat, work, energy transfer,
+enthalpy and thermodynamic processes
+with interactive simulations.
+
+</p>
+
+</a>
+
+
+</div>
 
 
 </main>
