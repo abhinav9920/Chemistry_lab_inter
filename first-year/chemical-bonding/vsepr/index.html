@@ -1,605 +1,343 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>
-VSEPR Theory | 3D Interactive Simulation
-</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VSEPR Theory | 3D Interactive Simulation</title>
 
 <style>
+*{box-sizing:border-box}
 
-* {
-    box-sizing: border-box;
+:root{
+    --bg:#f3f6fb;
+    --panel:#ffffff;
+    --ink:#172033;
+    --muted:#667085;
+    --line:#d8dee9;
+
+    --central:#4256d0;
+    --central-dark:#26368f;
+
+    --bonded:#30b7a5;
+    --bonded-dark:#14786d;
+
+    --bond:#7c8799;
+
+    --electron:#f4b740;
+    --electron-dark:#b97a00;
+
+    --accent:#4256d0;
 }
 
-
-body {
-
-    margin: 0;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    background: #f4f7fb;
-
-    color: #172033;
-
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
 }
 
-
-header {
-
-    background: #ffffff;
-
-    border-bottom:
-        1px solid #d8dee9;
-
-    padding: 16px 22px;
-
+header{
+    background:#fff;
+    border-bottom:1px solid var(--line);
+    padding:16px 22px;
 }
 
-
-header a {
-
-    color: #2457d6;
-
-    text-decoration: none;
-
-    font-weight: 700;
-
+header a{
+    color:var(--accent);
+    text-decoration:none;
+    font-weight:700;
 }
 
-
-main {
-
-    max-width: 1180px;
-
-    margin: auto;
-
-    padding: 24px 18px 42px;
-
+main{
+    max-width:1180px;
+    margin:auto;
+    padding:24px 18px 42px;
 }
 
-
-.hero,
-.panel {
-
-    background: #ffffff;
-
-    border:
-        1px solid #d8dee9;
-
-    border-radius: 20px;
-
-    padding: 22px;
-
-    box-shadow:
-        0 5px 20px
-        rgba(20,30,55,0.05);
-
+.hero,.panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 6px 24px rgba(28,39,66,.06);
 }
 
-
-.hero {
-
-    text-align: center;
-
-    margin-bottom: 18px;
-
+.hero{
+    text-align:center;
+    margin-bottom:18px;
 }
 
-
-.hero h1 {
-
-    margin: 0;
-
-    font-size:
-        clamp(30px,5vw,46px);
-
+.hero h1{
+    margin:0;
+    font-size:clamp(30px,5vw,46px);
 }
 
-
-.hero p {
-
-    color: #667085;
-
-    line-height: 1.5;
-
+.hero p{
+    color:var(--muted);
+    line-height:1.5;
+    margin:8px 0 0;
 }
 
-
-.layout {
-
-    display: grid;
-
-    grid-template-columns:
-        1.35fr 0.85fr;
-
-    gap: 18px;
-
+.layout{
+    display:grid;
+    grid-template-columns:1.35fr .85fr;
+    gap:18px;
 }
 
-
-.panel h2 {
-
-    margin-top: 0;
-
+.panel h2{
+    margin:0 0 14px;
 }
 
-
-/* =========================
-   3D VIEWER
-========================= */
-
-.viewer {
-
-    position: relative;
-
-    height: 520px;
-
-    border:
-        1px solid #e4e7ec;
-
-    border-radius: 16px;
-
-    overflow: hidden;
-
+.viewer{
+    position:relative;
+    height:520px;
+    border:1px solid #dfe5ef;
+    border-radius:18px;
+    overflow:hidden;
     background:
-        radial-gradient(
-            circle at center,
-            #ffffff,
-            #edf2f8
-        );
-
-    touch-action: none;
-
-    user-select: none;
-
-    cursor: grab;
-
+        radial-gradient(circle at 50% 42%, #ffffff 0%, #f7f9fd 46%, #e8eef8 100%);
+    touch-action:none;
+    user-select:none;
+    cursor:grab;
 }
 
-
-.viewer.dragging {
-
-    cursor: grabbing;
-
+.viewer.dragging{
+    cursor:grabbing;
 }
 
-
-canvas {
-
-    width: 100%;
-
-    height: 100%;
-
-    display: block;
-
+canvas{
+    width:100%;
+    height:100%;
+    display:block;
 }
 
-
-.shape-label {
-
-    position: absolute;
-
-    top: 14px;
-
-    left: 50%;
-
-    transform:
-        translateX(-50%);
-
-    background:
-        rgba(255,255,255,0.94);
-
-    border:
-        1px solid #d8dee9;
-
-    border-radius: 20px;
-
-    padding: 8px 14px;
-
-    font-weight: 800;
-
-    pointer-events: none;
-
+.shape-label{
+    position:absolute;
+    top:15px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:8px 15px;
+    border-radius:999px;
+    background:rgba(255,255,255,.94);
+    border:1px solid var(--line);
+    box-shadow:0 3px 12px rgba(28,39,66,.06);
+    font-weight:800;
+    pointer-events:none;
 }
 
-
-.viewer-help {
-
-    position: absolute;
-
-    left: 14px;
-
-    bottom: 12px;
-
-    background:
-        rgba(255,255,255,0.93);
-
-    border:
-        1px solid #d8dee9;
-
-    border-radius: 10px;
-
-    padding: 8px 11px;
-
-    color: #667085;
-
-    font-size: 13px;
-
-    pointer-events: none;
-
+.viewer-help{
+    position:absolute;
+    left:14px;
+    bottom:12px;
+    background:rgba(255,255,255,.94);
+    border:1px solid var(--line);
+    border-radius:11px;
+    padding:8px 11px;
+    color:var(--muted);
+    font-size:13px;
+    pointer-events:none;
 }
 
-
-/* =========================
-   CONTROLS
-========================= */
-
-.control {
-
-    border:
-        1px solid #e4e7ec;
-
-    border-radius: 13px;
-
-    padding: 14px;
-
-    margin-bottom: 13px;
-
+.control{
+    border:1px solid #e3e8f0;
+    background:#fbfcfe;
+    border-radius:14px;
+    padding:14px;
+    margin-bottom:13px;
 }
 
-
-label {
-
-    font-weight: 700;
-
+label{
+    font-weight:700;
 }
 
-
-input[type="range"] {
-
-    width: 100%;
-
-    margin-top: 10px;
-
+input[type="range"]{
+    width:100%;
+    margin-top:10px;
+    accent-color:var(--accent);
 }
 
-
-.value {
-
-    font-size: 20px;
-
-    font-weight: 800;
-
-    margin-top: 5px;
-
+.value{
+    font-size:20px;
+    font-weight:800;
+    margin-top:5px;
 }
 
-
-.result {
-
-    background: #f0f4ff;
-
-    border-radius: 14px;
-
-    padding: 15px;
-
-    text-align: center;
-
+.result{
+    background:linear-gradient(135deg,#eef1ff,#f8f9ff);
+    border:1px solid #dfe4ff;
+    border-radius:15px;
+    padding:15px;
+    text-align:center;
 }
 
-
-.result .big {
-
-    font-size: 27px;
-
-    font-weight: 900;
-
+.result .big{
+    font-size:27px;
+    font-weight:900;
 }
 
-
-.examples {
-
-    display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap: 8px;
-
+.examples{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
 }
 
-
-button {
-
-    border: 0;
-
-    border-radius: 10px;
-
-    padding: 11px;
-
-    background: #2457d6;
-
-    color: #ffffff;
-
-    font-weight: 800;
-
-    cursor: pointer;
-
+button{
+    border:0;
+    border-radius:11px;
+    padding:11px;
+    background:var(--accent);
+    color:#fff;
+    font-weight:800;
+    cursor:pointer;
+    transition:.15s;
 }
 
-
-button.secondary {
-
-    background: #eef1f5;
-
-    color: #172033;
-
+button:hover{
+    transform:translateY(-1px);
+    box-shadow:0 5px 14px rgba(66,86,208,.18);
 }
 
-
-.note {
-
-    color: #667085;
-
-    font-size: 13px;
-
-    line-height: 1.55;
-
+button.secondary{
+    background:#eef1f6;
+    color:var(--ink);
 }
 
-
-.legend {
-
-    display: flex;
-
-    gap: 15px;
-
-    flex-wrap: wrap;
-
-    margin-top: 12px;
-
-    color: #667085;
-
-    font-size: 13px;
-
+.note{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.55;
 }
 
-
-.legend-item {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 6px;
-
+.legend{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-top:12px;
+    color:var(--muted);
+    font-size:13px;
 }
 
-
-.legend-dot {
-
-    width: 12px;
-
-    height: 12px;
-
-    border-radius: 50%;
-
+.legend-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
 }
 
+.legend-dot{
+    width:13px;
+    height:13px;
+    border-radius:50%;
+}
+
+.electron-pair-icon{
+    position:relative;
+    width:28px;
+    height:13px;
+    display:inline-block;
+}
+
+.electron-pair-icon::before,
+.electron-pair-icon::after{
+    content:"";
+    position:absolute;
+    top:1px;
+    width:11px;
+    height:11px;
+    border-radius:50%;
+    background:var(--electron);
+    border:1px solid var(--electron-dark);
+}
+
+.electron-pair-icon::before{left:1px}
+.electron-pair-icon::after{right:1px}
 
 @media(max-width:850px){
-
-    .layout {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
+    .layout{grid-template-columns:1fr}
+    .viewer{height:460px}
 }
-
 
 @media(max-width:520px){
-
-    .examples {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-    .viewer {
-
-        height: 420px;
-
-    }
-
+    .examples{grid-template-columns:1fr}
+    .viewer{height:410px}
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
 <header>
-
-<a href="../">
-
-← Chemical Bonding
-
-</a>
-
+<a href="../">← Chemical Bonding</a>
 </header>
-
 
 <main>
 
-
 <section class="hero">
-
-<h1>
-
-🔗 VSEPR Theory — 3D
-
-</h1>
-
+<h1>🔗 VSEPR Theory — 3D</h1>
 <p>
-
-Rotate the molecule to observe its geometry
-from different angles.
-
+Rotate the model to view molecular geometry from different angles.
+Lone pairs are shown as electron pairs close to the central atom.
 </p>
-
 </section>
-
-
 
 <div class="layout">
 
-
-<!-- ====================================================
-     3D VIEWER
-==================================================== -->
-
 <section class="panel">
 
-<h2>
+<h2>3D Molecular Geometry</h2>
 
-3D Molecular Geometry
-
-</h2>
-
-
-<div
-    class="viewer"
-    id="viewer"
->
+<div class="viewer" id="viewer">
 
 <canvas id="canvas"></canvas>
 
-
-<div
-    class="shape-label"
-    id="shapeLabel"
->
-
+<div class="shape-label" id="shapeLabel">
 Linear
-
 </div>
-
 
 <div class="viewer-help">
-
 👆 Drag with finger, stylus or mouse to rotate
-
 </div>
 
-
 </div>
-
-
 
 <div class="legend">
 
-
 <div class="legend-item">
-
-<div
-    class="legend-dot"
-    style="background:#2457d6"
-></div>
-
+<span class="legend-dot" style="background:var(--central)"></span>
 Central atom
-
 </div>
 
-
 <div class="legend-item">
-
-<div
-    class="legend-dot"
-    style="background:#4f83ff"
-></div>
-
+<span class="legend-dot" style="background:var(--bonded)"></span>
 Bonded atom
-
 </div>
-
 
 <div class="legend-item">
-
-<div
-    class="legend-dot"
-    style="background:#f59e0b"
-></div>
-
+<span class="electron-pair-icon"></span>
 Lone pair
-
 </div>
 
-
 </div>
-
-
 
 <button
     class="secondary"
-    style="
-        width:100%;
-        margin-top:14px
-    "
+    style="width:100%;margin-top:14px"
     onclick="resetView()"
 >
-
 ↺ Reset View
-
 </button>
-
 
 </section>
 
 
-
-<!-- ====================================================
-     CONTROLS
-==================================================== -->
-
 <section class="panel">
 
-
-<h2>
-
-Change Electron Pairs
-
-</h2>
-
-
+<h2>Change Electron Pairs</h2>
 
 <div class="control">
 
 <label for="bonded">
-
 Bonded atoms
-
 </label>
-
 
 <input
     id="bonded"
@@ -610,29 +348,18 @@ Bonded atoms
     step="1"
 >
 
-
 <div class="value">
-
-<span id="bondedVal">
-
-2
-
-</span>
-
+<span id="bondedVal">2</span>
 </div>
 
 </div>
-
 
 
 <div class="control">
 
 <label for="lone">
-
 Lone pairs on central atom
-
 </label>
-
 
 <input
     id="lone"
@@ -643,172 +370,90 @@ Lone pairs on central atom
     step="1"
 >
 
-
 <div class="value">
-
-<span id="loneVal">
-
-0
-
-</span>
-
+<span id="loneVal">0</span>
 </div>
 
 </div>
-
 
 
 <div class="result">
 
-
-<div>
-
-Total electron domains
-
-</div>
-
+<div>Total electron domains</div>
 
 <div class="big">
-
-<span id="domains">
-
-2
-
-</span>
-
+<span id="domains">2</span>
 </div>
-
 
 <div id="shape">
-
 Linear
-
 </div>
 
-
 </div>
-
 
 
 <h2 style="margin-top:18px">
-
 Examples
-
 </h2>
 
 
 <div class="examples">
 
-
-<button
-    onclick="setExample(2,0)"
->
-
+<button onclick="setExample(2,0)">
 CO₂ — Linear
-
 </button>
 
-
-<button
-    onclick="setExample(3,0)"
->
-
+<button onclick="setExample(3,0)">
 BF₃ — Trigonal planar
-
 </button>
 
-
-<button
-    onclick="setExample(4,0)"
->
-
+<button onclick="setExample(4,0)">
 CH₄ — Tetrahedral
-
 </button>
 
-
-<button
-    onclick="setExample(3,1)"
->
-
+<button onclick="setExample(3,1)">
 NH₃ — Trigonal pyramidal
-
 </button>
 
-
-<button
-    onclick="setExample(2,2)"
->
-
+<button onclick="setExample(2,2)">
 H₂O — Bent
-
 </button>
 
-
-<button
-    onclick="setExample(5,0)"
->
-
+<button onclick="setExample(5,0)">
 PCl₅ — Trigonal bipyramidal
-
 </button>
 
-
-<button
-    onclick="setExample(6,0)"
->
-
+<button onclick="setExample(6,0)">
 SF₆ — Octahedral
-
 </button>
 
-
-<button
-    onclick="setExample(4,2)"
->
-
+<button onclick="setExample(4,2)">
 XeF₄ — Square planar
-
 </button>
-
 
 </div>
 
 
-
 <p class="note">
-
 <b>VSEPR principle:</b>
-electron domains arrange themselves as far apart
-as possible to minimise repulsion.
-
+electron domains arrange themselves as far apart as possible
+to minimise repulsion.
 </p>
-
 
 <p class="note">
-
-Orange objects represent lone pairs.
-They occupy electron-domain positions but are not atoms.
-
+<b>Lone pairs:</b>
+the yellow electron pairs are shown close to the central atom
+without a bond line, because a lone pair is not bonded to another atom.
 </p>
-
 
 </section>
 
-
 </div>
-
 
 </main>
 
 
-
 <script>
-
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
 
 const canvas =
     document.getElementById("canvas");
@@ -819,13 +464,11 @@ const ctx =
 const viewer =
     document.getElementById("viewer");
 
-
 const bonded =
     document.getElementById("bonded");
 
 const lone =
     document.getElementById("lone");
-
 
 const bondedVal =
     document.getElementById("bondedVal");
@@ -843,170 +486,95 @@ const shapeLabel =
     document.getElementById("shapeLabel");
 
 
+let rotationX = -0.30;
+let rotationY = 0.45;
 
-/* =====================================================
-   ROTATION
-===================================================== */
+let dragging = false;
 
-let rotationX =
-    -0.30;
+let previousX = 0;
+let previousY = 0;
 
-let rotationY =
-    0.45;
-
-
-let dragging =
-    false;
-
-let previousX =
-    0;
-
-let previousY =
-    0;
-
-
-
-/* =====================================================
-   VSEPR SHAPE NAME
-===================================================== */
 
 function shapeName(b,l){
 
-    const d =
-        b + l;
+    const d = b + l;
 
-
-    if(d === 2){
-
+    if(d === 2)
         return "Linear";
-
-    }
-
 
     if(d === 3){
 
-        if(l === 1){
-
+        if(l === 1)
             return "Bent";
-
-        }
 
         return "Trigonal planar";
 
     }
 
-
     if(d === 4){
 
-        if(l === 1){
-
+        if(l === 1)
             return "Trigonal pyramidal";
 
-        }
-
-        if(l === 2){
-
+        if(l === 2)
             return "Bent";
-
-        }
 
         return "Tetrahedral";
 
     }
 
-
     if(d === 5){
 
-        if(l === 1){
-
+        if(l === 1)
             return "Seesaw";
 
-        }
-
-        if(l === 2){
-
+        if(l === 2)
             return "T-shaped";
 
-        }
-
-        if(l === 3){
-
+        if(l === 3)
             return "Linear";
-
-        }
 
         return "Trigonal bipyramidal";
 
     }
 
-
     if(d === 6){
 
-        if(l === 1){
-
+        if(l === 1)
             return "Square pyramidal";
 
-        }
-
-        if(l === 2){
-
+        if(l === 2)
             return "Square planar";
-
-        }
 
         return "Octahedral";
 
     }
-
 
     return "Unsupported geometry";
 
 }
 
 
-
-/* =====================================================
-   IDEAL ELECTRON DOMAIN COORDINATES
-===================================================== */
-
 function baseVectors(d){
-
-
-    /* Linear */
 
     if(d === 2){
 
         return [
-
             [-1,0,0],
-
             [1,0,0]
-
         ];
 
     }
-
-
-
-    /* Trigonal planar */
 
     if(d === 3){
 
         return [
-
             [1,0,0],
-
             [-0.5,0.866,0],
-
             [-0.5,-0.866,0]
-
         ];
 
     }
-
-
-
-    /* Tetrahedral */
 
     if(d === 4){
 
@@ -1014,80 +582,43 @@ function baseVectors(d){
             1 / Math.sqrt(3);
 
         return [
-
             [ s, s, s],
-
             [-s,-s, s],
-
             [-s, s,-s],
-
             [ s,-s,-s]
-
         ];
 
     }
-
-
-
-    /* Trigonal bipyramidal */
 
     if(d === 5){
 
         return [
-
-            /* axial */
-
             [0,0,1],
-
             [0,0,-1],
-
-
-            /* equatorial */
-
             [1,0,0],
-
             [-0.5,0.866,0],
-
             [-0.5,-0.866,0]
-
         ];
 
     }
-
-
-
-    /* Octahedral */
 
     if(d === 6){
 
         return [
-
             [1,0,0],
-
             [-1,0,0],
-
             [0,1,0],
-
             [0,-1,0],
-
             [0,0,1],
-
             [0,0,-1]
-
         ];
 
     }
-
 
     return [];
 
 }
 
-
-
-/* =====================================================
-   LONE PAIR ARRANGEMENT
-===================================================== */
 
 function arrangeDomains(d,l){
 
@@ -1096,75 +627,51 @@ function arrangeDomains(d,l){
 
 
     /*
-    Trigonal bipyramidal:
-
-    lone pairs occupy equatorial positions first.
+    In a trigonal bipyramidal arrangement,
+    lone pairs preferentially occupy equatorial sites.
     */
 
     if(d === 5 && l > 0){
 
         v = [
-
             v[2],
-
             v[3],
-
             v[4],
-
             v[0],
-
             v[1]
-
         ];
 
     }
 
 
     /*
-    XeF4:
-
-    two lone pairs lie opposite each other,
-    leaving four atoms in a square plane.
+    For XeF4, the two lone pairs occupy
+    opposite positions, leaving a square plane.
     */
 
     if(d === 6 && l === 2){
 
         v = [
-
             v[4],
-
             v[5],
-
             v[0],
-
             v[1],
-
             v[2],
-
             v[3]
-
         ];
 
     }
-
 
     return v;
 
 }
 
 
-
-/* =====================================================
-   3D ROTATION
-===================================================== */
-
 function rotate(point){
 
     let [x,y,z] =
         point;
 
-
-    /* Y-axis rotation */
 
     const cosY =
         Math.cos(rotationY);
@@ -1179,9 +686,6 @@ function rotate(point){
     const z1 =
         -x*sinY + z*cosY;
 
-
-
-    /* X-axis rotation */
 
     const cosX =
         Math.cos(rotationX);
@@ -1198,27 +702,22 @@ function rotate(point){
 
 
     return [
-
         x1,
-
         y1,
-
         z2
-
     ];
 
 }
 
 
-
-/* =====================================================
-   3D → 2D PROJECTION
-===================================================== */
-
-function project(point){
+function project(point, distanceFactor=1){
 
     const rotated =
-        rotate(point);
+        rotate([
+            point[0]*distanceFactor,
+            point[1]*distanceFactor,
+            point[2]*distanceFactor
+        ]);
 
 
     const x =
@@ -1248,10 +747,6 @@ function project(point){
             rect.height
         ) * 0.30;
 
-
-    /*
-    simple perspective effect
-    */
 
     const perspective =
         1 + z * 0.16;
@@ -1288,11 +783,6 @@ function project(point){
 }
 
 
-
-/* =====================================================
-   COLOUR UTILITY
-===================================================== */
-
 function darken(hex,factor){
 
     const number =
@@ -1321,11 +811,6 @@ function darken(hex,factor){
 }
 
 
-
-/* =====================================================
-   DRAW 3D SPHERE
-===================================================== */
-
 function drawSphere(
     x,
     y,
@@ -1341,7 +826,7 @@ function drawSphere(
 
             y-radius*.35,
 
-            radius*.15,
+            radius*.12,
 
             x,
 
@@ -1359,7 +844,7 @@ function drawSphere(
 
 
     gradient.addColorStop(
-        .25,
+        .20,
         colour
     );
 
@@ -1374,17 +859,11 @@ function drawSphere(
 
 
     ctx.arc(
-
         x,
-
         y,
-
         radius,
-
         0,
-
         Math.PI*2
-
     );
 
 
@@ -1396,7 +875,7 @@ function drawSphere(
 
 
     ctx.strokeStyle =
-        "#172033";
+        "rgba(23,32,51,.75)";
 
 
     ctx.lineWidth =
@@ -1404,7 +883,6 @@ function drawSphere(
 
 
     ctx.stroke();
-
 
 
     if(label){
@@ -1426,13 +904,9 @@ function drawSphere(
 
 
         ctx.fillText(
-
             label,
-
             x,
-
             y
-
         );
 
     }
@@ -1440,10 +914,78 @@ function drawSphere(
 }
 
 
+/*
+Draw a lone pair as two compact electron spheres,
+with NO bond line to the central atom.
+*/
 
-/* =====================================================
-   DRAW MODEL
-===================================================== */
+function drawLonePair(vector){
+
+    /*
+    Keep the lone pair much closer to the central atom
+    than a bonded atom.
+    */
+
+    const p =
+        project(
+            vector,
+            0.53
+        );
+
+
+    const rotated =
+        rotate(vector);
+
+
+    /*
+    Build a small screen-space perpendicular direction
+    so the two electrons sit side-by-side.
+    */
+
+    let px =
+        -rotated[1];
+
+    let py =
+        rotated[0];
+
+
+    const len =
+        Math.hypot(px,py)
+        ||
+        1;
+
+
+    px /= len;
+    py /= len;
+
+
+    const separation =
+        10 * p.perspective;
+
+
+    const radius =
+        8.5 * p.perspective;
+
+
+    drawSphere(
+        p.x + px*separation,
+        p.y + py*separation,
+        radius,
+        "#f4b740",
+        ""
+    );
+
+
+    drawSphere(
+        p.x - px*separation,
+        p.y - py*separation,
+        radius,
+        "#f4b740",
+        ""
+    );
+
+}
+
 
 function draw(){
 
@@ -1452,15 +994,10 @@ function draw(){
 
 
     ctx.clearRect(
-
         0,
-
         0,
-
         rect.width,
-
         rect.height
-
     );
 
 
@@ -1504,11 +1041,6 @@ function draw(){
         name;
 
 
-
-    /*
-    only 2–6 domains are supported
-    */
-
     if(
         domains < 2
         ||
@@ -1543,7 +1075,6 @@ function draw(){
     }
 
 
-
     const vectors =
         arrangeDomains(
             domains,
@@ -1572,9 +1103,10 @@ function draw(){
     );
 
 
-
     /*
-    Project every object
+    For depth ordering, bonded atoms are projected
+    at full bond distance and lone pairs at a shorter
+    distance from the central atom.
     */
 
     objects.forEach(
@@ -1582,20 +1114,17 @@ function draw(){
 
             object.projected =
                 project(
-                    object.vector
+                    object.vector,
+                    object.lonePair
+                    ?
+                    0.53
+                    :
+                    1
                 );
 
         }
     );
 
-
-
-    /*
-    Sort by depth:
-
-    back objects first,
-    front objects last.
-    */
 
     objects.sort(
 
@@ -1608,20 +1137,23 @@ function draw(){
     );
 
 
-
     const center =
         project(
             [0,0,0]
         );
 
 
-
     /*
-    Draw bonds first
+    Draw ONLY actual chemical bonds.
+    Lone pairs receive no bond lines.
     */
 
     objects.forEach(
         object=>{
+
+            if(object.lonePair)
+                return;
+
 
             const p =
                 object.projected;
@@ -1631,36 +1163,22 @@ function draw(){
 
 
             ctx.moveTo(
-
                 center.x,
-
                 center.y
-
             );
 
 
             ctx.lineTo(
-
                 p.x,
-
                 p.y
-
             );
 
 
             ctx.strokeStyle =
-                object.lonePair
-                ?
-                "#d69e2e"
-                :
-                "#667085";
+                "#7c8799";
 
 
             ctx.lineWidth =
-                object.lonePair
-                ?
-                7
-                :
                 12;
 
 
@@ -1674,24 +1192,32 @@ function draw(){
     );
 
 
-
     /*
-    Draw outer atoms/lone pairs
+    Draw bonded atoms and lone pairs.
     */
 
     objects.forEach(
         object=>{
+
+            if(object.lonePair){
+
+                drawLonePair(
+                    object.vector
+                );
+
+                return;
+
+            }
+
 
             const p =
                 object.projected;
 
 
             const radius =
-                object.lonePair
-                ?
-                23*p.perspective
-                :
-                29*p.perspective;
+                29
+                *
+                p.perspective;
 
 
             drawSphere(
@@ -1702,16 +1228,8 @@ function draw(){
 
                 radius,
 
-                object.lonePair
-                ?
-                "#f59e0b"
-                :
-                "#4f83ff",
+                "#30b7a5",
 
-                object.lonePair
-                ?
-                "LP"
-                :
                 "X"
 
             );
@@ -1720,9 +1238,8 @@ function draw(){
     );
 
 
-
     /*
-    central atom
+    Draw central atom last.
     */
 
     drawSphere(
@@ -1731,9 +1248,9 @@ function draw(){
 
         center.y,
 
-        43,
+        44,
 
-        "#2457d6",
+        "#4256d0",
 
         "A"
 
@@ -1741,11 +1258,6 @@ function draw(){
 
 }
 
-
-
-/* =====================================================
-   DRAG ROTATION
-===================================================== */
 
 function pointerDown(event){
 
@@ -1773,14 +1285,10 @@ function pointerDown(event){
 }
 
 
-
 function pointerMove(event){
 
-    if(!dragging){
-
+    if(!dragging)
         return;
-
-    }
 
 
     const dx =
@@ -1795,7 +1303,6 @@ function pointerMove(event){
         previousY;
 
 
-
     rotationY +=
         dx * 0.01;
 
@@ -1804,18 +1311,14 @@ function pointerMove(event){
         dy * 0.01;
 
 
-
     rotationX =
         Math.max(
 
             -1.5,
 
             Math.min(
-
                 1.5,
-
                 rotationX
-
             )
 
         );
@@ -1834,7 +1337,6 @@ function pointerMove(event){
 }
 
 
-
 function pointerUp(){
 
     dragging =
@@ -1848,35 +1350,26 @@ function pointerUp(){
 }
 
 
-
 viewer.addEventListener(
     "pointerdown",
     pointerDown
 );
-
 
 viewer.addEventListener(
     "pointermove",
     pointerMove
 );
 
-
 viewer.addEventListener(
     "pointerup",
     pointerUp
 );
-
 
 viewer.addEventListener(
     "pointercancel",
     pointerUp
 );
 
-
-
-/* =====================================================
-   EXAMPLES
-===================================================== */
 
 function setExample(
     b,
@@ -1896,11 +1389,6 @@ function setExample(
 }
 
 
-
-/* =====================================================
-   RESET ROTATION
-===================================================== */
-
 function resetView(){
 
     rotationX =
@@ -1915,11 +1403,6 @@ function resetView(){
 
 }
 
-
-
-/* =====================================================
-   CANVAS RESIZE
-===================================================== */
 
 function resizeCanvas(){
 
@@ -1967,18 +1450,15 @@ function resizeCanvas(){
 }
 
 
-
 bonded.addEventListener(
     "input",
     draw
 );
 
-
 lone.addEventListener(
     "input",
     draw
 );
-
 
 window.addEventListener(
     "resize",
@@ -1990,7 +1470,5 @@ resizeCanvas();
 
 </script>
 
-
 </body>
-
 </html>
