@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interactive Periodic Table | First Year Chemistry</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
+header{background:#fff;border-bottom:1px solid #d8dee9;padding:16px 22px}
+header a{color:#2457d6;text-decoration:none;font-weight:700}
+main{max-width:1450px;margin:auto;padding:22px 16px 40px}
+.hero,.panel{background:#fff;border:1px solid #d8dee9;border-radius:18px;padding:20px}
+.hero{margin-bottom:16px;text-align:center}
+.hero h1{margin:0;font-size:clamp(28px,4vw,42px)} .hero p{color:#667085;margin:8px 0 0}
+.layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,.7fr);gap:16px;align-items:start}
+.table-wrap{overflow-x:auto;padding-bottom:8px}
+.pt{display:grid;grid-template-columns:repeat(18,minmax(54px,1fr));gap:5px;min-width:1030px}
+.el{min-height:66px;border:1px solid #d8dee9;border-radius:9px;background:#f8fafc;padding:5px;cursor:pointer;text-align:left;color:#172033}
+.el:hover,.el.selected{outline:3px solid #2457d6;outline-offset:1px}
+.el .z{font-size:10px;color:#667085} .el .sym{font-size:21px;font-weight:900;line-height:1.05} .el .nm{font-size:9px;color:#667085;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.placeholder{min-height:66px;border:1px dashed #cbd5e1;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#667085;font-size:11px;text-align:center;padding:4px}
+.series{display:grid;grid-template-columns:repeat(15,minmax(54px,1fr));gap:5px;min-width:860px;margin-top:10px;margin-left:calc((100% - 85px)/18 * 2)}
+.info h2{font-size:34px;margin:4px 0} .symbol-big{font-size:70px;font-weight:900;line-height:1}
+.atomic-no{color:#667085} .facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.fact{background:#f8fafc;border:1px solid #e4e7ec;border-radius:12px;padding:12px}
+.fact span{display:block;color:#667085;font-size:12px;margin-bottom:4px} .fact b{font-size:17px}
+.search-row{display:flex;gap:8px;margin-bottom:14px} input{width:100%;border:1px solid #cfd6e2;border-radius:10px;padding:11px;font-size:16px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px} .chip{background:#eef1f5;border-radius:999px;padding:6px 9px;font-size:11px}
+.note{color:#667085;font-size:12px;line-height:1.45;margin-top:14px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><a href="../">← Periodic Table</a></header>
+<main>
+<section class="hero">
+<h1>🧩 Interactive Periodic Table</h1>
+<p>Tap any element to reveal its basic atomic and periodic-table data.</p>
+</section>
+
+<div class="layout">
+<section class="panel">
+<div class="search-row"><input id="search" placeholder="Search by name, symbol or atomic number"></div>
+<div class="table-wrap">
+<div id="table" class="pt"></div>
+<div id="lanth" class="series"></div>
+<div id="act" class="series"></div>
+</div>
+<div class="legend">
+<span class="chip">s-block</span><span class="chip">p-block</span><span class="chip">d-block</span><span class="chip">f-block</span>
+</div>
+<p class="note">Tip for class: ask students to predict the group, period and block before tapping an element.</p>
+</section>
+
+<aside class="panel info" aria-live="polite">
+<div class="atomic-no" id="atomicNo">Atomic number 1</div>
+<div class="symbol-big" id="symbol">H</div>
+<h2 id="name">Hydrogen</h2>
+<div class="facts">
+<div class="fact"><span>Atomic mass</span><b id="mass">1.008</b></div>
+<div class="fact"><span>Group</span><b id="group">1</b></div>
+<div class="fact"><span>Period</span><b id="period">1</b></div>
+<div class="fact"><span>Block</span><b id="block">s-block</b></div>
+<div class="fact"><span>Category</span><b id="category">Nonmetal</b></div>
+<div class="fact"><span>Valence-shell region</span><b id="region">s-block element</b></div>
+</div>
+<p class="note">Bracketed masses denote the mass number commonly shown for elements without a standard atomic weight.</p>
+</aside>
+</div>
+</main>
+
+<script>
+const elements=[{"z": 1, "symbol": "H", "name": "Hydrogen", "group": 1, "period": 1, "category": "Nonmetal", "mass": "1.008", "block": "s"}, {"z": 2, "symbol": "He", "name": "Helium", "group": 18, "period": 1, "category": "Noble gas", "mass": "4.0026", "block": "s"}, {"z": 3, "symbol": "Li", "name": "Lithium", "group": 1, "period": 2, "category": "Alkali metal", "mass": "6.94", "block": "s"}, {"z": 4, "symbol": "Be", "name": "Beryllium", "group": 2, "period": 2, "category": "Alkaline earth metal", "mass": "9.0122", "block": "s"}, {"z": 5, "symbol": "B", "name": "Boron", "group": 13, "period": 2, "category": "Metalloid", "mass": "10.81", "block": "p"}, {"z": 6, "symbol": "C", "name": "Carbon", "group": 14, "period": 2, "category": "Nonmetal", "mass": "12.011", "block": "p"}, {"z": 7, "symbol": "N", "name": "Nitrogen", "group": 15, "period": 2, "category": "Nonmetal", "mass": "14.007", "block": "p"}, {"z": 8, "symbol": "O", "name": "Oxygen", "group": 16, "period": 2, "category": "Nonmetal", "mass": "15.999", "block": "p"}, {"z": 9, "symbol": "F", "name": "Fluorine", "group": 17, "period": 2, "category": "Halogen", "mass": "18.998", "block": "p"}, {"z": 10, "symbol": "Ne", "name": "Neon", "group": 18, "period": 2, "category": "Noble gas", "mass": "20.180", "block": "p"}, {"z": 11, "symbol": "Na", "name": "Sodium", "group": 1, "period": 3, "category": "Alkali metal", "mass": "22.990", "block": "s"}, {"z": 12, "symbol": "Mg", "name": "Magnesium", "group": 2, "period": 3, "category": "Alkaline earth metal", "mass": "24.305", "block": "s"}, {"z": 13, "symbol": "Al", "name": "Aluminium", "group": 13, "period": 3, "category": "Post-transition metal", "mass": "26.982", "block": "p"}, {"z": 14, "symbol": "Si", "name": "Silicon", "group": 14, "period": 3, "category": "Metalloid", "mass": "28.085", "block": "p"}, {"z": 15, "symbol": "P", "name": "Phosphorus", "group": 15, "period": 3, "category": "Nonmetal", "mass": "30.974", "block": "p"}, {"z": 16, "symbol": "S", "name": "Sulfur", "group": 16, "period": 3, "category": "Nonmetal", "mass": "32.06", "block": "p"}, {"z": 17, "symbol": "Cl", "name": "Chlorine", "group": 17, "period": 3, "category": "Halogen", "mass": "35.45", "block": "p"}, {"z": 18, "symbol": "Ar", "name": "Argon", "group": 18, "period": 3, "category": "Noble gas", "mass": "39.948", "block": "p"}, {"z": 19, "symbol": "K", "name": "Potassium", "group": 1, "period": 4, "category": "Alkali metal", "mass": "39.098", "block": "s"}, {"z": 20, "symbol": "Ca", "name": "Calcium", "group": 2, "period": 4, "category": "Alkaline earth metal", "mass": "40.078", "block": "s"}, {"z": 21, "symbol": "Sc", "name": "Scandium", "group": 3, "period": 4, "category": "Transition metal", "mass": "44.956", "block": "d"}, {"z": 22, "symbol": "Ti", "name": "Titanium", "group": 4, "period": 4, "category": "Transition metal", "mass": "47.867", "block": "d"}, {"z": 23, "symbol": "V", "name": "Vanadium", "group": 5, "period": 4, "category": "Transition metal", "mass": "50.942", "block": "d"}, {"z": 24, "symbol": "Cr", "name": "Chromium", "group": 6, "period": 4, "category": "Transition metal", "mass": "51.996", "block": "d"}, {"z": 25, "symbol": "Mn", "name": "Manganese", "group": 7, "period": 4, "category": "Transition metal", "mass": "54.938", "block": "d"}, {"z": 26, "symbol": "Fe", "name": "Iron", "group": 8, "period": 4, "category": "Transition metal", "mass": "55.845", "block": "d"}, {"z": 27, "symbol": "Co", "name": "Cobalt", "group": 9, "period": 4, "category": "Transition metal", "mass": "58.933", "block": "d"}, {"z": 28, "symbol": "Ni", "name": "Nickel", "group": 10, "period": 4, "category": "Transition metal", "mass": "58.693", "block": "d"}, {"z": 29, "symbol": "Cu", "name": "Copper", "group": 11, "period": 4, "category": "Transition metal", "mass": "63.546", "block": "d"}, {"z": 30, "symbol": "Zn", "name": "Zinc", "group": 12, "period": 4, "category": "Transition metal", "mass": "65.38", "block": "d"}, {"z": 31, "symbol": "Ga", "name": "Gallium", "group": 13, "period": 4, "category": "Post-transition metal", "mass": "69.723", "block": "p"}, {"z": 32, "symbol": "Ge", "name": "Germanium", "group": 14, "period": 4, "category": "Metalloid", "mass": "72.630", "block": "p"}, {"z": 33, "symbol": "As", "name": "Arsenic", "group": 15, "period": 4, "category": "Metalloid", "mass": "74.922", "block": "p"}, {"z": 34, "symbol": "Se", "name": "Selenium", "group": 16, "period": 4, "category": "Nonmetal", "mass": "78.971", "block": "p"}, {"z": 35, "symbol": "Br", "name": "Bromine", "group": 17, "period": 4, "category": "Halogen", "mass": "79.904", "block": "p"}, {"z": 36, "symbol": "Kr", "name": "Krypton", "group": 18, "period": 4, "category": "Noble gas", "mass": "83.798", "block": "p"}, {"z": 37, "symbol": "Rb", "name": "Rubidium", "group": 1, "period": 5, "category": "Alkali metal", "mass": "85.468", "block": "s"}, {"z": 38, "symbol": "Sr", "name": "Strontium", "group": 2, "period": 5, "category": "Alkaline earth metal", "mass": "87.62", "block": "s"}, {"z": 39, "symbol": "Y", "name": "Yttrium", "group": 3, "period": 5, "category": "Transition metal", "mass": "88.906", "block": "d"}, {"z": 40, "symbol": "Zr", "name": "Zirconium", "group": 4, "period": 5, "category": "Transition metal", "mass": "91.224", "block": "d"}, {"z": 41, "symbol": "Nb", "name": "Niobium", "group": 5, "period": 5, "category": "Transition metal", "mass": "92.906", "block": "d"}, {"z": 42, "symbol": "Mo", "name": "Molybdenum", "group": 6, "period": 5, "category": "Transition metal", "mass": "95.95", "block": "d"}, {"z": 43, "symbol": "Tc", "name": "Technetium", "group": 7, "period": 5, "category": "Transition metal", "mass": "[98]", "block": "d"}, {"z": 44, "symbol": "Ru", "name": "Ruthenium", "group": 8, "period": 5, "category": "Transition metal", "mass": "101.07", "block": "d"}, {"z": 45, "symbol": "Rh", "name": "Rhodium", "group": 9, "period": 5, "category": "Transition metal", "mass": "102.91", "block": "d"}, {"z": 46, "symbol": "Pd", "name": "Palladium", "group": 10, "period": 5, "category": "Transition metal", "mass": "106.42", "block": "d"}, {"z": 47, "symbol": "Ag", "name": "Silver", "group": 11, "period": 5, "category": "Transition metal", "mass": "107.87", "block": "d"}, {"z": 48, "symbol": "Cd", "name": "Cadmium", "group": 12, "period": 5, "category": "Transition metal", "mass": "112.41", "block": "d"}, {"z": 49, "symbol": "In", "name": "Indium", "group": 13, "period": 5, "category": "Post-transition metal", "mass": "114.82", "block": "p"}, {"z": 50, "symbol": "Sn", "name": "Tin", "group": 14, "period": 5, "category": "Post-transition metal", "mass": "118.71", "block": "p"}, {"z": 51, "symbol": "Sb", "name": "Antimony", "group": 15, "period": 5, "category": "Metalloid", "mass": "121.76", "block": "p"}, {"z": 52, "symbol": "Te", "name": "Tellurium", "group": 16, "period": 5, "category": "Metalloid", "mass": "127.60", "block": "p"}, {"z": 53, "symbol": "I", "name": "Iodine", "group": 17, "period": 5, "category": "Halogen", "mass": "126.90", "block": "p"}, {"z": 54, "symbol": "Xe", "name": "Xenon", "group": 18, "period": 5, "category": "Noble gas", "mass": "131.29", "block": "p"}, {"z": 55, "symbol": "Cs", "name": "Caesium", "group": 1, "period": 6, "category": "Alkali metal", "mass": "132.91", "block": "s"}, {"z": 56, "symbol": "Ba", "name": "Barium", "group": 2, "period": 6, "category": "Alkaline earth metal", "mass": "137.33", "block": "s"}, {"z": 57, "symbol": "La", "name": "Lanthanum", "group": 0, "period": 6, "category": "Lanthanide", "mass": "138.91", "block": "f"}, {"z": 58, "symbol": "Ce", "name": "Cerium", "group": 0, "period": 6, "category": "Lanthanide", "mass": "140.12", "block": "f"}, {"z": 59, "symbol": "Pr", "name": "Praseodymium", "group": 0, "period": 6, "category": "Lanthanide", "mass": "140.91", "block": "f"}, {"z": 60, "symbol": "Nd", "name": "Neodymium", "group": 0, "period": 6, "category": "Lanthanide", "mass": "144.24", "block": "f"}, {"z": 61, "symbol": "Pm", "name": "Promethium", "group": 0, "period": 6, "category": "Lanthanide", "mass": "[145]", "block": "f"}, {"z": 62, "symbol": "Sm", "name": "Samarium", "group": 0, "period": 6, "category": "Lanthanide", "mass": "150.36", "block": "f"}, {"z": 63, "symbol": "Eu", "name": "Europium", "group": 0, "period": 6, "category": "Lanthanide", "mass": "151.96", "block": "f"}, {"z": 64, "symbol": "Gd", "name": "Gadolinium", "group": 0, "period": 6, "category": "Lanthanide", "mass": "157.25", "block": "f"}, {"z": 65, "symbol": "Tb", "name": "Terbium", "group": 0, "period": 6, "category": "Lanthanide", "mass": "158.93", "block": "f"}, {"z": 66, "symbol": "Dy", "name": "Dysprosium", "group": 0, "period": 6, "category": "Lanthanide", "mass": "162.50", "block": "f"}, {"z": 67, "symbol": "Ho", "name": "Holmium", "group": 0, "period": 6, "category": "Lanthanide", "mass": "164.93", "block": "f"}, {"z": 68, "symbol": "Er", "name": "Erbium", "group": 0, "period": 6, "category": "Lanthanide", "mass": "167.26", "block": "f"}, {"z": 69, "symbol": "Tm", "name": "Thulium", "group": 0, "period": 6, "category": "Lanthanide", "mass": "168.93", "block": "f"}, {"z": 70, "symbol": "Yb", "name": "Ytterbium", "group": 0, "period": 6, "category": "Lanthanide", "mass": "173.05", "block": "f"}, {"z": 71, "symbol": "Lu", "name": "Lutetium", "group": 3, "period": 6, "category": "Lanthanide", "mass": "174.97", "block": "f"}, {"z": 72, "symbol": "Hf", "name": "Hafnium", "group": 4, "period": 6, "category": "Transition metal", "mass": "178.49", "block": "d"}, {"z": 73, "symbol": "Ta", "name": "Tantalum", "group": 5, "period": 6, "category": "Transition metal", "mass": "180.95", "block": "d"}, {"z": 74, "symbol": "W", "name": "Tungsten", "group": 6, "period": 6, "category": "Transition metal", "mass": "183.84", "block": "d"}, {"z": 75, "symbol": "Re", "name": "Rhenium", "group": 7, "period": 6, "category": "Transition metal", "mass": "186.21", "block": "d"}, {"z": 76, "symbol": "Os", "name": "Osmium", "group": 8, "period": 6, "category": "Transition metal", "mass": "190.23", "block": "d"}, {"z": 77, "symbol": "Ir", "name": "Iridium", "group": 9, "period": 6, "category": "Transition metal", "mass": "192.22", "block": "d"}, {"z": 78, "symbol": "Pt", "name": "Platinum", "group": 10, "period": 6, "category": "Transition metal", "mass": "195.08", "block": "d"}, {"z": 79, "symbol": "Au", "name": "Gold", "group": 11, "period": 6, "category": "Transition metal", "mass": "196.97", "block": "d"}, {"z": 80, "symbol": "Hg", "name": "Mercury", "group": 12, "period": 6, "category": "Transition metal", "mass": "200.59", "block": "d"}, {"z": 81, "symbol": "Tl", "name": "Thallium", "group": 13, "period": 6, "category": "Post-transition metal", "mass": "204.38", "block": "p"}, {"z": 82, "symbol": "Pb", "name": "Lead", "group": 14, "period": 6, "category": "Post-transition metal", "mass": "207.2", "block": "p"}, {"z": 83, "symbol": "Bi", "name": "Bismuth", "group": 15, "period": 6, "category": "Post-transition metal", "mass": "208.98", "block": "p"}, {"z": 84, "symbol": "Po", "name": "Polonium", "group": 16, "period": 6, "category": "Post-transition metal", "mass": "[209]", "block": "p"}, {"z": 85, "symbol": "At", "name": "Astatine", "group": 17, "period": 6, "category": "Halogen", "mass": "[210]", "block": "p"}, {"z": 86, "symbol": "Rn", "name": "Radon", "group": 18, "period": 6, "category": "Noble gas", "mass": "[222]", "block": "p"}, {"z": 87, "symbol": "Fr", "name": "Francium", "group": 1, "period": 7, "category": "Alkali metal", "mass": "[223]", "block": "s"}, {"z": 88, "symbol": "Ra", "name": "Radium", "group": 2, "period": 7, "category": "Alkaline earth metal", "mass": "[226]", "block": "s"}, {"z": 89, "symbol": "Ac", "name": "Actinium", "group": 0, "period": 7, "category": "Actinide", "mass": "[227]", "block": "f"}, {"z": 90, "symbol": "Th", "name": "Thorium", "group": 0, "period": 7, "category": "Actinide", "mass": "232.04", "block": "f"}, {"z": 91, "symbol": "Pa", "name": "Protactinium", "group": 0, "period": 7, "category": "Actinide", "mass": "231.04", "block": "f"}, {"z": 92, "symbol": "U", "name": "Uranium", "group": 0, "period": 7, "category": "Actinide", "mass": "238.03", "block": "f"}, {"z": 93, "symbol": "Np", "name": "Neptunium", "group": 0, "period": 7, "category": "Actinide", "mass": "[237]", "block": "f"}, {"z": 94, "symbol": "Pu", "name": "Plutonium", "group": 0, "period": 7, "category": "Actinide", "mass": "[244]", "block": "f"}, {"z": 95, "symbol": "Am", "name": "Americium", "group": 0, "period": 7, "category": "Actinide", "mass": "[243]", "block": "f"}, {"z": 96, "symbol": "Cm", "name": "Curium", "group": 0, "period": 7, "category": "Actinide", "mass": "[247]", "block": "f"}, {"z": 97, "symbol": "Bk", "name": "Berkelium", "group": 0, "period": 7, "category": "Actinide", "mass": "[247]", "block": "f"}, {"z": 98, "symbol": "Cf", "name": "Californium", "group": 0, "period": 7, "category": "Actinide", "mass": "[251]", "block": "f"}, {"z": 99, "symbol": "Es", "name": "Einsteinium", "group": 0, "period": 7, "category": "Actinide", "mass": "[252]", "block": "f"}, {"z": 100, "symbol": "Fm", "name": "Fermium", "group": 0, "period": 7, "category": "Actinide", "mass": "[257]", "block": "f"}, {"z": 101, "symbol": "Md", "name": "Mendelevium", "group": 0, "period": 7, "category": "Actinide", "mass": "[258]", "block": "f"}, {"z": 102, "symbol": "No", "name": "Nobelium", "group": 0, "period": 7, "category": "Actinide", "mass": "[259]", "block": "f"}, {"z": 103, "symbol": "Lr", "name": "Lawrencium", "group": 3, "period": 7, "category": "Actinide", "mass": "[266]", "block": "f"}, {"z": 104, "symbol": "Rf", "name": "Rutherfordium", "group": 4, "period": 7, "category": "Transition metal", "mass": "[267]", "block": "d"}, {"z": 105, "symbol": "Db", "name": "Dubnium", "group": 5, "period": 7, "category": "Transition metal", "mass": "[268]", "block": "d"}, {"z": 106, "symbol": "Sg", "name": "Seaborgium", "group": 6, "period": 7, "category": "Transition metal", "mass": "[269]", "block": "d"}, {"z": 107, "symbol": "Bh", "name": "Bohrium", "group": 7, "period": 7, "category": "Transition metal", "mass": "[270]", "block": "d"}, {"z": 108, "symbol": "Hs", "name": "Hassium", "group": 8, "period": 7, "category": "Transition metal", "mass": "[269]", "block": "d"}, {"z": 109, "symbol": "Mt", "name": "Meitnerium", "group": 9, "period": 7, "category": "Transition metal", "mass": "[278]", "block": "d"}, {"z": 110, "symbol": "Ds", "name": "Darmstadtium", "group": 10, "period": 7, "category": "Transition metal", "mass": "[281]", "block": "d"}, {"z": 111, "symbol": "Rg", "name": "Roentgenium", "group": 11, "period": 7, "category": "Transition metal", "mass": "[282]", "block": "d"}, {"z": 112, "symbol": "Cn", "name": "Copernicium", "group": 12, "period": 7, "category": "Transition metal", "mass": "[285]", "block": "d"}, {"z": 113, "symbol": "Nh", "name": "Nihonium", "group": 13, "period": 7, "category": "Post-transition metal", "mass": "[286]", "block": "p"}, {"z": 114, "symbol": "Fl", "name": "Flerovium", "group": 14, "period": 7, "category": "Post-transition metal", "mass": "[289]", "block": "p"}, {"z": 115, "symbol": "Mc", "name": "Moscovium", "group": 15, "period": 7, "category": "Post-transition metal", "mass": "[290]", "block": "p"}, {"z": 116, "symbol": "Lv", "name": "Livermorium", "group": 16, "period": 7, "category": "Post-transition metal", "mass": "[293]", "block": "p"}, {"z": 117, "symbol": "Ts", "name": "Tennessine", "group": 17, "period": 7, "category": "Halogen", "mass": "[294]", "block": "p"}, {"z": 118, "symbol": "Og", "name": "Oganesson", "group": 18, "period": 7, "category": "Noble gas", "mass": "[294]", "block": "p"}];
+const byZ=new Map(elements.map(e=>[e.z,e]));
+const table=document.getElementById("table");
+const lanth=document.getElementById("lanth");
+const act=document.getElementById("act");
+let selected=1;
+
+function buttonFor(e){
+ const b=document.createElement("button");
+ b.className="el"; b.dataset.z=e.z;
+ b.innerHTML=`<div class="z">${e.z}</div><div class="sym">${e.symbol}</div><div class="nm">${e.name}</div>`;
+ b.addEventListener("click",()=>selectElement(e.z));
+ return b;
+}
+
+function build(){
+ for(let period=1;period<=7;period++){
+   for(let group=1;group<=18;group++){
+     let e=elements.find(x=>x.period===period && x.group===group);
+     if(period===6 && group===3){
+       const p=document.createElement("div");p.className="placeholder";p.textContent="57–71";table.appendChild(p);continue;
+     }
+     if(period===7 && group===3){
+       const p=document.createElement("div");p.className="placeholder";p.textContent="89–103";table.appendChild(p);continue;
+     }
+     if(e) table.appendChild(buttonFor(e));
+     else {const s=document.createElement("div");table.appendChild(s);}
+   }
+ }
+ elements.filter(e=>e.category==="Lanthanide" && e.z<=71).forEach(e=>lanth.appendChild(buttonFor(e)));
+ elements.filter(e=>e.category==="Actinide" && e.z<=103).forEach(e=>act.appendChild(buttonFor(e)));
+}
+
+function selectElement(z){
+ const e=byZ.get(z); if(!e)return; selected=z;
+ document.querySelectorAll(".el").forEach(x=>x.classList.toggle("selected",Number(x.dataset.z)===z));
+ document.getElementById("atomicNo").textContent=`Atomic number ${e.z}`;
+ document.getElementById("symbol").textContent=e.symbol;
+ document.getElementById("name").textContent=e.name;
+ document.getElementById("mass").textContent=e.mass;
+ document.getElementById("group").textContent=e.group||"Lanthanide / Actinide";
+ document.getElementById("period").textContent=e.period;
+ document.getElementById("block").textContent=e.block+"-block";
+ document.getElementById("category").textContent=e.category;
+ document.getElementById("region").textContent=e.block+"-block element";
+}
+
+document.getElementById("search").addEventListener("input",e=>{
+ const q=e.target.value.trim().toLowerCase();
+ document.querySelectorAll(".el").forEach(btn=>{
+   const el=byZ.get(Number(btn.dataset.z));
+   const hit=!q || el.name.toLowerCase().includes(q) || el.symbol.toLowerCase()===q || String(el.z)===q;
+   btn.style.opacity=hit?"1":".18";
+ });
+});
+
+build();selectElement(1);
+</script>
+</body>
+</html>
