@@ -3,95 +3,1021 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Hess's Law | Interactive Simulation</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
-header{background:#fff;border-bottom:1px solid #d8dee9;padding:16px 20px}header a{color:#2457d6;text-decoration:none;font-weight:700}
-main{max-width:1180px;margin:auto;padding:22px 18px 42px}.hero,.panel{background:#fff;border:1px solid #d8dee9;border-radius:20px;padding:22px;box-shadow:0 5px 20px rgba(20,30,55,.05)}
-.hero{text-align:center;margin-bottom:18px}.hero h1{margin:0;font-size:clamp(30px,5vw,46px)}.hero p{color:#667085;line-height:1.5}
-.layout{display:grid;grid-template-columns:1.5fr .85fr;gap:18px}.panel h2{margin:0 0 14px}.diagram{border:1px solid #d8dee9;border-radius:15px;background:#fafbfc;overflow:hidden}svg{width:100%;height:auto;display:block}
-.control{padding:13px;border:1px solid #e4e7ec;border-radius:13px;margin-bottom:13px}label{font-weight:700}input[type=range]{width:100%;margin-top:9px}.value{font-size:19px;font-weight:800;margin-top:4px}
-.result{padding:15px;border-radius:14px;background:#f0f4ff;text-align:center}.result .big{font-size:27px;font-weight:900}.formula{text-align:center;font-size:23px;font-weight:800;margin:15px 0}
-button{width:100%;padding:12px;border:0;border-radius:11px;background:#2457d6;color:#fff;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px}button.secondary{background:#eef1f5;color:#172033}
-.note{color:#667085;font-size:13px;line-height:1.55}.badge{display:inline-block;padding:5px 9px;border-radius:99px;background:#eef1f5;font-size:12px;font-weight:800;margin-bottom:8px}
-@media(max-width:850px){.layout{grid-template-columns:1fr}}
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    color: #172033;
+}
+
+header {
+    background: #ffffff;
+    border-bottom: 1px solid #d8dee9;
+    padding: 16px 20px;
+}
+
+header a {
+    color: #2457d6;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+main {
+    max-width: 1200px;
+    margin: auto;
+    padding: 22px 18px 42px;
+}
+
+.hero,
+.panel {
+    background: #ffffff;
+    border: 1px solid #d8dee9;
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: 0 5px 20px rgba(20, 30, 55, 0.05);
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+.hero h1 {
+    margin: 0;
+    font-size: clamp(30px, 5vw, 46px);
+}
+
+.hero p {
+    color: #667085;
+    line-height: 1.5;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 1.5fr 0.9fr;
+    gap: 18px;
+}
+
+.panel h2 {
+    margin: 0 0 14px;
+}
+
+.diagram {
+    border: 1px solid #d8dee9;
+    border-radius: 15px;
+    background: #fafbfc;
+    overflow: hidden;
+}
+
+svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.control {
+    padding: 14px;
+    border: 1px solid #e4e7ec;
+    border-radius: 13px;
+    margin-bottom: 13px;
+}
+
+label {
+    font-weight: 700;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin-top: 10px;
+    accent-color: #2563eb;
+}
+
+.value {
+    font-size: 19px;
+    font-weight: 800;
+    margin-top: 5px;
+}
+
+.fixed-box {
+    padding: 15px;
+    margin-bottom: 13px;
+    border: 2px solid #7c3aed;
+    border-radius: 14px;
+    background: #f5f3ff;
+    text-align: center;
+}
+
+.fixed-box .big {
+    margin-top: 5px;
+    color: #6d28d9;
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.auto-box {
+    padding: 15px;
+    margin-bottom: 13px;
+    border: 2px solid #f59e0b;
+    border-radius: 14px;
+    background: #fffbeb;
+    text-align: center;
+}
+
+.auto-box .big {
+    margin-top: 5px;
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.result {
+    padding: 15px;
+    border-radius: 14px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    text-align: center;
+}
+
+.result .big {
+    margin-top: 5px;
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.formula {
+    padding: 13px;
+    margin: 14px 0;
+    border-radius: 12px;
+    background: #f8fafc;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.6;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: 0;
+    border-radius: 11px;
+    background: #2457d6;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+button.secondary {
+    background: #eef1f5;
+    color: #172033;
+}
+
+button.secondary:hover {
+    background: #e2e8f0;
+}
+
+.note {
+    color: #667085;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 99px;
+    background: #eef1f5;
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 13px;
+    color: #475467;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-line {
+    width: 28px;
+    height: 5px;
+    border-radius: 5px;
+}
+
+.positive {
+    color: #dc2626;
+}
+
+.negative {
+    color: #059669;
+}
+
+.neutral {
+    color: #64748b;
+}
+
+@media (max-width: 850px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+}
 </style>
 </head>
+
 <body>
-<header><a href="../">← Thermodynamics</a></header>
+
+<header>
+    <a href="../">← Thermodynamics</a>
+</header>
+
 <main>
-<section class="hero"><h1>⚖️ Hess's Law</h1><p>Explore how the enthalpy change of a reaction is independent of the path taken.</p></section>
+
+<section class="hero">
+    <h1>⚖️ Hess's Law</h1>
+
+    <p>
+        Change the enthalpy values of the intermediate steps.
+        The final step automatically adjusts so that the total enthalpy
+        remains equal to the fixed direct-path enthalpy.
+    </p>
+</section>
 
 <div class="layout">
+
 <section class="panel">
-<h2>Energy Pathway</h2>
+
+<h2>Hess Cycle</h2>
+
 <div class="diagram">
-<svg viewBox="0 0 820 560" aria-label="Hess law energy pathway diagram">
-<!-- Direct path -->
-<path d="M145 125 C300 125 430 125 665 125" fill="none" stroke="#344054" stroke-width="4" stroke-dasharray="10 8"/>
-<polygon points="665,125 647,116 647,134" fill="#344054"/>
-<!-- Indirect path -->
-<path d="M145 125 C190 125 205 275 270 275" fill="none" stroke="#2457d6" stroke-width="5"/>
-<path d="M270 275 C390 275 520 275 665 125" fill="none" stroke="#2457d6" stroke-width="5"/>
-<polygon points="665,125 646,123 656,140" fill="#2457d6"/>
-<!-- states -->
-<rect x="75" y="95" width="140" height="60" rx="12" fill="#fff" stroke="#344054" stroke-width="3"/>
-<text x="145" y="121" text-anchor="middle" font-size="18" font-weight="800">A</text><text x="145" y="143" text-anchor="middle" font-size="13">Initial state</text>
-<rect x="200" y="245" width="140" height="60" rx="12" fill="#fff" stroke="#2457d6" stroke-width="3"/>
-<text x="270" y="271" text-anchor="middle" font-size="18" font-weight="800">B</text><text x="270" y="293" text-anchor="middle" font-size="13">Intermediate</text>
-<rect x="595" y="95" width="140" height="60" rx="12" fill="#fff" stroke="#344054" stroke-width="3"/>
-<text x="665" y="121" text-anchor="middle" font-size="18" font-weight="800">C</text><text x="665" y="143" text-anchor="middle" font-size="13">Final state</text>
-<!-- labels -->
-<text id="directLabel" x="405" y="105" text-anchor="middle" font-size="17" font-weight="800">ΔH₁</text>
-<text id="step1Label" x="235" y="205" text-anchor="middle" font-size="16" font-weight="800">ΔH₂</text>
-<text id="step2Label" x="490" y="235" text-anchor="middle" font-size="16" font-weight="800">ΔH₃</text>
-<!-- equality -->
-<rect x="175" y="375" width="470" height="110" rx="16" fill="#f0f4ff" stroke="#d8dee9"/>
-<text x="410" y="408" text-anchor="middle" font-size="18" font-weight="700">Hess's Law</text>
-<text id="equation" x="410" y="447" text-anchor="middle" font-size="21" font-weight="900">ΔH₁ = ΔH₂ + ΔH₃</text>
-<text x="410" y="470" text-anchor="middle" font-size="13">Same initial and final states → same overall ΔH</text>
-<text x="410" y="525" text-anchor="middle" font-size="13">Dashed = direct path &nbsp;&nbsp; | &nbsp;&nbsp; Blue = indirect path</text>
+
+<svg viewBox="0 0 900 650"
+     role="img"
+     aria-label="Square Hess law cycle with two intermediate states">
+
+<defs>
+
+    <marker id="arrowPurple"
+            viewBox="0 0 10 10"
+            refX="9"
+            refY="5"
+            markerWidth="8"
+            markerHeight="8"
+            orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#7c3aed"/>
+    </marker>
+
+    <marker id="arrowStep1"
+            viewBox="0 0 10 10"
+            refX="9"
+            refY="5"
+            markerWidth="8"
+            markerHeight="8"
+            orient="auto-start-reverse">
+        <path id="arrowHead1"
+              d="M 0 0 L 10 5 L 0 10 z"
+              fill="#2563eb"/>
+    </marker>
+
+    <marker id="arrowStep2"
+            viewBox="0 0 10 10"
+            refX="9"
+            refY="5"
+            markerWidth="8"
+            markerHeight="8"
+            orient="auto-start-reverse">
+        <path id="arrowHead2"
+              d="M 0 0 L 10 5 L 0 10 z"
+              fill="#2563eb"/>
+    </marker>
+
+    <marker id="arrowStep3"
+            viewBox="0 0 10 10"
+            refX="9"
+            refY="5"
+            markerWidth="8"
+            markerHeight="8"
+            orient="auto-start-reverse">
+        <path id="arrowHead3"
+              d="M 0 0 L 10 5 L 0 10 z"
+              fill="#f59e0b"/>
+    </marker>
+
+</defs>
+
+<!-- Direct path: A to D -->
+
+<path
+    d="M235 145 L665 145"
+    fill="none"
+    stroke="#7c3aed"
+    stroke-width="6"
+    stroke-dasharray="13 9"
+    marker-end="url(#arrowPurple)"
+/>
+
+<!-- Step 1: A to B -->
+
+<path
+    id="step1Path"
+    d="M170 205 L170 430"
+    fill="none"
+    stroke="#2563eb"
+    stroke-width="6"
+    marker-end="url(#arrowStep1)"
+/>
+
+<!-- Step 2: B to C -->
+
+<path
+    id="step2Path"
+    d="M235 490 L665 490"
+    fill="none"
+    stroke="#2563eb"
+    stroke-width="6"
+    marker-end="url(#arrowStep2)"
+/>
+
+<!-- Step 3: C to D -->
+
+<path
+    id="step3Path"
+    d="M730 430 L730 205"
+    fill="none"
+    stroke="#f59e0b"
+    stroke-width="6"
+    marker-end="url(#arrowStep3)"
+/>
+
+<!-- State A -->
+
+<rect
+    x="80"
+    y="115"
+    width="180"
+    height="90"
+    rx="16"
+    fill="#ffffff"
+    stroke="#344054"
+    stroke-width="3"
+/>
+
+<text
+    x="170"
+    y="150"
+    text-anchor="middle"
+    font-size="23"
+    font-weight="900">
+    A
+</text>
+
+<text
+    x="170"
+    y="177"
+    text-anchor="middle"
+    font-size="14"
+    fill="#475467">
+    Initial state
+</text>
+
+<!-- State D -->
+
+<rect
+    x="640"
+    y="115"
+    width="180"
+    height="90"
+    rx="16"
+    fill="#ffffff"
+    stroke="#7c3aed"
+    stroke-width="3"
+/>
+
+<text
+    x="730"
+    y="150"
+    text-anchor="middle"
+    font-size="23"
+    font-weight="900">
+    D
+</text>
+
+<text
+    x="730"
+    y="177"
+    text-anchor="middle"
+    font-size="14"
+    fill="#475467">
+    Final state
+</text>
+
+<!-- Intermediate B -->
+
+<rect
+    x="80"
+    y="445"
+    width="180"
+    height="90"
+    rx="16"
+    fill="#eff6ff"
+    stroke="#2563eb"
+    stroke-width="3"
+/>
+
+<text
+    x="170"
+    y="480"
+    text-anchor="middle"
+    font-size="23"
+    font-weight="900">
+    B
+</text>
+
+<text
+    x="170"
+    y="507"
+    text-anchor="middle"
+    font-size="14"
+    fill="#475467">
+    Intermediate 1
+</text>
+
+<!-- Intermediate C -->
+
+<rect
+    x="640"
+    y="445"
+    width="180"
+    height="90"
+    rx="16"
+    fill="#fffbeb"
+    stroke="#f59e0b"
+    stroke-width="3"
+/>
+
+<text
+    x="730"
+    y="480"
+    text-anchor="middle"
+    font-size="23"
+    font-weight="900">
+    C
+</text>
+
+<text
+    x="730"
+    y="507"
+    text-anchor="middle"
+    font-size="14"
+    fill="#475467">
+    Intermediate 2
+</text>
+
+<!-- Direct-path label -->
+
+<rect
+    x="330"
+    y="72"
+    width="240"
+    height="52"
+    rx="12"
+    fill="#f5f3ff"
+    stroke="#c4b5fd"
+/>
+
+<text
+    id="directLabel"
+    x="450"
+    y="104"
+    text-anchor="middle"
+    font-size="18"
+    font-weight="900"
+    fill="#6d28d9">
+    ΔHdirect = −100 kJ mol⁻¹
+</text>
+
+<!-- Step labels -->
+
+<rect
+    x="14"
+    y="286"
+    width="145"
+    height="64"
+    rx="11"
+    fill="#ffffff"
+    stroke="#d8dee9"
+/>
+
+<text
+    id="step1Label"
+    x="86"
+    y="313"
+    text-anchor="middle"
+    font-size="16"
+    font-weight="900">
+    ΔH₁ = −40
+</text>
+
+<text
+    x="86"
+    y="337"
+    text-anchor="middle"
+    font-size="13"
+    fill="#667085">
+    Adjustable
+</text>
+
+<rect
+    x="330"
+    y="515"
+    width="240"
+    height="65"
+    rx="11"
+    fill="#ffffff"
+    stroke="#d8dee9"
+/>
+
+<text
+    id="step2Label"
+    x="450"
+    y="543"
+    text-anchor="middle"
+    font-size="16"
+    font-weight="900">
+    ΔH₂ = +20
+</text>
+
+<text
+    x="450"
+    y="566"
+    text-anchor="middle"
+    font-size="13"
+    fill="#667085">
+    Adjustable
+</text>
+
+<rect
+    x="742"
+    y="286"
+    width="145"
+    height="64"
+    rx="11"
+    fill="#fffbeb"
+    stroke="#f59e0b"
+/>
+
+<text
+    id="step3Label"
+    x="814"
+    y="313"
+    text-anchor="middle"
+    font-size="16"
+    font-weight="900">
+    ΔH₃ = −80
+</text>
+
+<text
+    x="814"
+    y="337"
+    text-anchor="middle"
+    font-size="13"
+    fill="#92400e">
+    Auto-adjusted
+</text>
+
+<!-- Centre equation -->
+
+<rect
+    x="270"
+    y="250"
+    width="360"
+    height="145"
+    rx="18"
+    fill="#f0f4ff"
+    stroke="#c7d2fe"
+    stroke-width="2"
+/>
+
+<text
+    x="450"
+    y="282"
+    text-anchor="middle"
+    font-size="19"
+    font-weight="800">
+    Hess's Law
+</text>
+
+<text
+    x="450"
+    y="319"
+    text-anchor="middle"
+    font-size="20"
+    font-weight="900">
+    ΔHdirect = ΔH₁ + ΔH₂ + ΔH₃
+</text>
+
+<text
+    id="equation"
+    x="450"
+    y="354"
+    text-anchor="middle"
+    font-size="18"
+    font-weight="800">
+    −100 = −40 + 20 − 80
+</text>
+
+<text
+    id="verification"
+    x="450"
+    y="379"
+    text-anchor="middle"
+    font-size="13"
+    fill="#059669"
+    font-weight="700">
+    Both paths give the same ΔH
+</text>
+
+<text
+    x="450"
+    y="625"
+    text-anchor="middle"
+    font-size="13"
+    fill="#667085">
+    A → D is the direct path | A → B → C → D is the indirect path
+</text>
+
 </svg>
+
 </div>
-<p class="note">The reaction may follow different paths, but if the initial and final states are the same, the overall enthalpy change is the same.</p>
+
+<div class="legend">
+
+    <div class="legend-item">
+        <span class="legend-line" style="background:#7c3aed"></span>
+        Fixed direct path
+    </div>
+
+    <div class="legend-item">
+        <span class="legend-line" style="background:#059669"></span>
+        Exothermic
+    </div>
+
+    <div class="legend-item">
+        <span class="legend-line" style="background:#dc2626"></span>
+        Endothermic
+    </div>
+
+    <div class="legend-item">
+        <span class="legend-line" style="background:#64748b"></span>
+        Thermoneutral
+    </div>
+
+</div>
+
+<p class="note">
+    The direct path from A to D has a fixed enthalpy change. The indirect
+    path passes through two intermediate states, B and C. When the first
+    two step values are changed, the third step is automatically adjusted.
+</p>
+
 </section>
 
 <section class="panel">
-<span class="badge">INTERACTIVE</span><h2>Change the Reaction Steps</h2>
-<div class="control"><label for="h2">Step 1: ΔH₂</label><input id="h2" type="range" min="-200" max="200" value="80" step="10"><div class="value"><span id="h2Val">+80</span> kJ mol⁻¹</div></div>
-<div class="control"><label for="h3">Step 2: ΔH₃</label><input id="h3" type="range" min="-200" max="200" value="120" step="10"><div class="value"><span id="h3Val">+120</span> kJ mol⁻¹</div></div>
-<div class="result"><div>Overall enthalpy change</div><div class="big">ΔH = <span id="total">+200</span> kJ mol⁻¹</div></div>
-<div class="formula">ΔH<sub>overall</sub> = ΔH<sub>2</sub> + ΔH<sub>3</sub></div>
-<button onclick="example(80,120)">Example 1: +80 + +120</button>
-<button onclick="example(-100,60)">Example 2: −100 + +60</button>
-<button onclick="example(150,-150)">Example 3: +150 + −150</button>
-<button class="secondary" onclick="example(0,0)">Reset</button>
-<p class="note">The direct-path ΔH is automatically equal to the sum of the two indirect steps.</p>
+
+<span class="badge">INTERACTIVE</span>
+
+<h2>Change the Intermediate Steps</h2>
+
+<div class="fixed-box">
+    <div>Fixed direct-path enthalpy</div>
+
+    <div class="big">
+        ΔH<sub>direct</sub> = −100 kJ mol<sup>−1</sup>
+    </div>
+</div>
+
+<div class="control">
+
+    <label for="h1">
+        Step 1: A → B, ΔH<sub>1</sub>
+    </label>
+
+    <input
+        id="h1"
+        type="range"
+        min="-200"
+        max="200"
+        value="-40"
+        step="10"
+    >
+
+    <div class="value">
+        <span id="h1Val">−40</span> kJ mol<sup>−1</sup>
+    </div>
+
+</div>
+
+<div class="control">
+
+    <label for="h2">
+        Step 2: B → C, ΔH<sub>2</sub>
+    </label>
+
+    <input
+        id="h2"
+        type="range"
+        min="-200"
+        max="200"
+        value="20"
+        step="10"
+    >
+
+    <div class="value">
+        <span id="h2Val">+20</span> kJ mol<sup>−1</sup>
+    </div>
+
+</div>
+
+<div class="auto-box">
+
+    <div>
+        Automatically calculated step
+    </div>
+
+    <div class="big">
+        ΔH<sub>3</sub> =
+        <span id="h3Val">−80</span>
+        kJ mol<sup>−1</sup>
+    </div>
+
+    <div class="note">
+        C → D
+    </div>
+
+</div>
+
+<div class="formula">
+    ΔH<sub>3</sub> =
+    ΔH<sub>direct</sub> − ΔH<sub>1</sub> − ΔH<sub>2</sub>
+</div>
+
+<div class="result">
+
+    <div>Indirect-path total</div>
+
+    <div class="big">
+        <span id="calculation">
+            −40 + 20 − 80 = −100
+        </span>
+        kJ mol<sup>−1</sup>
+    </div>
+
+</div>
+
+<button onclick="setExample(-40,20)">
+    Example 1
+</button>
+
+<button onclick="setExample(80,-130)">
+    Example 2
+</button>
+
+<button onclick="setExample(-160,100)">
+    Example 3
+</button>
+
+<button class="secondary" onclick="setExample(-40,20)">
+    Reset
+</button>
+
+<p class="note">
+    Only ΔH₁ and ΔH₂ can be changed. ΔH₃ is calculated automatically
+    so that the indirect path always totals −100 kJ mol⁻¹.
+</p>
+
 </section>
+
 </div>
 
 <section class="panel" style="margin-top:18px">
+
 <h2>🎯 Classroom Challenge</h2>
-<p><b>Question:</b> A reaction occurs in two steps. ΔH₁ = −120 kJ mol⁻¹ and ΔH₂ = +45 kJ mol⁻¹. What is the overall enthalpy change?</p>
-<button class="secondary" onclick="document.getElementById('answer').innerHTML='<b>Answer:</b> ΔH = −120 + 45 = −75 kJ mol⁻¹. The overall reaction is exothermic.'">Reveal Answer</button>
+
+<p>
+    The direct enthalpy change from A to D is
+    <b>−100 kJ mol⁻¹</b>. If ΔH₁ is
+    <b>+60 kJ mol⁻¹</b> and ΔH₂ is
+    <b>−90 kJ mol⁻¹</b>, calculate ΔH₃.
+</p>
+
+<button
+    class="secondary"
+    onclick="revealAnswer()">
+    Reveal Answer
+</button>
+
 <p id="answer"></p>
+
 </section>
+
 </main>
 
 <script>
-const h2=document.getElementById("h2"),h3=document.getElementById("h3");
-const h2Val=document.getElementById("h2Val"),h3Val=document.getElementById("h3Val"),total=document.getElementById("total");
-function fmt(n){return n>=0?"+"+n:n}
-function update(){
- const a=Number(h2.value),b=Number(h3.value),t=a+b;
- h2Val.textContent=fmt(a);h3Val.textContent=fmt(b);total.textContent=fmt(t);
- document.getElementById("equation").textContent=`ΔH₁ = ${fmt(a)} + (${fmt(b)}) = ${fmt(t)} kJ mol⁻¹`;
- document.getElementById("directLabel").textContent=`ΔH₁ = ${fmt(t)} kJ mol⁻¹`;
- document.getElementById("step1Label").textContent=`ΔH₂ = ${fmt(a)}`;
- document.getElementById("step2Label").textContent=`ΔH₃ = ${fmt(b)}`;
+const DIRECT_H = -100;
+
+const h1 = document.getElementById("h1");
+const h2 = document.getElementById("h2");
+
+const h1Val = document.getElementById("h1Val");
+const h2Val = document.getElementById("h2Val");
+const h3Val = document.getElementById("h3Val");
+
+const step1Label = document.getElementById("step1Label");
+const step2Label = document.getElementById("step2Label");
+const step3Label = document.getElementById("step3Label");
+
+const equation = document.getElementById("equation");
+const calculation = document.getElementById("calculation");
+
+function formatValue(number) {
+    if (number > 0) {
+        return "+" + number;
+    }
+
+    if (number < 0) {
+        return "−" + Math.abs(number);
+    }
+
+    return "0";
 }
-function example(a,b){h2.value=a;h3.value=b;update()}
-h2.addEventListener("input",update);h3.addEventListener("input",update);update();
+
+function equationValue(number, firstValue = false) {
+    if (firstValue) {
+        return formatValue(number);
+    }
+
+    if (number > 0) {
+        return "+ " + number;
+    }
+
+    if (number < 0) {
+        return "− " + Math.abs(number);
+    }
+
+    return "+ 0";
+}
+
+function getStepColour(value) {
+    if (value > 0) {
+        return "#dc2626";
+    }
+
+    if (value < 0) {
+        return "#059669";
+    }
+
+    return "#64748b";
+}
+
+function updateStepColour(pathId, arrowId, label, value) {
+    const colour = getStepColour(value);
+
+    document.getElementById(pathId)
+        .setAttribute("stroke", colour);
+
+    document.getElementById(arrowId)
+        .setAttribute("fill", colour);
+
+    label.setAttribute("fill", colour);
+}
+
+function update() {
+    const value1 = Number(h1.value);
+    const value2 = Number(h2.value);
+
+    /*
+    Hess's Law:
+
+    DIRECT_H = value1 + value2 + value3
+
+    Therefore:
+
+    value3 = DIRECT_H - value1 - value2
+    */
+
+    const value3 = DIRECT_H - value1 - value2;
+    const total = value1 + value2 + value3;
+
+    h1Val.textContent = formatValue(value1);
+    h2Val.textContent = formatValue(value2);
+    h3Val.textContent = formatValue(value3);
+
+    h1Val.className =
+        value1 > 0 ? "positive" :
+        value1 < 0 ? "negative" :
+        "neutral";
+
+    h2Val.className =
+        value2 > 0 ? "positive" :
+        value2 < 0 ? "negative" :
+        "neutral";
+
+    h3Val.className =
+        value3 > 0 ? "positive" :
+        value3 < 0 ? "negative" :
+        "neutral";
+
+    step1Label.textContent =
+        `ΔH₁ = ${formatValue(value1)}`;
+
+    step2Label.textContent =
+        `ΔH₂ = ${formatValue(value2)}`;
+
+    step3Label.textContent =
+        `ΔH₃ = ${formatValue(value3)}`;
+
+    equation.textContent =
+        `${formatValue(DIRECT_H)} = ` +
+        `${equationValue(value1, true)} ` +
+        `${equationValue(value2)} ` +
+        `${equationValue(value3)}`;
+
+    calculation.textContent =
+        `${equationValue(value1, true)} ` +
+        `${equationValue(value2)} ` +
+        `${equationValue(value3)} = ` +
+        `${formatValue(total)}`;
+
+    updateStepColour(
+        "step1Path",
+        "arrowHead1",
+        step1Label,
+        value1
+    );
+
+    updateStepColour(
+        "step2Path",
+        "arrowHead2",
+        step2Label,
+        value2
+    );
+
+    updateStepColour(
+        "step3Path",
+        "arrowHead3",
+        step3Label,
+        value3
+    );
+}
+
+function setExample(value1, value2) {
+    h1.value = value1;
+    h2.value = value2;
+
+    update();
+}
+
+function revealAnswer() {
+    const value1 = 60;
+    const value2 = -90;
+    const value3 = DIRECT_H - value1 - value2;
+
+    document.getElementById("answer").innerHTML =
+        "<b>Answer:</b><br>" +
+        "ΔH<sub>3</sub> = ΔH<sub>direct</sub> − ΔH<sub>1</sub> − ΔH<sub>2</sub><br>" +
+        "ΔH<sub>3</sub> = −100 − (+60) − (−90)<br>" +
+        "ΔH<sub>3</sub> = <b>" +
+        formatValue(value3) +
+        " kJ mol<sup>−1</sup></b>";
+}
+
+h1.addEventListener("input", update);
+h2.addEventListener("input", update);
+
+update();
 </script>
+
 </body>
 </html>
