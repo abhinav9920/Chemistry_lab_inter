@@ -2,113 +2,2202 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thermodynamics | Chemistry Classroom</title>
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Bohr Model | Absorption and Emission</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
-header{background:#fff;border-bottom:1px solid #d8dee9;padding:18px 22px}
-.top{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:15px}
-.back{color:#2457d6;text-decoration:none;font-weight:700}
-.badge{font-size:13px;color:#667085}
-main{max-width:1200px;margin:auto;padding:28px 20px}
-.hero{background:#fff;border:1px solid #d8dee9;border-radius:22px;padding:30px;margin-bottom:22px;box-shadow:0 6px 22px rgba(20,30,55,.05)}
-.hero h1{margin:0;font-size:clamp(32px,5vw,52px)}
-.hero p{font-size:18px;color:#667085;margin:10px 0 0;line-height:1.5}
-.section{margin:25px 0}
-.section h2{font-size:25px;margin:0 0 14px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.card{display:block;background:#fff;border:1px solid #d8dee9;border-radius:18px;padding:23px;text-decoration:none;color:inherit;min-height:170px;box-shadow:0 4px 16px rgba(20,30,55,.04);transition:.15s}
-.card:hover{transform:translateY(-3px);box-shadow:0 9px 25px rgba(20,30,55,.1)}
-.icon{font-size:38px}.card h3{font-size:22px;margin:10px 0 7px}.card p{color:#667085;line-height:1.5;margin:0}
-.available{display:inline-block;margin-top:13px;padding:6px 9px;border-radius:8px;background:#e9f7ef;color:#18794e;font-size:11px;font-weight:800}
-.soon{display:inline-block;margin-top:13px;padding:6px 9px;border-radius:8px;background:#f0f2f5;color:#667085;font-size:11px;font-weight:800}
-.lesson{background:#fff;border:1px solid #d8dee9;border-radius:18px;padding:23px}
-.lesson-title{font-size:22px;font-weight:800;margin-bottom:4px}
-.lesson-sub{color:#667085;margin-bottom:18px}
-.lesson-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.lesson-btn{display:block;text-decoration:none;color:inherit;background:#f7f9fc;border:1px solid #d8dee9;border-radius:14px;padding:18px}
-.lesson-btn strong{display:block;font-size:17px;margin-bottom:6px}.lesson-btn span{color:#667085;font-size:14px}
-footer{text-align:center;color:#667085;font-size:13px;padding:10px 20px 30px}
-@media(max-width:800px){.grid,.lesson-grid{grid-template-columns:1fr}}
+:root {
+    --blue: #2563eb;
+    --dark-blue: #1d4ed8;
+    --purple: #7c3aed;
+    --green: #059669;
+    --red: #dc2626;
+    --orange: #f59e0b;
+    --ink: #172033;
+    --muted: #667085;
+    --border: #d8dee9;
+    --panel: #ffffff;
+    --background: #f4f7fb;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--ink);
+}
+
+header {
+    padding: 16px 20px;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+}
+
+header a {
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 800;
+}
+
+main {
+    width: min(1320px, 100%);
+    margin: auto;
+    padding: 22px 18px 45px;
+}
+
+.hero,
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(20, 30, 55, 0.05);
+}
+
+.hero {
+    padding: 24px;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.hero h1 {
+    margin: 0;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.hero p {
+    max-width: 850px;
+    margin: 10px auto 0;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(310px, 0.9fr);
+    gap: 18px;
+}
+
+.panel {
+    padding: 20px;
+}
+
+.panel h2 {
+    margin: 0 0 14px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-bottom: 8px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #3730a3;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.atom-container {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    background:
+        radial-gradient(circle at center, #172554 0, #0f172a 48%, #020617 100%);
+}
+
+#atomSvg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.mode-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+    margin-bottom: 14px;
+}
+
+button {
+    width: 100%;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 11px;
+    background: var(--blue);
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
+}
+
+button:hover {
+    background: var(--dark-blue);
+    transform: translateY(-1px);
+}
+
+button.secondary {
+    background: #eef1f5;
+    color: var(--ink);
+}
+
+button.secondary:hover {
+    background: #e2e8f0;
+}
+
+.mode-button {
+    background: #eef1f5;
+    color: var(--ink);
+}
+
+.mode-button.active.absorption {
+    background: var(--blue);
+    color: #ffffff;
+}
+
+.mode-button.active.emission {
+    background: var(--red);
+    color: #ffffff;
+}
+
+.control {
+    padding: 14px;
+    margin-bottom: 12px;
+    border: 1px solid #e4e7ec;
+    border-radius: 13px;
+    background: #ffffff;
+}
+
+.control label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 800;
+}
+
+select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cfd6e2;
+    border-radius: 9px;
+    background: #ffffff;
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.action-button {
+    margin-top: 3px;
+    background: var(--purple);
+}
+
+.action-button.emission-action {
+    background: var(--red);
+}
+
+.action-button.emission-action:hover {
+    background: #b91c1c;
+}
+
+.message {
+    min-height: 76px;
+    padding: 14px;
+    margin: 14px 0;
+    border-radius: 13px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    line-height: 1.5;
+}
+
+.message.absorption-message {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+.message.emission-message {
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.message strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 17px;
+}
+
+.data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.data-box {
+    min-height: 88px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fafbfc;
+}
+
+.data-label {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.data-value {
+    margin-top: 6px;
+    font-size: 17px;
+    font-weight: 900;
+    overflow-wrap: anywhere;
+}
+
+.radiation-card {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    text-align: center;
+    background: #f8fafc;
+}
+
+.radiation-card .region {
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.radiation-bar {
+    height: 22px;
+    margin: 12px 0 5px;
+    border-radius: 999px;
+    background:
+        linear-gradient(
+            90deg,
+            #7137ff 0%,
+            #305cff 18%,
+            #00a5ff 33%,
+            #00c86b 48%,
+            #f1d400 63%,
+            #ff8a00 78%,
+            #e31b23 100%
+        );
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.wavelength-marker-wrap {
+    position: relative;
+    height: 18px;
+}
+
+#wavelengthMarker {
+    position: absolute;
+    top: -26px;
+    left: 50%;
+    width: 4px;
+    height: 30px;
+    border-radius: 5px;
+    background: #111827;
+    transform: translateX(-50%);
+    transition: left 0.35s ease;
+}
+
+.series-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.series-card {
+    padding: 14px 10px;
+    border: 2px solid transparent;
+    border-radius: 14px;
+    text-align: center;
+    background: #f8fafc;
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.series-card.active {
+    border-color: var(--purple);
+    background: #f5f3ff;
+    transform: translateY(-3px);
+}
+
+.series-name {
+    font-weight: 900;
+}
+
+.series-destination {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.series-region {
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.lower-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 18px;
+}
+
+.energy-diagram {
+    position: relative;
+    height: 390px;
+    padding: 20px 55px 20px 75px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    background: #fafbfc;
+}
+
+.energy-level {
+    position: absolute;
+    right: 50px;
+    left: 85px;
+    height: 3px;
+    background: #64748b;
+}
+
+.energy-level span {
+    position: absolute;
+    top: -11px;
+    left: -65px;
+    width: 55px;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.energy-level small {
+    position: absolute;
+    top: -10px;
+    right: 6px;
+    padding: 1px 5px;
+    background: #fafbfc;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+#energyArrow {
+    position: absolute;
+    left: 52%;
+    width: 6px;
+    border-radius: 5px;
+    background: var(--blue);
+    transform: translateX(-50%);
+    transition:
+        top 0.45s ease,
+        height 0.45s ease,
+        background 0.25s ease;
+}
+
+#energyArrow::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 0;
+    height: 0;
+    transform: translateX(-50%);
+}
+
+#energyArrow.up::after {
+    top: -10px;
+    border-right: 9px solid transparent;
+    border-bottom: 14px solid var(--blue);
+    border-left: 9px solid transparent;
+}
+
+#energyArrow.down::after {
+    bottom: -10px;
+    border-top: 14px solid var(--red);
+    border-right: 9px solid transparent;
+    border-left: 9px solid transparent;
+}
+
+#energyArrow.down {
+    background: var(--red);
+}
+
+#energyTransitionLabel {
+    position: absolute;
+    right: 10px;
+    left: 10px;
+    bottom: 9px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.calculation {
+    padding: 16px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    line-height: 1.65;
+}
+
+.calculation h3 {
+    margin: 0 0 12px;
+}
+
+.formula {
+    padding: 12px;
+    margin: 12px 0;
+    border-radius: 11px;
+    background: #eef2ff;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.explanation {
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 12px;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #78350f;
+}
+
+.note {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 12px;
+    color: #dbeafe;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+}
+
+@media (max-width: 950px) {
+    .layout,
+    .lower-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 680px) {
+    .series-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .data-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .panel {
+        padding: 15px;
+    }
+}
 </style>
 </head>
+
 <body>
 
 <header>
-<div class="top">
-<a class="back" href="../">← First Year Chemistry</a>
-<div class="badge">GJC Narsapur • Chemistry Classroom</div>
-</div>
+    <a href="../">← Atomic Structure</a>
 </header>
 
 <main>
 
 <section class="hero">
-<h1>🔥 Thermodynamics</h1>
-<p>First Year Chemistry • Interactive Classroom Dashboard</p>
+    <h1>⚛️ Bohr Model of Hydrogen</h1>
+
+    <p>
+        Observe the absorption and emission of radiation when an electron
+        moves between the permitted energy levels of a hydrogen atom.
+    </p>
 </section>
 
-<section class="section">
-<h2>🎯 Today's Lesson</h2>
-<div class="lesson">
-<div class="lesson-title">First Law of Thermodynamics</div>
-<div class="lesson-sub">Predict → Observe → Explain</div>
-<div class="lesson-grid">
-<a class="lesson-btn" href="first-law/"><strong>⚡ Start Simulation</strong><span>Explore ΔU = q + w</span></a>
-<div class="lesson-btn"><strong>💬 Classroom Discussion</strong><span>Connect heat, work and energy to real life</span></div>
-<div class="lesson-btn"><strong>🧠 Quick Challenge</strong><span>Predict the sign and magnitude of ΔU</span></div>
-</div>
-</div>
+<div class="layout">
+
+<section class="panel">
+
+    <h2>Hydrogen Atom</h2>
+
+    <div class="atom-container">
+
+        <svg
+            id="atomSvg"
+            viewBox="0 0 900 700"
+            aria-label="Bohr model of hydrogen with six electron orbits"
+        >
+
+            <defs>
+                <radialGradient id="nucleusGradient">
+                    <stop offset="0%" stop-color="#fff7a8"/>
+                    <stop offset="45%" stop-color="#f59e0b"/>
+                    <stop offset="100%" stop-color="#dc2626"/>
+                </radialGradient>
+
+                <radialGradient id="electronGradient">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="45%" stop-color="#67e8f9"/>
+                    <stop offset="100%" stop-color="#0284c7"/>
+                </radialGradient>
+
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="5" result="blur"/>
+                    <feMerge>
+                        <feMergeNode in="blur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+
+                <filter id="photonGlow">
+                    <feGaussianBlur stdDeviation="8" result="blur"/>
+                    <feMerge>
+                        <feMergeNode in="blur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <!-- Orbit n = 6 -->
+            <circle
+                cx="450"
+                cy="350"
+                r="280"
+                fill="none"
+                stroke="#94a3b8"
+                stroke-width="2"
+                stroke-dasharray="8 7"
+                opacity="0.65"
+            />
+
+            <!-- Orbit n = 5 -->
+            <circle
+                cx="450"
+                cy="350"
+                r="235"
+                fill="none"
+                stroke="#94a3b8"
+                stroke-width="2"
+                stroke-dasharray="8 7"
+                opacity="0.7"
+            />
+
+            <!-- Orbit n = 4 -->
+            <circle
+                cx="450"
+                cy="350"
+                r="192"
+                fill="none"
+                stroke="#94a3b8"
+                stroke-width="2"
+                stroke-dasharray="8 7"
+                opacity="0.75"
+            />
+
+            <!-- Orbit n = 3 -->
+            <circle
+                cx="450"
+                cy="350"
+                r="150"
+                fill="none"
+                stroke="#94a3b8"
+                stroke-width="2"
+                stroke-dasharray="8 7"
+                opacity="0.8"
+            />
+
+            <!-- Orbit n = 2 -->
+            <circle
+                cx="450"
+                cy="350"
+                r="108"
+                fill="none"
+                stroke="#94a3b8"
+                stroke-width="2"
+                stroke-dasharray="8 7"
+                opacity="0.9"
+            />
+
+            <!-- Orbit n = 1 -->
+            <circle
+                cx="450"
+                cy="350"
+                r="68"
+                fill="none"
+                stroke="#cbd5e1"
+                stroke-width="2.5"
+            />
+
+            <!-- Orbit labels -->
+            <g
+                fill="#ffffff"
+                font-size="17"
+                font-weight="800"
+            >
+                <text x="450" y="60" text-anchor="middle">n = 6</text>
+                <text x="450" y="105" text-anchor="middle">n = 5</text>
+                <text x="450" y="148" text-anchor="middle">n = 4</text>
+                <text x="450" y="190" text-anchor="middle">n = 3</text>
+                <text x="450" y="232" text-anchor="middle">n = 2</text>
+                <text x="450" y="272" text-anchor="middle">n = 1</text>
+            </g>
+
+            <!-- Nucleus glow -->
+            <circle
+                cx="450"
+                cy="350"
+                r="47"
+                fill="#f59e0b"
+                opacity="0.18"
+                filter="url(#glow)"
+            />
+
+            <!-- Nucleus -->
+            <circle
+                cx="450"
+                cy="350"
+                r="33"
+                fill="url(#nucleusGradient)"
+                stroke="#ffffff"
+                stroke-width="2"
+            />
+
+            <text
+                x="450"
+                y="357"
+                text-anchor="middle"
+                fill="#ffffff"
+                font-size="23"
+                font-weight="900"
+            >
+                p⁺
+            </text>
+
+            <text
+                x="450"
+                y="405"
+                text-anchor="middle"
+                fill="#f8fafc"
+                font-size="14"
+                font-weight="700"
+            >
+                Nucleus
+            </text>
+
+            <!-- Transition trail -->
+            <line
+                id="transitionTrail"
+                x1="518"
+                y1="350"
+                x2="558"
+                y2="350"
+                stroke="#60a5fa"
+                stroke-width="5"
+                stroke-dasharray="8 7"
+                opacity="0"
+            />
+
+            <!-- Electron -->
+            <circle
+                id="electronGlow"
+                cx="518"
+                cy="350"
+                r="19"
+                fill="#38bdf8"
+                opacity="0.25"
+                filter="url(#glow)"
+            />
+
+            <circle
+                id="electron"
+                cx="518"
+                cy="350"
+                r="11"
+                fill="url(#electronGradient)"
+                stroke="#ffffff"
+                stroke-width="2"
+            />
+
+            <text
+                id="electronLabel"
+                x="518"
+                y="324"
+                text-anchor="middle"
+                fill="#ffffff"
+                font-size="14"
+                font-weight="900"
+            >
+                e⁻
+            </text>
+
+            <!-- Photon wave -->
+            <path
+                id="photonWave"
+                d=""
+                fill="none"
+                stroke="#fde047"
+                stroke-width="6"
+                stroke-linecap="round"
+                filter="url(#photonGlow)"
+                opacity="0"
+            />
+
+            <polygon
+                id="photonArrow"
+                points=""
+                fill="#fde047"
+                opacity="0"
+            />
+
+            <text
+                id="photonLabel"
+                x="450"
+                y="650"
+                text-anchor="middle"
+                fill="#fde047"
+                font-size="17"
+                font-weight="900"
+                opacity="0"
+            >
+                Photon
+            </text>
+
+            <!-- Mode title -->
+            <rect
+                x="300"
+                y="615"
+                width="300"
+                height="48"
+                rx="15"
+                fill="#0f172a"
+                stroke="#334155"
+            />
+
+            <text
+                id="svgModeText"
+                x="450"
+                y="646"
+                text-anchor="middle"
+                fill="#93c5fd"
+                font-size="18"
+                font-weight="900"
+            >
+                Select a transition and press Start
+            </text>
+
+        </svg>
+
+    </div>
+
+    <div class="legend">
+
+        <div class="legend-item">
+            <span
+                class="legend-dot"
+                style="background:#38bdf8"
+            ></span>
+            Electron
+        </div>
+
+        <div class="legend-item">
+            <span
+                class="legend-dot"
+                style="background:#f59e0b"
+            ></span>
+            Nucleus
+        </div>
+
+        <div class="legend-item">
+            <span
+                class="legend-dot"
+                style="background:#fde047"
+            ></span>
+            Photon
+        </div>
+
+    </div>
+
 </section>
 
-<section class="section">
-<h2>🎮 Interactive Simulations</h2>
-<div class="grid">
-<a class="card" href="heat-work-energy/">
-<div class="icon">🔥</div>
-<h3>Heat, Work &amp; Energy Transfer</h3>
-<p>Explore a gas-cylinder model and investigate how heat and work are associated with energy transfer.</p>
-<span class="available">AVAILABLE</span>
-</a>
-<a class="card" href="first-law/">
-<div class="icon">⚡</div>
-<h3>First Law of Thermodynamics</h3>
-<p>Manipulate heat and work and observe the change in internal energy using ΔU = q + w.</p>
-<span class="available">AVAILABLE</span>
-</a>
-</div>
+<section class="panel">
+
+    <span class="badge">INTERACTIVE SIMULATION</span>
+
+    <h2>Electron Transition</h2>
+
+    <div class="mode-buttons">
+
+        <button
+            id="absorptionButton"
+            class="mode-button active absorption"
+            onclick="setMode('absorption')"
+        >
+            ⬆ Absorption
+        </button>
+
+        <button
+            id="emissionButton"
+            class="mode-button"
+            onclick="setMode('emission')"
+        >
+            ⬇ Emission
+        </button>
+
+    </div>
+
+    <div class="control">
+
+        <label id="initialLabel" for="initialLevel">
+            Initial lower orbit
+        </label>
+
+        <select id="initialLevel"></select>
+
+    </div>
+
+    <div class="control">
+
+        <label id="finalLabel" for="finalLevel">
+            Final upper orbit
+        </label>
+
+        <select id="finalLevel"></select>
+
+    </div>
+
+    <button
+        id="startButton"
+        class="action-button"
+        onclick="startTransition()"
+    >
+        ▶ Absorb Photon and Excite Electron
+    </button>
+
+    <button
+        class="secondary"
+        onclick="resetSimulation()"
+    >
+        Reset
+    </button>
+
+    <div
+        id="processMessage"
+        class="message absorption-message"
+    >
+        <strong>Absorption</strong>
+
+        The electron absorbs a photon and moves from a lower-energy
+        orbit to a higher-energy orbit.
+    </div>
+
+    <div class="data-grid">
+
+        <div class="data-box">
+            <div class="data-label">TRANSITION</div>
+            <div id="transitionValue" class="data-value">
+                n = 1 → n = 2
+            </div>
+        </div>
+
+        <div class="data-box">
+            <div class="data-label">SPECTRAL SERIES</div>
+            <div id="seriesValue" class="data-value">
+                Lyman
+            </div>
+        </div>
+
+        <div class="data-box">
+            <div class="data-label">PHOTON ENERGY</div>
+            <div id="energyValue" class="data-value">
+                10.20 eV
+            </div>
+        </div>
+
+        <div class="data-box">
+            <div class="data-label">ENERGY PER MOLE</div>
+            <div id="molarEnergyValue" class="data-value">
+                984.2 kJ mol⁻¹
+            </div>
+        </div>
+
+        <div class="data-box">
+            <div class="data-label">FREQUENCY</div>
+            <div id="frequencyValue" class="data-value">
+                2.47 × 10¹⁵ Hz
+            </div>
+        </div>
+
+        <div class="data-box">
+            <div class="data-label">WAVELENGTH</div>
+            <div id="wavelengthValue" class="data-value">
+                121.5 nm
+            </div>
+        </div>
+
+    </div>
+
+    <div class="radiation-card">
+
+        <div class="data-label">REGION OF ELECTROMAGNETIC SPECTRUM</div>
+
+        <div id="regionValue" class="region">
+            Ultraviolet
+        </div>
+
+        <div id="radiationDescription" class="note">
+            This radiation lies outside the visible region.
+        </div>
+
+        <div class="radiation-bar"></div>
+
+        <div class="wavelength-marker-wrap">
+            <div id="wavelengthMarker"></div>
+        </div>
+
+        <div class="note">
+            Visible spectrum: approximately 380–750 nm
+        </div>
+
+    </div>
+
 </section>
 
-<section class="section">
-<h2>📊 Presentations</h2>
-<div class="grid">
-<div class="card"><div class="icon">📊</div><h3>Thermodynamics — Introduction</h3><p>Classroom presentation introducing thermodynamic systems, surroundings, heat and energy.</p><span class="soon">COMING SOON</span></div>
-<div class="card"><div class="icon">📊</div><h3>First Law of Thermodynamics</h3><p>Presentation with examples, sign conventions and classroom questions.</p><span class="soon">COMING SOON</span></div>
 </div>
+
+<section class="panel" style="margin-top:18px">
+
+    <h2>Hydrogen Spectral Series</h2>
+
+    <p class="note">
+        A hydrogen emission series is identified by the lower energy
+        level on which the electron finally arrives.
+    </p>
+
+    <div class="series-grid">
+
+        <div id="series1" class="series-card active">
+            <div class="series-name">Lyman</div>
+            <div class="series-destination">Final level: n = 1</div>
+            <div class="series-region">Ultraviolet</div>
+        </div>
+
+        <div id="series2" class="series-card">
+            <div class="series-name">Balmer</div>
+            <div class="series-destination">Final level: n = 2</div>
+            <div class="series-region">Mainly visible</div>
+        </div>
+
+        <div id="series3" class="series-card">
+            <div class="series-name">Paschen</div>
+            <div class="series-destination">Final level: n = 3</div>
+            <div class="series-region">Infrared</div>
+        </div>
+
+        <div id="series4" class="series-card">
+            <div class="series-name">Brackett</div>
+            <div class="series-destination">Final level: n = 4</div>
+            <div class="series-region">Infrared</div>
+        </div>
+
+        <div id="series5" class="series-card">
+            <div class="series-name">Pfund</div>
+            <div class="series-destination">Final level: n = 5</div>
+            <div class="series-region">Infrared</div>
+        </div>
+
+    </div>
+
 </section>
 
-<section class="section">
-<h2>📖 Study Material</h2>
-<div class="grid">
-<div class="card"><div class="icon">📖</div><h3>Chapter Notes</h3><p>Complete First Year Thermodynamics notes.</p><span class="soon">COMING SOON</span></div>
-<div class="card"><div class="icon">📋</div><h3>Formula Sheet</h3><p>Important thermodynamics equations and sign conventions.</p><span class="soon">COMING SOON</span></div>
-</div>
+<div class="lower-layout">
+
+<section class="panel">
+
+    <h2>Energy-Level Diagram</h2>
+
+    <div class="energy-diagram">
+
+        <div
+            class="energy-level"
+            data-level="6"
+            style="top:35px"
+        >
+            <span>n = 6</span>
+            <small>−0.378 eV</small>
+        </div>
+
+        <div
+            class="energy-level"
+            data-level="5"
+            style="top:85px"
+        >
+            <span>n = 5</span>
+            <small>−0.544 eV</small>
+        </div>
+
+        <div
+            class="energy-level"
+            data-level="4"
+            style="top:137px"
+        >
+            <span>n = 4</span>
+            <small>−0.850 eV</small>
+        </div>
+
+        <div
+            class="energy-level"
+            data-level="3"
+            style="top:194px"
+        >
+            <span>n = 3</span>
+            <small>−1.511 eV</small>
+        </div>
+
+        <div
+            class="energy-level"
+            data-level="2"
+            style="top:263px"
+        >
+            <span>n = 2</span>
+            <small>−3.400 eV</small>
+        </div>
+
+        <div
+            class="energy-level"
+            data-level="1"
+            style="top:337px"
+        >
+            <span>n = 1</span>
+            <small>−13.600 eV</small>
+        </div>
+
+        <div id="energyArrow" class="up"></div>
+
+        <div id="energyTransitionLabel">
+            Absorption: electron moves upward
+        </div>
+
+    </div>
+
 </section>
 
-<section class="section">
-<h2>📝 Practice &amp; Assessment</h2>
-<div class="grid">
-<div class="card"><div class="icon">📝</div><h3>Worksheets</h3><p>Classroom activities and numerical problems.</p><span class="soon">COMING SOON</span></div>
-<div class="card"><div class="icon">🧠</div><h3>Quick Quiz</h3><p>Short interactive questions for checking understanding during class.</p><span class="soon">COMING SOON</span></div>
+<section class="panel">
+
+    <h2>Calculation</h2>
+
+    <div class="calculation">
+
+        <h3 id="calculationHeading">
+            Energy absorbed by the electron
+        </h3>
+
+        <p>
+            The energy of an electron in the
+            <i>n</i>th orbit of hydrogen is:
+        </p>
+
+        <div class="formula">
+            E<sub>n</sub> =
+            −13.6 / n² eV
+        </div>
+
+        <p id="levelEnergyCalculation">
+            E₁ = −13.600 eV<br>
+            E₂ = −3.400 eV
+        </p>
+
+        <div class="formula">
+            |ΔE| =
+            13.6
+            |
+            1/n<sub>lower</sub>²
+            −
+            1/n<sub>upper</sub>²
+            |
+            eV
+        </div>
+
+        <p id="photonCalculation">
+            |ΔE| = 10.200 eV
+        </p>
+
+        <div class="formula">
+            E = hν = hc/λ
+        </div>
+
+        <p id="frequencyCalculation">
+            ν = 2.466 × 10¹⁵ Hz<br>
+            λ = 121.50 nm
+        </p>
+
+        <div id="conceptExplanation" class="explanation">
+            During absorption, the photon energy must exactly equal the
+            difference between the two permitted energy levels. The electron
+            cannot remain between the permitted orbits.
+        </div>
+
+    </div>
+
+</section>
+
 </div>
+
+<section class="panel" style="margin-top:18px">
+
+    <h2>Important Ideas Demonstrated</h2>
+
+    <ul class="note" style="font-size:14px;line-height:1.8">
+
+        <li>
+            Electrons can occupy only certain permitted energy levels.
+        </li>
+
+        <li>
+            An electron moves to a higher orbit only by absorbing a photon
+            having exactly the required energy.
+        </li>
+
+        <li>
+            An excited electron is unstable and can return to a lower orbit.
+        </li>
+
+        <li>
+            When the electron returns to a lower orbit, a photon is emitted.
+        </li>
+
+        <li>
+            The photon energy is equal to the difference between the initial
+            and final electron energy levels.
+        </li>
+
+        <li>
+            The wavelength of an emission line determines whether the
+            radiation is ultraviolet, visible or infrared.
+        </li>
+
+    </ul>
+
+    <p class="note">
+        This is a simplified educational representation. Orbit sizes,
+        electron motion and photon waves are not drawn to physical scale.
+    </p>
+
 </section>
 
 </main>
 
-<footer>
-Chemistry Interactive Lab • Telangana Intermediate • GJC Narsapur
-</footer>
+<script>
+/* ---------------------------------------------------------
+   PHYSICAL CONSTANTS
+--------------------------------------------------------- */
+
+const PLANCK_CONSTANT = 6.62607015e-34;
+const SPEED_OF_LIGHT = 2.99792458e8;
+const ELECTRON_VOLT = 1.602176634e-19;
+const AVOGADRO_CONSTANT = 6.02214076e23;
+const HYDROGEN_GROUND_ENERGY = 13.6;
+
+/* ---------------------------------------------------------
+   BOHR ORBIT DISPLAY VALUES
+--------------------------------------------------------- */
+
+const centreX = 450;
+const centreY = 350;
+
+const orbitRadii = {
+    1: 68,
+    2: 108,
+    3: 150,
+    4: 192,
+    5: 235,
+    6: 280
+};
+
+/*
+   Positions of energy levels inside the energy-level diagram.
+*/
+
+const energyLevelPositions = {
+    1: 337,
+    2: 263,
+    3: 194,
+    4: 137,
+    5: 85,
+    6: 35
+};
+
+const seriesInformation = {
+    1: {
+        name: "Lyman",
+        usualRegion: "Ultraviolet"
+    },
+    2: {
+        name: "Balmer",
+        usualRegion: "Visible / near ultraviolet"
+    },
+    3: {
+        name: "Paschen",
+        usualRegion: "Infrared"
+    },
+    4: {
+        name: "Brackett",
+        usualRegion: "Infrared"
+    },
+    5: {
+        name: "Pfund",
+        usualRegion: "Infrared"
+    }
+};
+
+/* ---------------------------------------------------------
+   ELEMENT REFERENCES
+--------------------------------------------------------- */
+
+const electron = document.getElementById("electron");
+const electronGlow = document.getElementById("electronGlow");
+const electronLabel = document.getElementById("electronLabel");
+
+const photonWave = document.getElementById("photonWave");
+const photonArrow = document.getElementById("photonArrow");
+const photonLabel = document.getElementById("photonLabel");
+
+const transitionTrail =
+    document.getElementById("transitionTrail");
+
+const initialLevel =
+    document.getElementById("initialLevel");
+
+const finalLevel =
+    document.getElementById("finalLevel");
+
+const initialLabel =
+    document.getElementById("initialLabel");
+
+const finalLabel =
+    document.getElementById("finalLabel");
+
+const startButton =
+    document.getElementById("startButton");
+
+const absorptionButton =
+    document.getElementById("absorptionButton");
+
+const emissionButton =
+    document.getElementById("emissionButton");
+
+const processMessage =
+    document.getElementById("processMessage");
+
+const svgModeText =
+    document.getElementById("svgModeText");
+
+/* ---------------------------------------------------------
+   SIMULATION STATE
+--------------------------------------------------------- */
+
+let mode = "absorption";
+let currentElectronLevel = 1;
+let animationRunning = false;
+let animationFrameId = null;
+
+/* ---------------------------------------------------------
+   NUMBER FORMATTING
+--------------------------------------------------------- */
+
+function superscriptNumber(number) {
+    const superscripts = {
+        "-": "⁻",
+        "0": "⁰",
+        "1": "¹",
+        "2": "²",
+        "3": "³",
+        "4": "⁴",
+        "5": "⁵",
+        "6": "⁶",
+        "7": "⁷",
+        "8": "⁸",
+        "9": "⁹"
+    };
+
+    return String(number)
+        .split("")
+        .map(character => superscripts[character] || character)
+        .join("");
+}
+
+function scientificNotation(value, decimalPlaces = 3) {
+    if (value === 0) {
+        return "0";
+    }
+
+    const exponent = Math.floor(Math.log10(Math.abs(value)));
+    const coefficient = value / Math.pow(10, exponent);
+
+    return (
+        coefficient.toFixed(decimalPlaces) +
+        " × 10" +
+        superscriptNumber(exponent)
+    );
+}
+
+/* ---------------------------------------------------------
+   ENERGY AND PHOTON CALCULATIONS
+--------------------------------------------------------- */
+
+function levelEnergy(level) {
+    return -HYDROGEN_GROUND_ENERGY / (level * level);
+}
+
+function transitionData(levelA, levelB) {
+    const lower = Math.min(levelA, levelB);
+    const upper = Math.max(levelA, levelB);
+
+    const lowerEnergy = levelEnergy(lower);
+    const upperEnergy = levelEnergy(upper);
+
+    const energyEV = Math.abs(upperEnergy - lowerEnergy);
+    const energyJoule = energyEV * ELECTRON_VOLT;
+
+    const frequency = energyJoule / PLANCK_CONSTANT;
+
+    const wavelengthMetre =
+        SPEED_OF_LIGHT / frequency;
+
+    const wavelengthNanometre =
+        wavelengthMetre * 1e9;
+
+    const molarEnergy =
+        energyJoule *
+        AVOGADRO_CONSTANT /
+        1000;
+
+    return {
+        lower,
+        upper,
+        lowerEnergy,
+        upperEnergy,
+        energyEV,
+        energyJoule,
+        frequency,
+        wavelengthMetre,
+        wavelengthNanometre,
+        molarEnergy
+    };
+}
+
+/* ---------------------------------------------------------
+   ELECTROMAGNETIC REGION
+--------------------------------------------------------- */
+
+function getRadiationRegion(wavelengthNm) {
+    if (wavelengthNm < 380) {
+        return {
+            name: "Ultraviolet",
+            colour: "#8b5cf6",
+            description:
+                "This radiation has a wavelength shorter than visible light."
+        };
+    }
+
+    if (wavelengthNm <= 750) {
+        return {
+            name: "Visible Light",
+            colour: wavelengthToColour(wavelengthNm),
+            description:
+                "This photon can fall within the visible region of the spectrum."
+        };
+    }
+
+    return {
+        name: "Infrared",
+        colour: "#ef4444",
+        description:
+            "This radiation has a wavelength longer than visible light."
+    };
+}
+
+function wavelengthToColour(wavelength) {
+    let red = 0;
+    let green = 0;
+    let blue = 0;
+
+    if (wavelength >= 380 && wavelength < 440) {
+        red = -(wavelength - 440) / 60;
+        blue = 1;
+    } else if (wavelength < 490) {
+        green = (wavelength - 440) / 50;
+        blue = 1;
+    } else if (wavelength < 510) {
+        green = 1;
+        blue = -(wavelength - 510) / 20;
+    } else if (wavelength < 580) {
+        red = (wavelength - 510) / 70;
+        green = 1;
+    } else if (wavelength < 645) {
+        red = 1;
+        green = -(wavelength - 645) / 65;
+    } else if (wavelength <= 750) {
+        red = 1;
+    }
+
+    const convert = value =>
+        Math.round(255 * Math.max(0, Math.min(1, value)));
+
+    return `rgb(${convert(red)}, ${convert(green)}, ${convert(blue)})`;
+}
+
+/* ---------------------------------------------------------
+   TRANSITION SELECTORS
+--------------------------------------------------------- */
+
+function option(level) {
+    return `<option value="${level}">n = ${level}</option>`;
+}
+
+function populateSelectors() {
+    initialLevel.innerHTML = "";
+    finalLevel.innerHTML = "";
+
+    if (mode === "absorption") {
+        for (let level = 1; level <= 5; level++) {
+            initialLevel.innerHTML += option(level);
+        }
+
+        initialLevel.value = "1";
+        updateFinalLevelOptions();
+    } else {
+        for (let level = 2; level <= 6; level++) {
+            initialLevel.innerHTML += option(level);
+        }
+
+        initialLevel.value = "2";
+        updateFinalLevelOptions();
+    }
+}
+
+function updateFinalLevelOptions() {
+    const selectedInitial = Number(initialLevel.value);
+
+    finalLevel.innerHTML = "";
+
+    if (mode === "absorption") {
+        for (
+            let level = selectedInitial + 1;
+            level <= 6;
+            level++
+        ) {
+            finalLevel.innerHTML += option(level);
+        }
+    } else {
+        for (
+            let level = 1;
+            level < selectedInitial;
+            level++
+        ) {
+            finalLevel.innerHTML += option(level);
+        }
+    }
+
+    updateDisplay();
+}
+
+/* ---------------------------------------------------------
+   CHANGE ABSORPTION / EMISSION MODE
+--------------------------------------------------------- */
+
+function setMode(selectedMode) {
+    stopAnimation();
+
+    mode = selectedMode;
+
+    absorptionButton.className = "mode-button";
+    emissionButton.className = "mode-button";
+
+    if (mode === "absorption") {
+        absorptionButton.className =
+            "mode-button active absorption";
+
+        initialLabel.textContent =
+            "Initial lower orbit";
+
+        finalLabel.textContent =
+            "Final upper orbit";
+
+        startButton.textContent =
+            "▶ Absorb Photon and Excite Electron";
+
+        startButton.className =
+            "action-button";
+
+        processMessage.className =
+            "message absorption-message";
+
+        processMessage.innerHTML =
+            "<strong>Absorption</strong>" +
+            "The electron absorbs a photon and moves from a " +
+            "lower-energy orbit to a higher-energy orbit.";
+
+        currentElectronLevel = 1;
+    } else {
+        emissionButton.className =
+            "mode-button active emission";
+
+        initialLabel.textContent =
+            "Initial excited orbit";
+
+        finalLabel.textContent =
+            "Final lower orbit";
+
+        startButton.textContent =
+            "▶ Release Photon and De-excite Electron";
+
+        startButton.className =
+            "action-button emission-action";
+
+        processMessage.className =
+            "message emission-message";
+
+        processMessage.innerHTML =
+            "<strong>Emission</strong>" +
+            "The electron returns from a higher-energy orbit to a " +
+            "lower-energy orbit and releases a photon.";
+
+        currentElectronLevel = 2;
+    }
+
+    hidePhoton();
+    populateSelectors();
+    updateElectronPosition(currentElectronLevel);
+    updateDisplay();
+}
+
+/* ---------------------------------------------------------
+   SPECTRAL SERIES
+--------------------------------------------------------- */
+
+function getSeriesLevel() {
+    /*
+       Emission series is determined by the final lower level.
+
+       For absorption, the corresponding absorption series is
+       determined by the initial lower level.
+    */
+
+    if (mode === "emission") {
+        return Number(finalLevel.value);
+    }
+
+    return Number(initialLevel.value);
+}
+
+function updateSeriesCards(seriesLevel) {
+    for (let level = 1; level <= 5; level++) {
+        const card = document.getElementById(`series${level}`);
+
+        if (level === seriesLevel) {
+            card.classList.add("active");
+        } else {
+            card.classList.remove("active");
+        }
+    }
+}
+
+/* ---------------------------------------------------------
+   UPDATE ALL NUMERICAL INFORMATION
+--------------------------------------------------------- */
+
+function updateDisplay() {
+    if (
+        !initialLevel.value ||
+        !finalLevel.value
+    ) {
+        return;
+    }
+
+    const initial = Number(initialLevel.value);
+    const final = Number(finalLevel.value);
+
+    const data = transitionData(initial, final);
+    const region =
+        getRadiationRegion(data.wavelengthNanometre);
+
+    const seriesLevel = getSeriesLevel();
+    const series = seriesInformation[seriesLevel];
+
+    document.getElementById("transitionValue").textContent =
+        `n = ${initial} ${mode === "absorption" ? "→" : "→"} n = ${final}`;
+
+    document.getElementById("seriesValue").textContent =
+        mode === "emission"
+            ? `${series.name} series`
+            : `${series.name} absorption`;
+
+    document.getElementById("energyValue").textContent =
+        `${data.energyEV.toFixed(3)} eV`;
+
+    document.getElementById("molarEnergyValue").textContent =
+        `${data.molarEnergy.toFixed(1)} kJ mol⁻¹`;
+
+    document.getElementById("frequencyValue").textContent =
+        `${scientificNotation(data.frequency)} Hz`;
+
+    document.getElementById("wavelengthValue").textContent =
+        `${data.wavelengthNanometre.toFixed(2)} nm`;
+
+    const regionValue =
+        document.getElementById("regionValue");
+
+    regionValue.textContent = region.name;
+    regionValue.style.color = region.colour;
+
+    document.getElementById(
+        "radiationDescription"
+    ).textContent = region.description;
+
+    updateVisibleMarker(data.wavelengthNanometre);
+    updateSeriesCards(seriesLevel);
+    updateCalculation(data, initial, final);
+    updateEnergyArrow(initial, final);
+}
+
+/* ---------------------------------------------------------
+   VISIBLE-SPECTRUM MARKER
+--------------------------------------------------------- */
+
+function updateVisibleMarker(wavelengthNm) {
+    const marker =
+        document.getElementById("wavelengthMarker");
+
+    /*
+       Positions ultraviolet to the far left,
+       visible light from 380 to 750 nm,
+       and infrared to the far right.
+    */
+
+    let percentage;
+
+    if (wavelengthNm < 380) {
+        percentage = 2;
+    } else if (wavelengthNm > 750) {
+        percentage = 98;
+    } else {
+        percentage =
+            ((wavelengthNm - 380) / (750 - 380)) * 100;
+    }
+
+    marker.style.left = `${percentage}%`;
+}
+
+/* ---------------------------------------------------------
+   CALCULATION PANEL
+--------------------------------------------------------- */
+
+function updateCalculation(data, initial, final) {
+    const initialEnergy = levelEnergy(initial);
+    const finalEnergy = levelEnergy(final);
+
+    document.getElementById(
+        "calculationHeading"
+    ).textContent =
+        mode === "absorption"
+            ? "Energy absorbed by the electron"
+            : "Energy released by the electron";
+
+    document.getElementById(
+        "levelEnergyCalculation"
+    ).innerHTML =
+        `E<sub>${initial}</sub> = ` +
+        `${initialEnergy.toFixed(3)} eV<br>` +
+        `E<sub>${final}</sub> = ` +
+        `${finalEnergy.toFixed(3)} eV`;
+
+    document.getElementById(
+        "photonCalculation"
+    ).innerHTML =
+        `|ΔE| = |${finalEnergy.toFixed(3)} − ` +
+        `(${initialEnergy.toFixed(3)})|<br>` +
+        `|ΔE| = <b>${data.energyEV.toFixed(3)} eV</b><br>` +
+        `|ΔE| = <b>${scientificNotation(data.energyJoule)} J</b>`;
+
+    document.getElementById(
+        "frequencyCalculation"
+    ).innerHTML =
+        `ν = ${scientificNotation(data.frequency)} Hz<br>` +
+        `λ = ${data.wavelengthNanometre.toFixed(2)} nm`;
+
+    const explanation =
+        document.getElementById("conceptExplanation");
+
+    if (mode === "absorption") {
+        explanation.innerHTML =
+            "<b>Excitation:</b> The electron absorbs a photon whose " +
+            "energy is exactly equal to the energy difference between " +
+            `n = ${initial} and n = ${final}. It then moves to the ` +
+            "higher-energy orbit.";
+    } else {
+        explanation.innerHTML =
+            "<b>De-excitation:</b> The electron returns from " +
+            `n = ${initial} to n = ${final}. The lost electron energy ` +
+            "is released as a photon of electromagnetic radiation.";
+    }
+}
+
+/* ---------------------------------------------------------
+   ENERGY-LEVEL ARROW
+--------------------------------------------------------- */
+
+function updateEnergyArrow(initial, final) {
+    const arrow =
+        document.getElementById("energyArrow");
+
+    const initialY = energyLevelPositions[initial];
+    const finalY = energyLevelPositions[final];
+
+    const upperY = Math.min(initialY, finalY);
+    const lowerY = Math.max(initialY, finalY);
+
+    arrow.style.top = `${upperY}px`;
+    arrow.style.height = `${lowerY - upperY}px`;
+
+    const label =
+        document.getElementById("energyTransitionLabel");
+
+    if (mode === "absorption") {
+        arrow.className = "up";
+
+        label.textContent =
+            `Absorption: n = ${initial} → n = ${final}`;
+
+        label.style.color = "#2563eb";
+    } else {
+        arrow.className = "down";
+
+        label.textContent =
+            `Emission: n = ${initial} → n = ${final}`;
+
+        label.style.color = "#dc2626";
+    }
+}
+
+/* ---------------------------------------------------------
+   ELECTRON POSITION AND ANIMATION
+--------------------------------------------------------- */
+
+function getElectronCoordinates(level) {
+    /*
+       Electron is displayed on the right side of each orbit.
+    */
+
+    return {
+        x: centreX + orbitRadii[level],
+        y: centreY
+    };
+}
+
+function updateElectronPosition(level) {
+    const position = getElectronCoordinates(level);
+
+    electron.setAttribute("cx", position.x);
+    electron.setAttribute("cy", position.y);
+
+    electronGlow.setAttribute("cx", position.x);
+    electronGlow.setAttribute("cy", position.y);
+
+    electronLabel.setAttribute("x", position.x);
+    electronLabel.setAttribute("y", position.y - 25);
+}
+
+function animateElectron(fromLevel, toLevel, callback) {
+    const start = getElectronCoordinates(fromLevel);
+    const end = getElectronCoordinates(toLevel);
+
+    transitionTrail.setAttribute("x1", start.x);
+    transitionTrail.setAttribute("y1", start.y);
+    transitionTrail.setAttribute("x2", end.x);
+    transitionTrail.setAttribute("y2", end.y);
+    transitionTrail.setAttribute("opacity", "0.9");
+
+    const duration = 1200;
+    const startTime = performance.now();
+
+    function frame(time) {
+        const elapsed = time - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        /*
+           Ease-in-out motion.
+        */
+
+        const eased =
+            progress < 0.5
+                ? 2 * progress * progress
+                : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+        const x = start.x + (end.x - start.x) * eased;
+        const y = start.y + (end.y - start.y) * eased;
+
+        electron.setAttribute("cx", x);
+        electron.setAttribute("cy", y);
+
+        electronGlow.setAttribute("cx", x);
+        electronGlow.setAttribute("cy", y);
+
+        electronLabel.setAttribute("x", x);
+        electronLabel.setAttribute("y", y - 25);
+
+        if (progress < 1) {
+            animationFrameId =
+                requestAnimationFrame(frame);
+        } else {
+            currentElectronLevel = toLevel;
+            transitionTrail.setAttribute("opacity", "0");
+
+            if (callback) {
+                callback();
+            }
+        }
+    }
+
+    animationFrameId =
+        requestAnimationFrame(frame);
+}
+
+/* ---------------------------------------------------------
+   PHOTON WAVE
+--------------------------------------------------------- */
+
+function createWavePath(startX, endX, centreWaveY) {
+    const direction = endX >= startX ? 1 : -1;
+    const distance = Math.abs(endX - startX);
+    const segments = 14;
+    const step = distance / segments;
+
+    let path = `M ${startX} ${centreWaveY}`;
+
+    for (let index = 1; index <= segments; index++) {
+        const x =
+            startX + direction * step * index;
+
+        const y =
+            centreWaveY +
+            (index % 2 === 0 ? -14 : 14);
+
+        path += ` L ${x} ${y}`;
+    }
+
+    return path;
+}
+
+function showPhoton(type, data) {
+    const electronPosition =
+        getElectronCoordinates(
+            type === "incoming"
+                ? Number(initialLevel.value)
+                : Number(finalLevel.value)
+        );
+
+    let startX;
+    let endX;
+
+    if (type === "incoming") {
+        startX = 835;
+        endX = electronPosition.x + 18;
+
+        photonLabel.textContent =
+            `Incoming photon: ${data.wavelengthNanometre.toFixed(1)} nm`;
+    } else {
+        startX = electronPosition.x + 18;
+        endX = 835;
+
+        photonLabel.textContent =
+            `Emitted photon: ${data.wavelengthNanometre.toFixed(1)} nm`;
+    }
+
+    const waveY = 565;
+    const colour =
+        getRadiationRegion(
+            data.wavelengthNanometre
+        ).colour;
+
+    photonWave.setAttribute(
+        "d",
+        createWavePath(startX, endX, waveY)
+    );
+
+    photonWave.setAttribute("stroke", colour);
+    photonArrow.setAttribute("fill", colour);
+    photonLabel.setAttribute("fill", colour);
+
+    if (type === "incoming") {
+        photonArrow.setAttribute(
+            "points",
+            `${endX - 2},${waveY} ` +
+            `${endX + 17},${waveY - 11} ` +
+            `${endX + 17},${waveY + 11}`
+        );
+    } else {
+        photonArrow.setAttribute(
+            "points",
+            `${endX + 2},${waveY} ` +
+            `${endX - 17},${waveY - 11} ` +
+            `${endX - 17},${waveY + 11}`
+        );
+    }
+
+    photonWave.setAttribute("opacity", "1");
+    photonArrow.setAttribute("opacity", "1");
+    photonLabel.setAttribute("opacity", "1");
+
+    const totalLength =
+        photonWave.getTotalLength();
+
+    photonWave.style.strokeDasharray =
+        totalLength;
+
+    photonWave.style.strokeDashoffset =
+        totalLength;
+
+    photonWave.style.transition = "none";
+
+    requestAnimationFrame(() => {
+        photonWave.style.transition =
+            "stroke-dashoffset 1s linear";
+
+        photonWave.style.strokeDashoffset = "0";
+    });
+}
+
+function hidePhoton() {
+    photonWave.setAttribute("opacity", "0");
+    photonArrow.setAttribute("opacity", "0");
+    photonLabel.setAttribute("opacity", "0");
+}
+
+/* ---------------------------------------------------------
+   START TRANSITION
+--------------------------------------------------------- */
+
+function startTransition() {
+    if (animationRunning) {
+        return;
+    }
+
+    stopAnimation();
+    animationRunning = true;
+    startButton.disabled = true;
+
+    const initial = Number(initialLevel.value);
+    const final = Number(finalLevel.value);
+    const data = transitionData(initial, final);
+
+    hidePhoton();
+    updateElectronPosition(initial);
+    currentElectronLevel = initial;
+
+    if (mode === "absorption") {
+        svgModeText.textContent =
+            "Photon approaches the electron";
+
+        svgModeText.setAttribute("fill", "#93c5fd");
+
+        processMessage.innerHTML =
+            "<strong>1. Photon absorption</strong>" +
+            `The electron at n = ${initial} absorbs a photon of ` +
+            `${data.energyEV.toFixed(3)} eV.`;
+
+        showPhoton("incoming", data);
+
+        setTimeout(() => {
+            hidePhoton();
+
+            svgModeText.textContent =
+                "Electron is excited to a higher orbit";
+
+            processMessage.innerHTML =
+                "<strong>2. Electron excitation</strong>" +
+                `After absorbing energy, the electron jumps from ` +
+                `n = ${initial} to n = ${final}.`;
+
+            animateElectron(initial, final, () => {
+                svgModeText.textContent =
+                    `Electron is now in the excited n = ${final} state`;
+
+                processMessage.innerHTML =
+                    "<strong>Excited state formed</strong>" +
+                    `The electron has moved to n = ${final}. Its energy ` +
+                    "has increased by exactly the energy of the absorbed photon.";
+
+                animationRunning = false;
+                startButton.disabled = false;
+            });
+        }, 1100);
+    } else {
+        svgModeText.textContent =
+            "Excited electron returns to a lower orbit";
+
+        svgModeText.setAttribute("fill", "#fca5a5");
+
+        processMessage.innerHTML =
+            "<strong>1. Electron de-excitation</strong>" +
+            `The electron falls from n = ${initial} to n = ${final}.`;
+
+        animateElectron(initial, final, () => {
+            svgModeText.textContent =
+                "Energy is released as a photon";
+
+            processMessage.innerHTML =
+                "<strong>2. Photon emission</strong>" +
+                `A photon of ${data.energyEV.toFixed(3)} eV and ` +
+                `${data.wavelengthNanometre.toFixed(2)} nm is emitted.`;
+
+            showPhoton("outgoing", data);
+
+            setTimeout(() => {
+                const region =
+                    getRadiationRegion(
+                        data.wavelengthNanometre
+                    );
+
+                svgModeText.textContent =
+                    `${seriesInformation[final].name} series — ${region.name}`;
+
+                processMessage.innerHTML =
+                    "<strong>Emission completed</strong>" +
+                    `The emitted photon belongs to the ` +
+                    `<b>${seriesInformation[final].name} series</b> and ` +
+                    `lies in the <b>${region.name}</b> region.`;
+
+                animationRunning = false;
+                startButton.disabled = false;
+            }, 1100);
+        });
+    }
+}
+
+/* ---------------------------------------------------------
+   RESET AND STOP
+--------------------------------------------------------- */
+
+function stopAnimation() {
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+    }
+
+    animationFrameId = null;
+    animationRunning = false;
+    startButton.disabled = false;
+    transitionTrail.setAttribute("opacity", "0");
+}
+
+function resetSimulation() {
+    stopAnimation();
+    hidePhoton();
+
+    const initial = Number(initialLevel.value);
+
+    currentElectronLevel = initial;
+    updateElectronPosition(initial);
+
+    svgModeText.textContent =
+        "Select a transition and press Start";
+
+    svgModeText.setAttribute(
+        "fill",
+        mode === "absorption"
+            ? "#93c5fd"
+            : "#fca5a5"
+    );
+
+    if (mode === "absorption") {
+        processMessage.innerHTML =
+            "<strong>Absorption</strong>" +
+            "The electron absorbs a photon and moves from a " +
+            "lower-energy orbit to a higher-energy orbit.";
+    } else {
+        processMessage.innerHTML =
+            "<strong>Emission</strong>" +
+            "The electron returns from a higher-energy orbit to a " +
+            "lower-energy orbit and releases a photon.";
+    }
+}
+
+/* ---------------------------------------------------------
+   EVENT LISTENERS
+--------------------------------------------------------- */
+
+initialLevel.addEventListener(
+    "change",
+    () => {
+        stopAnimation();
+        hidePhoton();
+        updateFinalLevelOptions();
+
+        currentElectronLevel =
+            Number(initialLevel.value);
+
+        updateElectronPosition(
+            currentElectronLevel
+        );
+    }
+);
+
+finalLevel.addEventListener(
+    "change",
+    () => {
+        stopAnimation();
+        hidePhoton();
+        updateDisplay();
+
+        currentElectronLevel =
+            Number(initialLevel.value);
+
+        updateElectronPosition(
+            currentElectronLevel
+        );
+    }
+);
+
+/* ---------------------------------------------------------
+   INITIALISE
+--------------------------------------------------------- */
+
+populateSelectors();
+updateDisplay();
+updateElectronPosition(1);
+</script>
 
 </body>
 </html>
