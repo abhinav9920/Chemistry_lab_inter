@@ -1336,14 +1336,21 @@ let revolutionFrameId = null;
 let lastRevolutionTime = null;
 let electronAngle = 0;
 let currentOrbitRadius = orbitRadii[1];
+let currentEffectiveLevel = 1;
 let transitionStartRadius = null;
 let transitionEndRadius = null;
 
 /*
-   Angular speed in radians per millisecond.
-   0.001 gives approximately one revolution every 6.3 seconds.
+   Displayed tangential speed on the first orbit, in SVG pixels
+   per millisecond. In Bohr's model, electron speed is inversely
+   proportional to the principal quantum number:
+
+       v(n) = v(1) / n
+
+   Angular speed is calculated from omega = v / r, so electrons
+   revolve progressively more slowly in the higher orbits.
 */
-const ELECTRON_ANGULAR_SPEED = 0.001;
+const FIRST_ORBIT_DISPLAY_SPEED = 0.25;
 
 /* ---------------------------------------------------------
    NUMBER FORMATTING
@@ -1876,6 +1883,7 @@ function renderElectron() {
 
 function updateElectronPosition(level) {
     currentElectronLevel = level;
+    currentEffectiveLevel = level;
     currentOrbitRadius = orbitRadii[level];
     renderElectron();
 }
@@ -1893,8 +1901,14 @@ function startElectronRevolution() {
         const elapsed = Math.min(time - lastRevolutionTime, 50);
         lastRevolutionTime = time;
 
+        const orbitalSpeed =
+            FIRST_ORBIT_DISPLAY_SPEED / currentEffectiveLevel;
+
+        const angularSpeed =
+            orbitalSpeed / currentOrbitRadius;
+
         electronAngle =
-            (electronAngle + elapsed * ELECTRON_ANGULAR_SPEED) %
+            (electronAngle + elapsed * angularSpeed) %
             (Math.PI * 2);
 
         renderElectron();
@@ -1912,6 +1926,7 @@ function animateElectron(fromLevel, toLevel, callback) {
     transitionStartRadius = startRadius;
     transitionEndRadius = endRadius;
     currentOrbitRadius = startRadius;
+    currentEffectiveLevel = fromLevel;
     transitionTrail.setAttribute("opacity", "0.9");
 
     const duration = 1200;
@@ -1933,6 +1948,9 @@ function animateElectron(fromLevel, toLevel, callback) {
         currentOrbitRadius =
             startRadius + (endRadius - startRadius) * eased;
 
+        currentEffectiveLevel =
+            fromLevel + (toLevel - fromLevel) * eased;
+
         renderElectron();
 
         if (progress < 1) {
@@ -1940,6 +1958,7 @@ function animateElectron(fromLevel, toLevel, callback) {
                 requestAnimationFrame(frame);
         } else {
             currentElectronLevel = toLevel;
+            currentEffectiveLevel = toLevel;
             currentOrbitRadius = endRadius;
             transitionStartRadius = null;
             transitionEndRadius = null;
@@ -2180,6 +2199,7 @@ function stopAnimation() {
     animationFrameId = null;
     transitionStartRadius = null;
     transitionEndRadius = null;
+    currentEffectiveLevel = currentElectronLevel;
     currentOrbitRadius = orbitRadii[currentElectronLevel];
     animationRunning = false;
     startButton.disabled = false;
