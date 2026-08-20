@@ -1332,6 +1332,18 @@ let mode = "absorption";
 let currentElectronLevel = 1;
 let animationRunning = false;
 let animationFrameId = null;
+let revolutionFrameId = null;
+let lastRevolutionTime = null;
+let electronAngle = 0;
+let currentOrbitRadius = orbitRadii[1];
+let transitionStartRadius = null;
+let transitionEndRadius = null;
+
+/*
+   Angular speed in radians per millisecond.
+   0.001 gives approximately one revolution every 6.3 seconds.
+*/
+const ELECTRON_ANGULAR_SPEED = 0.001;
 
 /* ---------------------------------------------------------
    NUMBER FORMATTING
@@ -1816,19 +1828,24 @@ function updateEnergyArrow(initial, final) {
    ELECTRON POSITION AND ANIMATION
 --------------------------------------------------------- */
 
-function getElectronCoordinates(level) {
-    /*
-       Electron is displayed on the right side of each orbit.
-    */
+function getElectronCoordinates(level, angle = electronAngle) {
+    const radius = orbitRadii[level];
 
     return {
-        x: centreX + orbitRadii[level],
-        y: centreY
+        x: centreX + radius * Math.cos(angle),
+        y: centreY + radius * Math.sin(angle)
     };
 }
 
-function updateElectronPosition(level) {
-    const position = getElectronCoordinates(level);
+function getCoordinatesForRadius(radius, angle = electronAngle) {
+    return {
+        x: centreX + radius * Math.cos(angle),
+        y: centreY + radius * Math.sin(angle)
+    };
+}
+
+function renderElectron() {
+    const position = getCoordinatesForRadius(currentOrbitRadius);
 
     electron.setAttribute("cx", position.x);
     electron.setAttribute("cy", position.y);
@@ -1838,16 +1855,63 @@ function updateElectronPosition(level) {
 
     electronLabel.setAttribute("x", position.x);
     electronLabel.setAttribute("y", position.y - 25);
+
+    if (
+        animationRunning &&
+        transitionStartRadius !== null &&
+        transitionEndRadius !== null
+    ) {
+        const trailStart =
+            getCoordinatesForRadius(transitionStartRadius);
+
+        const trailEnd =
+            getCoordinatesForRadius(transitionEndRadius);
+
+        transitionTrail.setAttribute("x1", trailStart.x);
+        transitionTrail.setAttribute("y1", trailStart.y);
+        transitionTrail.setAttribute("x2", trailEnd.x);
+        transitionTrail.setAttribute("y2", trailEnd.y);
+    }
+}
+
+function updateElectronPosition(level) {
+    currentElectronLevel = level;
+    currentOrbitRadius = orbitRadii[level];
+    renderElectron();
+}
+
+function startElectronRevolution() {
+    if (revolutionFrameId !== null) {
+        return;
+    }
+
+    function revolve(time) {
+        if (lastRevolutionTime === null) {
+            lastRevolutionTime = time;
+        }
+
+        const elapsed = Math.min(time - lastRevolutionTime, 50);
+        lastRevolutionTime = time;
+
+        electronAngle =
+            (electronAngle + elapsed * ELECTRON_ANGULAR_SPEED) %
+            (Math.PI * 2);
+
+        renderElectron();
+
+        revolutionFrameId = requestAnimationFrame(revolve);
+    }
+
+    revolutionFrameId = requestAnimationFrame(revolve);
 }
 
 function animateElectron(fromLevel, toLevel, callback) {
-    const start = getElectronCoordinates(fromLevel);
-    const end = getElectronCoordinates(toLevel);
+    const startRadius = orbitRadii[fromLevel];
+    const endRadius = orbitRadii[toLevel];
 
-    transitionTrail.setAttribute("x1", start.x);
-    transitionTrail.setAttribute("y1", start.y);
-    transitionTrail.setAttribute("x2", end.x);
-    transitionTrail.setAttribute("y2", end.y);
+    transitionStartRadius = startRadius;
+    transitionEndRadius = endRadius;
+    currentOrbitRadius = startRadius;
     transitionTrail.setAttribute("opacity", "0.9");
 
     const duration = 1200;
@@ -1866,24 +1930,21 @@ function animateElectron(fromLevel, toLevel, callback) {
                 ? 2 * progress * progress
                 : 1 - Math.pow(-2 * progress + 2, 2) / 2;
 
-        const x = start.x + (end.x - start.x) * eased;
-        const y = start.y + (end.y - start.y) * eased;
+        currentOrbitRadius =
+            startRadius + (endRadius - startRadius) * eased;
 
-        electron.setAttribute("cx", x);
-        electron.setAttribute("cy", y);
-
-        electronGlow.setAttribute("cx", x);
-        electronGlow.setAttribute("cy", y);
-
-        electronLabel.setAttribute("x", x);
-        electronLabel.setAttribute("y", y - 25);
+        renderElectron();
 
         if (progress < 1) {
             animationFrameId =
                 requestAnimationFrame(frame);
         } else {
             currentElectronLevel = toLevel;
+            currentOrbitRadius = endRadius;
+            transitionStartRadius = null;
+            transitionEndRadius = null;
             transitionTrail.setAttribute("opacity", "0");
+            renderElectron();
 
             if (callback) {
                 callback();
@@ -2117,6 +2178,9 @@ function stopAnimation() {
     }
 
     animationFrameId = null;
+    transitionStartRadius = null;
+    transitionEndRadius = null;
+    currentOrbitRadius = orbitRadii[currentElectronLevel];
     animationRunning = false;
     startButton.disabled = false;
     transitionTrail.setAttribute("opacity", "0");
@@ -2197,6 +2261,7 @@ finalLevel.addEventListener(
 populateSelectors();
 updateDisplay();
 updateElectronPosition(1);
+startElectronRevolution();
 </script>
 
 </body>
