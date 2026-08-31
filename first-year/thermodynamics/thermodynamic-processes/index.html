@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Thermodynamic Process Lab | Interactive Simulation</title>
+<style>
+:root{--ink:#172033;--muted:#667085;--line:#d8dee9;--paper:#fff;--wash:#f4f7fb;--blue:#2457d6;--navy:#17345f;--cyan:#23a9b8;--red:#df5b47;--amber:#f2ad32;--green:#16835c;--purple:#7950c8}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--wash);color:var(--ink)}button,input,select{font:inherit}header{background:#fff;border-bottom:1px solid var(--line);padding:16px 22px}header a{color:var(--blue);text-decoration:none;font-weight:700}main{max-width:1280px;margin:auto;padding:20px 16px 48px}
+.hero{background:linear-gradient(135deg,#142f55,#22678a);color:#fff;border-radius:22px;padding:24px 27px;margin-bottom:16px;box-shadow:0 12px 32px rgba(23,52,95,.16)}.hero h1{margin:0;font-size:clamp(30px,5vw,48px)}.hero p{margin:8px 0 0;color:#dcecf6;line-height:1.5;max-width:880px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:16px}.tab{border:1px solid var(--line);border-radius:13px;background:#fff;padding:12px 8px;font-weight:800;color:var(--ink);cursor:pointer}.tab:hover{border-color:#87a4e8}.tab.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.process-banner{display:flex;justify-content:space-between;align-items:center;gap:15px;background:#fff;border:1px solid var(--line);border-left:6px solid var(--blue);border-radius:15px;padding:14px 17px;margin-bottom:16px}.process-banner h2{margin:0 0 4px;font-size:21px}.process-banner p{margin:0;color:var(--muted);line-height:1.4}.constant{white-space:nowrap;background:#eef3ff;color:#174ea6;border-radius:99px;padding:8px 12px;font-weight:800;font-size:13px}
+.visual-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:0 5px 18px rgba(20,30,55,.05)}.panel h2{font-size:20px;margin:0 0 4px}.sub{color:var(--muted);font-size:13px;line-height:1.45;margin:0 0 12px}.canvas-box{border:2px solid #26364d;border-radius:14px;overflow:hidden;background:#f7fafc}canvas{display:block;width:100%;height:390px}
+.readings{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:14px 0}.reading{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center}.reading span{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}.reading strong{font-size:16px}.reading.heat{border-top:4px solid var(--red)}.reading.work{border-top:4px solid var(--blue)}.reading.energy{border-top:4px solid var(--green)}
+.lab-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:16px;margin-top:16px}.control{padding:12px 0;border-top:1px solid #edf0f4}.control:first-of-type{border-top:0}.control-line{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px;font-weight:700}.control output{color:#174ea6}input[type=range]{width:100%;margin-top:10px;accent-color:var(--blue)}.presets{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.preset,.action{border:0;border-radius:10px;padding:10px;font-weight:800;cursor:pointer}.preset{background:#eef1f5;color:var(--ink)}.preset.selected{background:#e8efff;color:#174ea6}.actions{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:8px;margin-top:12px}.action.primary{background:var(--blue);color:#fff}.action.secondary{background:#eef1f5;color:var(--ink)}.action:disabled{opacity:.5;cursor:not-allowed}
+.predict-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.prediction{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;border:1px solid #e4e7ec;border-radius:10px;padding:8px}.prediction label{font-weight:900;color:var(--navy)}.prediction select{width:100%;border:1px solid var(--line);border-radius:8px;padding:7px;background:#fff;color:var(--ink)}.prediction select.correct{border-color:var(--green);background:#edf9f3}.prediction select.wrong{border-color:#c43227;background:#fff1f0}.feedback{margin-top:11px;min-height:45px;border-radius:11px;background:#eef4ff;color:#244d82;padding:11px 12px;line-height:1.4;font-size:14px}.feedback.good{background:#eaf7ef;color:#12633f}.feedback.bad{background:#fff2f0;color:#9d2017}
+.equation-strip{display:grid;grid-template-columns:.9fr 1.4fr;gap:14px;margin-top:16px}.equation-box{background:linear-gradient(140deg,#183153,#275c83);color:#fff;border-radius:17px;padding:18px;text-align:center}.equation-box h2{margin:0 0 9px;font-size:18px}.equation{font-family:Georgia,'Times New Roman',serif;font-size:clamp(22px,3vw,29px)}.explain{background:#fff;border:1px solid var(--line);border-radius:17px;padding:18px}.explain h2{margin:0 0 7px;font-size:19px}.explain p{margin:0;color:#475467;line-height:1.55}
+.comparison{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;overflow:auto}.comparison h2{margin:0 0 13px;font-size:21px}table{width:100%;border-collapse:collapse;min-width:760px}th,td{text-align:left;border-bottom:1px solid #e4e7ec;padding:11px 10px;font-size:14px;line-height:1.4}th{background:#f4f7fb;color:#344054}td:first-child{font-weight:800}.note{color:var(--muted);font-size:12px;line-height:1.5;margin:11px 0 0}
+@media(max-width:980px){.visual-grid,.lab-grid,.equation-strip{grid-template-columns:1fr}.readings{grid-template-columns:repeat(3,1fr)}}@media(max-width:650px){main{padding:12px 9px 35px}.hero{padding:19px}.tabs{grid-template-columns:1fr 1fr}.process-banner{align-items:flex-start;flex-direction:column}.panel{padding:12px}canvas{height:330px}.readings{grid-template-columns:1fr 1fr}.predict-grid{grid-template-columns:1fr 1fr}.actions{grid-template-columns:1fr}.presets{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><a href="../">← Thermodynamics</a></header>
+<main>
+<section class="hero"><h1>📈 Thermodynamic Process Lab</h1><p>Connect piston motion, molecular behaviour, energy transfer and the path on a pressure–volume graph.</p></section>
+
+<nav class="tabs" aria-label="Thermodynamic processes">
+ <button class="tab active" data-mode="isothermal">🌡️ Isothermal</button>
+ <button class="tab" data-mode="adiabatic">🧊 Adiabatic</button>
+ <button class="tab" data-mode="isochoric">🔒 Isochoric</button>
+ <button class="tab" data-mode="isobaric">⚖️ Isobaric</button>
+</nav>
+
+<section class="process-banner" id="processBanner">
+ <div><h2 id="processTitle">Isothermal Process</h2><p id="processDescription">Temperature remains constant while pressure and volume change.</p></div>
+ <div class="constant" id="constantBadge">T = constant</div>
+</section>
+
+<div class="visual-grid">
+ <section class="panel"><h2>Piston–Gas Model</h2><p class="sub" id="modelNote">A thermal reservoir maintains constant temperature.</p><div class="canvas-box"><canvas id="pistonCanvas" aria-label="Animated piston and ideal gas model"></canvas></div></section>
+ <section class="panel"><h2>Live P–V Diagram</h2><p class="sub">The coloured path shows the process; shaded area represents the magnitude of boundary work.</p><div class="canvas-box"><canvas id="graphCanvas" aria-label="Pressure volume graph"></canvas></div></section>
+</div>
+
+<div class="readings">
+ <div class="reading"><span>Pressure, P</span><strong id="pRead">1.00 bar</strong></div>
+ <div class="reading"><span>Volume, V</span><strong id="vRead">24.94 L</strong></div>
+ <div class="reading"><span>Temperature, T</span><strong id="tRead">300 K</strong></div>
+ <div class="reading heat"><span>Heat, q</span><strong id="qRead">0.00 kJ</strong></div>
+ <div class="reading work"><span>Work, w</span><strong id="wRead">0.00 kJ</strong></div>
+ <div class="reading energy"><span>ΔU</span><strong id="uRead">0.00 kJ</strong></div>
+</div>
+
+<div class="lab-grid">
+ <section class="panel"><h2>Control the Process</h2><p class="sub">Initial state: 1.00 mol ideal gas, 300 K and 1.00 bar.</p>
+  <div class="control"><div class="control-line"><label id="targetLabel" for="targetSlider">Final volume</label><output id="targetOutput">40.0 L</output></div><input id="targetSlider" type="range" min="12" max="45" value="40" step="0.5"></div>
+  <div class="presets"><button class="preset selected" id="presetA">Expansion</button><button class="preset" id="presetB">Compression</button></div>
+  <div class="actions"><button class="action primary" id="runButton">Run Process</button><button class="action secondary" id="pauseButton" disabled>Pause</button><button class="action secondary" id="resetButton">Reset</button></div>
+  <div class="feedback" id="feedback" aria-live="polite">Predict all six changes, then run the process.</div>
+ </section>
+
+ <section class="panel"><h2>Predict Before You Run</h2><p class="sub">For P, V and T choose the change. For q, w and ΔU choose the sign.</p>
+  <div class="predict-grid">
+   <div class="prediction"><label for="predP">P</label><select id="predP" data-variable="P"><option value="">Choose</option><option value="increase">Increases</option><option value="decrease">Decreases</option><option value="constant">Constant</option></select></div>
+   <div class="prediction"><label for="predV">V</label><select id="predV" data-variable="V"><option value="">Choose</option><option value="increase">Increases</option><option value="decrease">Decreases</option><option value="constant">Constant</option></select></div>
+   <div class="prediction"><label for="predT">T</label><select id="predT" data-variable="T"><option value="">Choose</option><option value="increase">Increases</option><option value="decrease">Decreases</option><option value="constant">Constant</option></select></div>
+   <div class="prediction"><label for="predQ">q</label><select id="predQ" data-variable="q"><option value="">Choose</option><option value="positive">Positive</option><option value="negative">Negative</option><option value="zero">Zero</option></select></div>
+   <div class="prediction"><label for="predW">w</label><select id="predW" data-variable="w"><option value="">Choose</option><option value="positive">Positive</option><option value="negative">Negative</option><option value="zero">Zero</option></select></div>
+   <div class="prediction"><label for="predU">ΔU</label><select id="predU" data-variable="u"><option value="">Choose</option><option value="positive">Positive</option><option value="negative">Negative</option><option value="zero">Zero</option></select></div>
+  </div>
+ </section>
+</div>
+
+<div class="equation-strip">
+ <section class="equation-box"><h2 id="equationTitle">Isothermal relation</h2><div class="equation" id="equation">PV = constant</div></section>
+ <section class="explain"><h2>What is happening?</h2><p id="explanation">For an ideal gas, internal energy depends only on temperature. Because temperature remains constant, ΔU = 0 and heat exchanged balances the work.</p></section>
+</div>
+
+<section class="comparison"><h2>Comparison of the Four Processes</h2>
+<table><thead><tr><th>Process</th><th>Constant quantity</th><th>Ideal-gas relation</th><th>Heat and work</th><th>Internal energy</th></tr></thead><tbody>
+<tr><td>Isothermal</td><td>Temperature</td><td>PV = constant</td><td>q = −w</td><td>ΔU = 0</td></tr>
+<tr><td>Adiabatic</td><td>Heat exchange is zero</td><td>PV<sup>γ</sup> = constant</td><td>q = 0</td><td>ΔU = w</td></tr>
+<tr><td>Isochoric</td><td>Volume</td><td>P/T = constant</td><td>w = 0</td><td>ΔU = q</td></tr>
+<tr><td>Isobaric</td><td>Pressure</td><td>V/T = constant</td><td>w = −PΔV</td><td>ΔU = q + w</td></tr>
+</tbody></table>
+<p class="note"><b>Sign convention used throughout:</b> ΔU = q + w. Heat absorbed by the system is positive. Work done on the system is positive; work done by an expanding gas is negative. The adiabatic model uses γ = 1.40 and C<sub>V</sub> = R/(γ−1).</p>
+</section>
+</main>
+
+<script>
+const Rbar=.08314,R=8.314,n=1,T1=300,P1=1,V1=n*Rbar*T1/P1,gamma=1.4,Cv=R/(gamma-1);
+const piston=document.getElementById('pistonCanvas'),pc=piston.getContext('2d');
+const graph=document.getElementById('graphCanvas'),gc=graph.getContext('2d');
+const slider=document.getElementById('targetSlider'),targetOutput=document.getElementById('targetOutput');
+const selects=[...document.querySelectorAll('.prediction select')];
+let mode='isothermal',progress=0,running=false,paused=false,done=false,last=performance.now(),particles=[],dims={pw:0,ph:0,gw:0,gh:0,dpr:1};
+
+const copy={
+ isothermal:{title:'Isothermal Process',desc:'Temperature remains constant while pressure and volume change.',badge:'T = constant',note:'A thermal reservoir maintains constant temperature.',eqTitle:'Isothermal relation',eq:'PV = constant',explain:'For an ideal gas, internal energy depends only on temperature. Because temperature remains constant, ΔU = 0 and heat exchanged balances the work.'},
+ adiabatic:{title:'Adiabatic Process',desc:'No heat enters or leaves the system; work changes its internal energy and temperature.',badge:'q = 0',note:'Insulated walls prevent heat transfer.',eqTitle:'Reversible adiabatic relation',eq:'PV<sup>γ</sup> = constant',explain:'During adiabatic expansion the gas does work using its internal energy, so it cools. Compression does work on the gas, so it warms.'},
+ isochoric:{title:'Isochoric Process',desc:'The rigid container keeps volume constant while temperature and pressure change.',badge:'V = constant',note:'The locked piston cannot move, so boundary work is zero.',eqTitle:'Constant-volume relation',eq:'P/T = constant',explain:'Heating increases molecular speed and collision force. Pressure rises, but the fixed piston means ΔV = 0 and w = 0.'},
+ isobaric:{title:'Isobaric Process',desc:'External pressure remains constant while heating or cooling changes volume.',badge:'P = constant',note:'A freely moving weighted piston maintains constant pressure.',eqTitle:'Constant-pressure relation',eq:'V/T = constant',explain:'At constant pressure, heating makes the gas expand and lift the piston. Part of the supplied heat raises internal energy and part supports expansion work.'}
+};
+
+function resize(){const pr=piston.getBoundingClientRect(),gr=graph.getBoundingClientRect();dims.dpr=Math.min(devicePixelRatio||1,2);dims.pw=pr.width;dims.ph=pr.height;dims.gw=gr.width;dims.gh=gr.height;piston.width=pr.width*dims.dpr;piston.height=pr.height*dims.dpr;graph.width=gr.width*dims.dpr;graph.height=gr.height*dims.dpr;pc.setTransform(dims.dpr,0,0,dims.dpr,0,0);gc.setTransform(dims.dpr,0,0,dims.dpr,0,0);makeParticles();draw()}
+function currentState(x=progress){const target=Number(slider.value);let V=V1,T=T1,P=P1;if(mode==='isothermal'){V=V1+(target-V1)*x;P=P1*V1/V}else if(mode==='adiabatic'){V=V1+(target-V1)*x;P=P1*Math.pow(V1/V,gamma);T=T1*Math.pow(V1/V,gamma-1)}else if(mode==='isochoric'){T=T1+(target-T1)*x;P=P1*T/T1}else{T=T1+(target-T1)*x;V=V1*T/T1}let w=0,q=0,u=n*Cv*(T-T1);if(mode==='isothermal'){w=-n*R*T1*Math.log(V/V1);q=-w;u=0}else if(mode==='adiabatic'){w=u;q=0}else if(mode==='isochoric'){w=0;q=u}else{w=-P1*(V-V1)*100;q=u-w}return{P,V,T,q,w,u}}
+function finalState(){return currentState(1)}
+function signed(v){return(Math.abs(v)<.005?'0.00':(v>0?'+':'')+(v/1000).toFixed(2))+' kJ'}
+
+function configure(next){mode=next;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));const c=copy[mode];document.getElementById('processTitle').textContent=c.title;document.getElementById('processDescription').textContent=c.desc;document.getElementById('constantBadge').textContent=c.badge;document.getElementById('modelNote').textContent=c.note;document.getElementById('equationTitle').textContent=c.eqTitle;document.getElementById('equation').innerHTML=c.eq;document.getElementById('explanation').textContent=c.explain;const thermal=mode==='isochoric'||mode==='isobaric';document.getElementById('targetLabel').textContent=thermal?'Final temperature':'Final volume';slider.min=thermal?'180':'12';slider.max=thermal?'600':'45';slider.step=thermal?'10':'.5';slider.value=thermal?'500':'40';document.getElementById('presetA').textContent=thermal?'Heating':'Expansion';document.getElementById('presetB').textContent=thermal?'Cooling':'Compression';reset()}
+function makeParticles(){particles=[];for(let i=0;i<34;i++){const a=Math.random()*Math.PI*2;particles.push({x:Math.random(),y:Math.random(),a,s:.7+Math.random()*.6})}}
+function setPreset(first){const thermal=mode==='isochoric'||mode==='isobaric';slider.value=thermal?(first?500:200):(first?40:15);document.querySelectorAll('.preset').forEach((b,i)=>b.classList.toggle('selected',(i===0)===first));reset(false)}
+function reset(clear=true){progress=0;running=false;paused=false;done=false;document.getElementById('runButton').disabled=false;document.getElementById('runButton').textContent='Run Process';document.getElementById('pauseButton').disabled=true;document.getElementById('pauseButton').textContent='Pause';slider.disabled=false;if(clear){selects.forEach(s=>{s.value='';s.className=''})}document.getElementById('feedback').className='feedback';document.getElementById('feedback').textContent='Predict all six changes, then run the process.';updateOutput();updateReadings();draw()}
+function updateOutput(){targetOutput.textContent=(mode==='isochoric'||mode==='isobaric')?Math.round(slider.value)+' K':Number(slider.value).toFixed(1)+' L'}
+function run(){if(selects.some(s=>!s.value)){const f=document.getElementById('feedback');f.className='feedback bad';f.textContent='Complete all six predictions before running the process.';return}running=true;paused=false;done=false;slider.disabled=true;document.getElementById('runButton').disabled=true;document.getElementById('pauseButton').disabled=false;document.getElementById('feedback').className='feedback';document.getElementById('feedback').textContent='Process running—follow the piston, particles and P–V path.'}
+function expected(){const s=finalState(),dir=(v,a)=>Math.abs(v-a)<.001?'constant':v>a?'increase':'decrease',sign=v=>Math.abs(v)<.01?'zero':v>0?'positive':'negative';return{P:dir(s.P,P1),V:dir(s.V,V1),T:dir(s.T,T1),q:sign(s.q),w:sign(s.w),u:sign(s.u)}}
+function grade(){const key=expected();let score=0;selects.forEach(s=>{const ok=s.value===key[s.dataset.variable];s.className=ok?'correct':'wrong';if(ok)score++});const f=document.getElementById('feedback');f.className='feedback '+(score===6?'good':'bad');f.textContent=score===6?'✓ Excellent—6/6 predictions are correct.':`${score}/6 predictions are correct. Green choices are correct; reconsider the red choices using the graph and energy readings.`}
+function updateReadings(){const s=currentState();document.getElementById('pRead').textContent=s.P.toFixed(2)+' bar';document.getElementById('vRead').textContent=s.V.toFixed(2)+' L';document.getElementById('tRead').textContent=s.T.toFixed(0)+' K';document.getElementById('qRead').textContent=signed(s.q);document.getElementById('wRead').textContent=signed(s.w);document.getElementById('uRead').textContent=signed(s.u)}
+
+function drawPiston(){const w=dims.pw,h=dims.ph,s=currentState(),minV=12,maxV=50,top=55,bottom=h-38,cylX=w*.22,cylW=w*.56;let pistonY=bottom-55-(s.V-minV)/(maxV-minV)*(bottom-top-90);if(mode==='isochoric')pistonY=bottom-55-(V1-minV)/(maxV-minV)*(bottom-top-90);pc.clearRect(0,0,w,h);pc.fillStyle='#f8fafc';pc.fillRect(0,0,w,h);if(mode==='adiabatic'){pc.strokeStyle='#f2ad32';pc.lineWidth=8;pc.setLineDash([10,7]);pc.strokeRect(cylX-12,top-13,cylW+24,bottom-top+25);pc.setLineDash([])}pc.strokeStyle='#344054';pc.lineWidth=4;pc.strokeRect(cylX,top,cylW,bottom-top);pc.fillStyle='rgba(70,148,225,.16)';pc.fillRect(cylX+3,pistonY+13,cylW-6,bottom-pistonY-15);pc.fillStyle=mode==='isochoric'?'#7950c8':'#667085';pc.fillRect(cylX-8,pistonY,cylW+16,15);pc.fillRect(w/2-18,pistonY-22,36,22);if(mode==='isochoric'){pc.fillStyle='#7950c8';pc.fillRect(cylX-18,pistonY-5,10,25);pc.fillRect(cylX+cylW+8,pistonY-5,10,25)}if(mode==='isothermal'){pc.fillStyle='#31b7c9';pc.fillRect(cylX-5,bottom+6,cylW+10,12);pc.fillStyle='#147b87';pc.font='bold 12px Arial';pc.textAlign='center';pc.fillText('THERMAL RESERVOIR',w/2,bottom+32)}if(mode==='isobaric'){pc.fillStyle='#344054';for(let i=0;i<3;i++)pc.fillRect(w/2-34+i*24,pistonY-34,20,10)}const gasTop=pistonY+16,gasH=bottom-gasTop,tempScale=Math.sqrt(s.T/T1);particles.forEach(p=>{if(!paused){p.x=(p.x+Math.cos(p.a)*.0014*p.s*tempScale)%1;if(p.x<0)p.x+=1;p.y=(p.y+Math.sin(p.a)*.0014*p.s*tempScale)%1;if(p.y<0)p.y+=1}const x=cylX+10+p.x*(cylW-20),y=gasTop+10+p.y*Math.max(10,gasH-20);pc.beginPath();pc.arc(x,y,4.4,0,Math.PI*2);pc.fillStyle=s.T>T1+3?'#df5b47':s.T<T1-3?'#23a9b8':'#2457d6';pc.fill()});const q=s.q;if(Math.abs(q)>10){pc.strokeStyle=q>0?'#df5b47':'#23a9b8';pc.fillStyle=pc.strokeStyle;pc.lineWidth=4;const y=h*.53,x1=q>0?cylX-55:cylX-5,x2=q>0?cylX-5:cylX-55;pc.beginPath();pc.moveTo(x1,y);pc.lineTo(x2,y);pc.stroke();pc.beginPath();pc.moveTo(x2,y);pc.lineTo(x2+(q>0?-10:10),y-7);pc.lineTo(x2+(q>0?-10:10),y+7);pc.fill();pc.font='bold 13px Arial';pc.textAlign='center';pc.fillText(q>0?'HEAT IN':'HEAT OUT',cylX-30,y-12)}pc.fillStyle='#344054';pc.font='bold 13px Arial';pc.textAlign='center';pc.fillText(mode==='isochoric'?'PISTON LOCKED':'MOVABLE PISTON',w/2,29)}
+
+function drawGraph(){const w=dims.gw,h=dims.gh,L=55,Rg=20,Tg=25,B=45,plotW=w-L-Rg,plotH=h-Tg-B,maxV=50,maxP=3.4;const xy=(V,P)=>[L+V/maxV*plotW,h-B-P/maxP*plotH];gc.clearRect(0,0,w,h);gc.fillStyle='#fff';gc.fillRect(0,0,w,h);gc.strokeStyle='#d8dee9';gc.lineWidth=1;for(let v=0;v<=50;v+=10){const[x]=xy(v,0);gc.beginPath();gc.moveTo(x,Tg);gc.lineTo(x,h-B);gc.stroke()}for(let p=0;p<=3;p++){const[,y]=xy(0,p);gc.beginPath();gc.moveTo(L,y);gc.lineTo(w-Rg,y);gc.stroke()}gc.strokeStyle='#344054';gc.lineWidth=2;gc.beginPath();gc.moveTo(L,Tg);gc.lineTo(L,h-B);gc.lineTo(w-Rg,h-B);gc.stroke();gc.fillStyle='#344054';gc.font='12px Arial';gc.textAlign='center';for(let v=10;v<=50;v+=10){const[x]=xy(v,0);gc.fillText(v,x,h-B+18)}gc.textAlign='right';for(let p=1;p<=3;p++){const[,y]=xy(0,p);gc.fillText(p.toFixed(0),L-8,y+4)}gc.font='bold 13px Arial';gc.textAlign='center';gc.fillText('Volume / L',L+plotW/2,h-8);gc.save();gc.translate(14,Tg+plotH/2);gc.rotate(-Math.PI/2);gc.fillText('Pressure / bar',0,0);gc.restore();const points=[];for(let i=0;i<=80;i++){const x=Math.min(progress,i/80);points.push(currentState(x));if(i/80>=progress)break}if(points.length<2)points.push(currentState(0));const baseY=xy(0,0)[1];gc.beginPath();let first=xy(points[0].V,points[0].P);gc.moveTo(first[0],baseY);points.forEach(s=>{const[a,b]=xy(s.V,s.P);gc.lineTo(a,b)});let end=xy(points[points.length-1].V,points[points.length-1].P);gc.lineTo(end[0],baseY);gc.closePath();gc.fillStyle='rgba(36,87,214,.12)';gc.fill();gc.beginPath();points.forEach((s,i)=>{const[a,b]=xy(s.V,s.P);i?gc.lineTo(a,b):gc.moveTo(a,b)});gc.strokeStyle=mode==='adiabatic'?'#7950c8':mode==='isochoric'?'#df5b47':mode==='isobaric'?'#16835c':'#2457d6';gc.lineWidth=4;gc.stroke();const start=xy(V1,P1);gc.fillStyle='#172033';gc.beginPath();gc.arc(start[0],start[1],5,0,Math.PI*2);gc.fill();gc.fillText('1',start[0]-10,start[1]-8);gc.fillStyle=gc.strokeStyle;gc.beginPath();gc.arc(end[0],end[1],6,0,Math.PI*2);gc.fill();gc.fillText(progress>=1?'2':'',end[0]+10,end[1]-8)}
+function draw(){drawPiston();drawGraph()}
+function animate(now){const dt=Math.min(.04,(now-last)/1000);last=now;if(running){progress=Math.min(1,progress+dt/3.2);if(progress>=1){running=false;done=true;document.getElementById('runButton').disabled=false;document.getElementById('runButton').textContent='Run Again';document.getElementById('pauseButton').disabled=true;grade()}}updateReadings();draw();requestAnimationFrame(animate)}
+
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>configure(b.dataset.mode)));
+slider.addEventListener('input',()=>{updateOutput();reset(false)});
+document.getElementById('presetA').addEventListener('click',()=>setPreset(true));document.getElementById('presetB').addEventListener('click',()=>setPreset(false));
+document.getElementById('runButton').addEventListener('click',()=>{if(done){reset();document.getElementById('runButton').textContent='Run Process';return}run()});
+document.getElementById('pauseButton').addEventListener('click',()=>{running=!running;paused=!running;document.getElementById('pauseButton').textContent=running?'Pause':'Resume'});
+document.getElementById('resetButton').addEventListener('click',()=>{reset();document.getElementById('runButton').textContent='Run Process'});
+window.addEventListener('resize',resize);resize();configure('isothermal');requestAnimationFrame(animate);
+</script>
+</body>
+</html>
