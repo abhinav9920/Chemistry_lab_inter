@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entropy Explorer | Interactive Thermodynamics Simulation</title>
+<style>
+:root{
+    --ink:#172033;
+    --muted:#667085;
+    --line:#d8dee9;
+    --paper:#ffffff;
+    --wash:#f4f7fb;
+    --navy:#183153;
+    --blue:#2f6fed;
+    --cyan:#31b7c9;
+    --coral:#ee6c4d;
+    --amber:#f4b942;
+    --green:#16835c;
+    --red:#b42318;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--wash);color:var(--ink)}
+button,input{font:inherit}
+header{background:var(--paper);border-bottom:1px solid var(--line);padding:16px 22px}
+header a{color:#2457d6;text-decoration:none;font-weight:700}
+main{max-width:1220px;margin:auto;padding:22px 18px 48px}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:20px;background:linear-gradient(135deg,#172b4d,#214f78);color:#fff;border-radius:22px;padding:25px 28px;margin-bottom:18px;box-shadow:0 12px 32px rgba(24,49,83,.16)}
+.hero h1{margin:0;font-size:clamp(30px,5vw,48px)}
+.hero p{margin:8px 0 0;max-width:760px;color:#dce9f7;line-height:1.5}
+.hero-symbol{font-size:58px;filter:drop-shadow(0 5px 12px rgba(0,0,0,.2))}
+.step-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.step{background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px 14px;color:var(--muted)}
+.step b{color:var(--ink);margin-right:6px}
+.step.active{border-color:var(--blue);box-shadow:0 0 0 2px rgba(47,111,237,.1)}
+.scenario-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.scenario-tab{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:14px;padding:13px 12px;font-weight:800;cursor:pointer;transition:.18s}
+.scenario-tab:hover{transform:translateY(-2px);border-color:#8aaaf5}
+.scenario-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(310px,.75fr);gap:18px;align-items:start}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:19px;padding:19px;box-shadow:0 5px 20px rgba(20,30,55,.05)}
+.panel h2{font-size:22px;margin:0 0 5px}
+.panel-subtitle{color:var(--muted);line-height:1.45;margin:0 0 15px;font-size:14px}
+.canvas-wrap{position:relative;border:2px solid #26364d;border-radius:16px;overflow:hidden;background:#eef5fb;min-height:410px}
+canvas{width:100%;height:410px;display:block}
+.canvas-label{position:absolute;top:11px;padding:6px 9px;border-radius:8px;background:rgba(255,255,255,.9);font-size:12px;font-weight:800;pointer-events:none}
+.label-left{left:11px}.label-right{right:11px}
+.live-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.live-card{background:#f7f9fc;border:1px solid #e4e7ec;border-radius:12px;padding:11px;text-align:center}
+.live-card span{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}
+.live-card strong{font-size:19px}
+.composition{margin-top:11px;border:1px solid #e4e7ec;border-radius:12px;padding:11px}
+.composition-head{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:7px}
+.distribution{display:flex;height:13px;border-radius:99px;overflow:hidden;background:#e8edf3}
+.distribution-left{background:var(--blue);width:100%}.distribution-right{background:var(--coral);width:0}
+.prediction{background:#f7f9fc;border:1px solid #e4e7ec;border-radius:14px;padding:14px;margin-bottom:13px}
+.prediction h3{margin:0 0 9px;font-size:16px}
+.prediction-options{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.predict-btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 4px;font-weight:700;cursor:pointer;color:var(--ink)}
+.predict-btn.selected{border-color:var(--blue);background:#eaf0ff;color:#174ea6}
+.predict-btn:disabled{cursor:default;opacity:.72}
+.control{border-top:1px solid #edf0f4;padding:13px 0}
+.control:first-of-type{border-top:0}
+.control-row{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:14px;font-weight:700}
+.control-row output{color:#174ea6}
+input[type=range]{width:100%;margin-top:9px;accent-color:var(--blue)}
+.heat-controls.hidden{display:none}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}
+.action{border:0;border-radius:11px;padding:12px 10px;font-weight:800;cursor:pointer}
+.primary{background:var(--blue);color:#fff}.secondary{background:#eef1f5;color:var(--ink)}
+.action:disabled{opacity:.5;cursor:not-allowed}
+.feedback{min-height:48px;margin-top:11px;padding:11px 12px;border-radius:11px;background:#eef4ff;color:#254a7c;font-size:14px;line-height:1.4}
+.feedback.good{background:#e9f7ef;color:#12633f}.feedback.bad{background:#fff1f0;color:#9d2017}
+.explain-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.equation-card{background:linear-gradient(145deg,#fff,#f7faff);border:1px solid var(--line);border-radius:18px;padding:20px}
+.equation-card h2{margin:0 0 12px;font-size:20px}
+.equation{font-family:Georgia,'Times New Roman',serif;background:#172b4d;color:#fff;border-radius:13px;padding:15px;text-align:center;font-size:clamp(20px,3vw,28px);margin-bottom:12px}
+.calculation{font-size:16px;font-weight:800;color:#174ea6;margin:10px 0}
+.explanation{line-height:1.6;color:#475467;margin:0}
+.key-message{border-left:5px solid var(--amber);background:#fff9e8;border-radius:0 14px 14px 0;padding:16px 18px}
+.key-message h2{margin:0 0 8px;font-size:20px}
+.key-message p{margin:0;line-height:1.6}
+.tiny{font-size:12px;color:var(--muted);line-height:1.5;margin:9px 0 0}
+@media(max-width:900px){.workspace{grid-template-columns:1fr}.canvas-wrap,canvas{min-height:370px;height:370px}.explain-grid{grid-template-columns:1fr}}
+@media(max-width:620px){main{padding:14px 10px 35px}.hero{padding:20px;align-items:flex-start}.hero-symbol{font-size:40px}.step-strip,.scenario-tabs{grid-template-columns:1fr}.step{display:none}.step.active{display:block}.panel{padding:13px}.canvas-wrap,canvas{min-height:320px;height:320px}.live-grid{grid-template-columns:1fr}.prediction-options{grid-template-columns:1fr}.actions{grid-template-columns:1fr}.scenario-tab{padding:11px}}
+@media(prefers-reduced-motion:reduce){.scenario-tab,.action{transition:none}}
+</style>
+</head>
+<body>
+<header><a href="../">← Thermodynamics</a></header>
+<main>
+<section class="hero">
+    <div><h1>🌌 Entropy Explorer</h1><p>Predict a change, observe particles, and explain why spontaneous processes move toward overwhelmingly more probable macroscopic states.</p></div>
+    <div class="hero-symbol" aria-hidden="true">Ω</div>
+</section>
+
+<div class="step-strip" aria-label="Learning sequence">
+    <div class="step active" id="stepPredict"><b>1 · Predict</b> Choose the direction of entropy change.</div>
+    <div class="step" id="stepObserve"><b>2 · Observe</b> Run the particle model.</div>
+    <div class="step" id="stepExplain"><b>3 · Explain</b> Connect probability with entropy.</div>
+</div>
+
+<nav class="scenario-tabs" aria-label="Entropy demonstrations">
+    <button class="scenario-tab active" data-mode="expansion">↔️ Gas Expansion</button>
+    <button class="scenario-tab" data-mode="mixing">🔵🔴 Gas Mixing</button>
+    <button class="scenario-tab" data-mode="heat">🔥❄️ Heat Transfer</button>
+</nav>
+
+<div class="workspace">
+<section class="panel">
+    <h2 id="simulationTitle">Free Expansion of a Gas</h2>
+    <p class="panel-subtitle" id="simulationSubtitle">Particles initially occupy half the available volume. Remove the partition and watch the accessible region double.</p>
+    <div class="canvas-wrap">
+        <canvas id="entropyCanvas" aria-label="Animated particle model of entropy"></canvas>
+        <span class="canvas-label label-left" id="leftLabel">Occupied region</span>
+        <span class="canvas-label label-right" id="rightLabel">Vacuum</span>
+    </div>
+    <div class="live-grid">
+        <div class="live-card"><span id="metricOneLabel">Particles on left</span><strong id="metricOne">30</strong></div>
+        <div class="live-card"><span id="metricTwoLabel">Particles on right</span><strong id="metricTwo">0</strong></div>
+        <div class="live-card"><span>Entropy change</span><strong id="liveEntropy">0.00 J K⁻¹</strong></div>
+    </div>
+    <div class="composition">
+        <div class="composition-head"><span id="barLeftLabel">Left side</span><span id="barRightLabel">Right side</span></div>
+        <div class="distribution" aria-label="Live particle distribution"><div class="distribution-left" id="distributionLeft"></div><div class="distribution-right" id="distributionRight"></div></div>
+    </div>
+</section>
+
+<aside class="panel">
+    <h2>Control the Experiment</h2>
+    <p class="panel-subtitle">Make a prediction before starting the process.</p>
+    <div class="prediction">
+        <h3>What happens to the total entropy?</h3>
+        <div class="prediction-options">
+            <button class="predict-btn" data-prediction="increase">↑ Increases</button>
+            <button class="predict-btn" data-prediction="same">→ No change</button>
+            <button class="predict-btn" data-prediction="decrease">↓ Decreases</button>
+        </div>
+    </div>
+    <div class="control">
+        <div class="control-row"><label for="particleCount">Model particles</label><output id="particleValue">30</output></div>
+        <input id="particleCount" type="range" min="12" max="60" value="30" step="2">
+    </div>
+    <div class="heat-controls hidden" id="heatControls">
+        <div class="control">
+            <div class="control-row"><label for="hotTemperature">Hot side temperature</label><output id="hotValue">500 K</output></div>
+            <input id="hotTemperature" type="range" min="350" max="700" value="500" step="10">
+        </div>
+        <div class="control">
+            <div class="control-row"><label for="coldTemperature">Cold side temperature</label><output id="coldValue">250 K</output></div>
+            <input id="coldTemperature" type="range" min="150" max="340" value="250" step="10">
+        </div>
+    </div>
+    <div class="actions">
+        <button class="action primary" id="runButton">Release Partition</button>
+        <button class="action secondary" id="resetButton">Reset</button>
+    </div>
+    <button class="action secondary" id="pauseButton" style="width:100%" disabled>Pause Animation</button>
+    <div class="feedback" id="feedback" aria-live="polite">Select your prediction, then run the experiment.</div>
+</aside>
+</div>
+
+<div class="explain-grid">
+    <section class="equation-card">
+        <h2>Microscopic interpretation</h2>
+        <div class="equation">S = k<sub>B</sub> ln Ω</div>
+        <p class="calculation" id="microstateCalculation">After expansion, each particle has twice the accessible volume.</p>
+        <p class="explanation" id="microstateExplanation">The number of accessible arrangements increases by a factor of 2<sup>N</sup>. The evenly spread macrostate is therefore far more probable than every particle remaining on one side.</p>
+        <p class="tiny">Ω denotes the number of accessible microstates. Particle counts are a simplified conceptual model; the thermodynamic calculation uses one mole of ideal gas.</p>
+    </section>
+    <section class="equation-card">
+        <h2>Thermodynamic calculation</h2>
+        <div class="equation" id="thermoEquation">ΔS = nR ln(V₂/V₁)</div>
+        <p class="calculation" id="thermoCalculation">ΔS = (1.00 mol)(8.314 J mol⁻¹ K⁻¹) ln 2 = +5.76 J K⁻¹</p>
+        <p class="explanation" id="thermoExplanation">Expansion into a larger accessible volume increases the entropy of the gas.</p>
+    </section>
+</div>
+
+<section class="key-message" style="margin-top:18px">
+    <h2>Key idea</h2>
+    <p><strong>Entropy is not merely a visual measure of “disorder.”</strong> It measures how many microscopic arrangements are compatible with the observed macroscopic state. Spontaneous change overwhelmingly favours states with greater statistical weight.</p>
+</section>
+</main>
+
+<script>
+const R=8.314;
+const canvas=document.getElementById('entropyCanvas');
+const ctx=canvas.getContext('2d');
+const tabs=[...document.querySelectorAll('.scenario-tab')];
+const predictButtons=[...document.querySelectorAll('.predict-btn')];
+const particleSlider=document.getElementById('particleCount');
+const hotSlider=document.getElementById('hotTemperature');
+const coldSlider=document.getElementById('coldTemperature');
+const runButton=document.getElementById('runButton');
+const resetButton=document.getElementById('resetButton');
+const pauseButton=document.getElementById('pauseButton');
+const feedback=document.getElementById('feedback');
+
+let mode='expansion';
+let particles=[];
+let prediction='';
+let started=false;
+let running=false;
+let complete=false;
+let progress=0;
+let lastTime=performance.now();
+let width=0,height=0,dpr=1;
+
+const modeCopy={
+ expansion:{
+  title:'Free Expansion of a Gas',
+  subtitle:'Particles initially occupy half the available volume. Remove the partition and watch the accessible region double.',
+  left:'Occupied region',right:'Vacuum',run:'Release Partition'
+ },
+ mixing:{
+  title:'Mixing of Two Ideal Gases',
+  subtitle:'Two gases begin separated. Remove the partition and observe the enormous increase in accessible arrangements.',
+  left:'Gas A',right:'Gas B',run:'Remove Partition'
+ },
+ heat:{
+  title:'Spontaneous Heat Transfer',
+  subtitle:'A hot sample and a cold sample exchange energy through a conducting wall until thermal equilibrium is reached.',
+  left:'Hot sample',right:'Cold sample',run:'Start Heat Transfer'
+ }
+};
+
+function resizeCanvas(){
+ const rect=canvas.getBoundingClientRect();
+ dpr=Math.min(window.devicePixelRatio||1,2);
+ width=Math.max(300,rect.width);height=Math.max(260,rect.height);
+ canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+
+function random(min,max){return min+Math.random()*(max-min)}
+function particleSpeed(temperature=300){return 46*Math.sqrt(temperature/300)}
+
+function makeParticle(side,color,temperature){
+ const margin=18,mid=width/2;
+ const x=side==='left'?random(margin,mid-margin):random(mid+margin,width-margin);
+ const y=random(margin,height-margin);
+ const angle=random(0,Math.PI*2);
+ const speed=particleSpeed(temperature)*random(.72,1.25);
+ return{x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,side,color,temperature,r:5.2};
+}
+
+function resetSimulation(){
+ started=false;running=false;complete=false;progress=0;prediction='';
+ runButton.disabled=false;runButton.textContent=modeCopy[mode].run;pauseButton.disabled=true;pauseButton.textContent='Pause Animation';
+ predictButtons.forEach(b=>{b.disabled=false;b.classList.remove('selected')});
+ particleSlider.disabled=false;hotSlider.disabled=false;coldSlider.disabled=false;
+ const total=Number(particleSlider.value);particles=[];
+ if(mode==='expansion'){
+  for(let i=0;i<total;i++)particles.push(makeParticle('left','#2f6fed',300));
+ }else if(mode==='mixing'){
+  const half=Math.floor(total/2);
+  for(let i=0;i<half;i++)particles.push(makeParticle('left','#2f6fed',300));
+  for(let i=half;i<total;i++)particles.push(makeParticle('right','#ee6c4d',300));
+ }else{
+  const half=Math.floor(total/2),hot=Number(hotSlider.value),cold=Number(coldSlider.value);
+  for(let i=0;i<half;i++)particles.push(makeParticle('left','#ee6c4d',hot));
+  for(let i=half;i<total;i++)particles.push(makeParticle('right','#31b7c9',cold));
+ }
+ feedback.className='feedback';feedback.textContent='Select your prediction, then run the experiment.';
+ setStep('predict');updateReadings();updateExplanation();draw();
+}
+
+function setMode(next){
+ mode=next;
+ tabs.forEach(t=>t.classList.toggle('active',t.dataset.mode===mode));
+ const copy=modeCopy[mode];
+ document.getElementById('simulationTitle').textContent=copy.title;
+ document.getElementById('simulationSubtitle').textContent=copy.subtitle;
+ document.getElementById('leftLabel').textContent=copy.left;
+ document.getElementById('rightLabel').textContent=copy.right;
+ runButton.textContent=copy.run;
+ document.getElementById('heatControls').classList.toggle('hidden',mode!=='heat');
+ resetSimulation();
+}
+
+function setStep(step){
+ document.getElementById('stepPredict').classList.toggle('active',step==='predict');
+ document.getElementById('stepObserve').classList.toggle('active',step==='observe');
+ document.getElementById('stepExplain').classList.toggle('active',step==='explain');
+}
+
+function startSimulation(){
+ if(!prediction){
+  feedback.className='feedback bad';feedback.textContent='Make a prediction before running the experiment.';return;
+ }
+ if(complete){resetSimulation();return}
+ started=true;running=true;runButton.disabled=true;pauseButton.disabled=false;
+ particleSlider.disabled=true;hotSlider.disabled=true;coldSlider.disabled=true;
+ predictButtons.forEach(b=>b.disabled=true);
+ setStep('observe');
+ feedback.className='feedback';
+ feedback.textContent=mode==='heat'?'Energy is spreading between the samples…':'The constraint has been removed. Watch how the particle distribution changes…';
+}
+
+function finishSimulation(){
+ complete=true;running=false;progress=1;runButton.disabled=false;runButton.textContent='Run Again';pauseButton.disabled=true;
+ setStep('explain');
+ const correct=prediction==='increase';
+ feedback.className='feedback '+(correct?'good':'bad');
+ feedback.textContent=correct?'✓ Correct. The total entropy increases because the final macrostate has many more accessible microstates.':'The total entropy increases. Compare the initial constraints with the much larger number of accessible final arrangements.';
+ updateReadings();
+}
+
+function moveParticles(dt){
+ const margin=10,mid=width/2;
+ if(mode==='heat'&&started)progress=Math.min(1,progress+dt/8);
+ particles.forEach(p=>{
+  if(mode==='heat'){
+   const hot=Number(hotSlider.value),cold=Number(coldSlider.value),finalT=(hot+cold)/2;
+   const initial=p.side==='left'?hot:cold;
+   const targetT=initial+(finalT-initial)*progress;
+   const current=Math.hypot(p.vx,p.vy)||1;
+   const target=particleSpeed(targetT);
+   const scale=1+(target/current-1)*Math.min(1,dt*2.5);
+   p.vx*=scale;p.vy*=scale;p.temperature=targetT;
+  }
+  p.x+=p.vx*dt;p.y+=p.vy*dt;
+  let minX=margin,maxX=width-margin;
+  const partitionActive=mode==='heat'||!started;
+  if(partitionActive){
+   if(p.side==='left')maxX=mid-8;else minX=mid+8;
+  }
+  if(p.x<minX){p.x=minX;p.vx=Math.abs(p.vx)}
+  if(p.x>maxX){p.x=maxX;p.vx=-Math.abs(p.vx)}
+  if(p.y<margin){p.y=margin;p.vy=Math.abs(p.vy)}
+  if(p.y>height-margin){p.y=height-margin;p.vy=-Math.abs(p.vy)}
+ });
+ if(mode!=='heat'&&started)progress=Math.min(1,progress+dt/7);
+ if(progress>=1&&!complete)finishSimulation();
+}
+
+function drawParticle(p){
+ let color=p.color;
+ if(mode==='heat'){
+  const hot=Number(hotSlider.value),cold=Number(coldSlider.value);
+  const ratio=(p.temperature-cold)/Math.max(1,hot-cold);
+  const red=Math.round(49+(238-49)*ratio),green=Math.round(183+(108-183)*ratio),blue=Math.round(201+(77-201)*ratio);
+  color=`rgb(${red},${green},${blue})`;
+ }
+ ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
+ ctx.beginPath();ctx.arc(p.x-1.5,p.y-1.5,1.4,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,.72)';ctx.fill();
+}
+
+function draw(){
+ ctx.clearRect(0,0,width,height);
+ const grad=ctx.createLinearGradient(0,0,width,0);
+ grad.addColorStop(0,'#e9f2ff');grad.addColorStop(1,mode==='heat'?'#e9f8fa':'#f6f8fb');
+ ctx.fillStyle=grad;ctx.fillRect(0,0,width,height);
+ ctx.strokeStyle='#26364d';ctx.lineWidth=2;ctx.strokeRect(1,1,width-2,height-2);
+ const showPartition=mode==='heat'||!started;
+ if(showPartition){
+  ctx.fillStyle=mode==='heat'?'#cbd5e1':'#52657b';ctx.fillRect(width/2-4,0,8,height);
+  if(mode==='heat'){
+   ctx.fillStyle='rgba(244,185,66,.7)';
+   for(let y=20;y<height;y+=32){ctx.fillRect(width/2-2,y,4,14)}
+  }
+ }
+ if(mode==='expansion'&&!started){ctx.fillStyle='rgba(102,112,133,.08)';ctx.fillRect(width/2+4,0,width/2-4,height)}
+ particles.forEach(drawParticle);
+}
+
+function entropyFinal(){
+ if(mode==='expansion'||mode==='mixing')return R*Math.log(2);
+ const hot=Number(hotSlider.value),cold=Number(coldSlider.value),tf=(hot+cold)/2,cv=1.5*R;
+ return .5*cv*Math.log(tf/hot)+.5*cv*Math.log(tf/cold);
+}
+
+function updateReadings(){
+ const total=particles.length||1,mid=width/2;
+ if(mode==='heat'){
+  const hot=Number(hotSlider.value),cold=Number(coldSlider.value),tf=(hot+cold)/2;
+  const tl=hot+(tf-hot)*progress,tr=cold+(tf-cold)*progress;
+  document.getElementById('metricOneLabel').textContent='Left temperature';
+  document.getElementById('metricTwoLabel').textContent='Right temperature';
+  document.getElementById('metricOne').textContent=Math.round(tl)+' K';
+  document.getElementById('metricTwo').textContent=Math.round(tr)+' K';
+  document.getElementById('barLeftLabel').textContent='Hot-side molecular speed';
+  document.getElementById('barRightLabel').textContent='Cold-side molecular speed';
+  const leftPct=50+(tl-tr)/Math.max(1,hot-cold)*30;
+  document.getElementById('distributionLeft').style.width=leftPct+'%';
+  document.getElementById('distributionRight').style.width=(100-leftPct)+'%';
+ }else{
+  const left=particles.filter(p=>p.x<mid).length,right=total-left;
+  document.getElementById('metricOneLabel').textContent='Particles on left';
+  document.getElementById('metricTwoLabel').textContent='Particles on right';
+  document.getElementById('metricOne').textContent=left;
+  document.getElementById('metricTwo').textContent=right;
+  document.getElementById('barLeftLabel').textContent='Left side '+Math.round(left/total*100)+'%';
+  document.getElementById('barRightLabel').textContent='Right side '+Math.round(right/total*100)+'%';
+  document.getElementById('distributionLeft').style.width=(left/total*100)+'%';
+  document.getElementById('distributionRight').style.width=(right/total*100)+'%';
+ }
+ document.getElementById('liveEntropy').textContent=(entropyFinal()*progress).toFixed(2)+' J K⁻¹';
+}
+
+function updateExplanation(){
+ const n=Number(particleSlider.value),logRatio=(n*Math.log10(2)).toFixed(1);
+ if(mode==='expansion'){
+  document.getElementById('microstateCalculation').innerHTML=`Accessible microstate ratio: Ω<sub>final</sub>/Ω<sub>initial</sub> ≈ 2<sup>${n}</sup> (log₁₀ ratio ≈ ${logRatio})`;
+  document.getElementById('microstateExplanation').innerHTML='Each model particle can access twice the volume. The evenly spread macrostate is overwhelmingly more probable than every particle remaining in one half.';
+  document.getElementById('thermoEquation').innerHTML='ΔS = nR ln(V₂/V₁)';
+  document.getElementById('thermoCalculation').innerHTML='ΔS = (1.00 mol)(8.314 J mol⁻¹ K⁻¹) ln 2 = +5.76 J K⁻¹';
+  document.getElementById('thermoExplanation').textContent='Free expansion doubles the accessible volume and increases the entropy of the gas.';
+ }else if(mode==='mixing'){
+  document.getElementById('microstateCalculation').innerHTML=`Accessible microstate ratio: Ω<sub>mixed</sub>/Ω<sub>separated</sub> ≈ 2<sup>${n}</sup> (log₁₀ ratio ≈ ${logRatio})`;
+  document.getElementById('microstateExplanation').textContent='After the partition is removed, particles of both gases can occupy either half. Separated arrangements are only a tiny fraction of the accessible possibilities.';
+  document.getElementById('thermoEquation').innerHTML='ΔS<sub>mix</sub> = −nR Σ xᵢ ln xᵢ';
+  document.getElementById('thermoCalculation').innerHTML='For equal gases: ΔS<sub>mix</sub> = −(1.00 mol)R[½ ln ½ + ½ ln ½] = +5.76 J K⁻¹';
+  document.getElementById('thermoExplanation').textContent='Mixing distinguishable ideal gases increases the number of accessible arrangements and therefore increases entropy.';
+ }else{
+  const hot=Number(hotSlider.value),cold=Number(coldSlider.value),tf=(hot+cold)/2,ds=entropyFinal();
+  document.getElementById('microstateCalculation').innerHTML=`Energy spreads from ${hot} K and ${cold} K samples toward a common temperature of ${tf.toFixed(0)} K.`;
+  document.getElementById('microstateExplanation').textContent='There are far more ways to distribute energy across both samples near thermal equilibrium than to keep it concentrated in the hotter sample.';
+  document.getElementById('thermoEquation').innerHTML='ΔS<sub>total</sub> = Σ nC<sub>V</sub> ln(T<sub>f</sub>/T<sub>i</sub>)';
+  document.getElementById('thermoCalculation').innerHTML=`For 0.50 mol on each side and C<sub>V</sub> = 3R/2: ΔS<sub>total</sub> = +${ds.toFixed(2)} J K⁻¹`;
+  document.getElementById('thermoExplanation').textContent='The colder sample gains more entropy than the hotter sample loses, so the entropy change of the combined isolated system is positive.';
+ }
+}
+
+function animate(now){
+ const dt=Math.min(.035,(now-lastTime)/1000);lastTime=now;
+ if(running)moveParticles(dt);
+ else if(!started)moveParticles(Math.min(dt,.012));
+ draw();updateReadings();requestAnimationFrame(animate);
+}
+
+tabs.forEach(tab=>tab.addEventListener('click',()=>setMode(tab.dataset.mode)));
+predictButtons.forEach(button=>button.addEventListener('click',()=>{
+ prediction=button.dataset.prediction;
+ predictButtons.forEach(b=>b.classList.toggle('selected',b===button));
+ feedback.className='feedback';feedback.textContent='Prediction recorded. Run the experiment to test it.';
+}));
+particleSlider.addEventListener('input',()=>{document.getElementById('particleValue').textContent=particleSlider.value;resetSimulation()});
+hotSlider.addEventListener('input',()=>{if(Number(hotSlider.value)<=Number(coldSlider.value))hotSlider.value=Number(coldSlider.value)+10;document.getElementById('hotValue').textContent=hotSlider.value+' K';resetSimulation()});
+coldSlider.addEventListener('input',()=>{if(Number(coldSlider.value)>=Number(hotSlider.value))coldSlider.value=Number(hotSlider.value)-10;document.getElementById('coldValue').textContent=coldSlider.value+' K';resetSimulation()});
+runButton.addEventListener('click',startSimulation);
+resetButton.addEventListener('click',resetSimulation);
+pauseButton.addEventListener('click',()=>{running=!running;pauseButton.textContent=running?'Pause Animation':'Resume Animation'});
+window.addEventListener('resize',()=>{resizeCanvas();resetSimulation()});
+
+resizeCanvas();resetSimulation();requestAnimationFrame(animate);
+</script>
+</body>
+</html>
