@@ -67,10 +67,10 @@ button.secondary{background:#eef1f5;color:#172033}
     <!-- continuous reaction curve -->
     <path id="profile"
           d="M 120 270
-             C 180 270, 190 160, 270 115
-             C 350 70, 390 95, 445 170
-             C 485 225, 500 270, 560 270
-             C 625 270, 665 270, 730 270"
+             L 210 270
+             C 260 270, 300 115, 370 115
+             C 440 115, 500 270, 580 270
+             L 730 270"
           fill="none"
           stroke="#344054"
           stroke-width="6"
@@ -98,9 +98,14 @@ button.secondary{background:#eef1f5;color:#172033}
     <text id="deltaText" x="625" y="310" font-size="18" font-weight="700">ΔH</text>
 
     <!-- activation energy -->
-    <line id="eaLine" x1="445" x2="445" y1="170" y2="270"
+    <line id="eaLine" x1="370" x2="370" y1="115" y2="270"
           stroke="#667085" stroke-width="3" stroke-dasharray="6 6"/>
-    <text x="455" y="215" font-size="16" font-weight="700">Ea</text>
+    <text id="eaText" x="382" y="193" font-size="16" font-weight="700">Ea</text>
+
+    <!-- transition state -->
+    <circle id="transitionDot" cx="370" cy="115" r="7" fill="#b42318"/>
+    <text id="transitionText" x="370" y="92" text-anchor="middle"
+          fill="#b42318" font-size="16" font-weight="700">Transition state</text>
 </svg>
 </div>
 
@@ -168,6 +173,10 @@ const deltaLine = document.getElementById("deltaLine");
 const arrowTop = document.getElementById("arrowTop");
 const arrowBottom = document.getElementById("arrowBottom");
 const deltaText = document.getElementById("deltaText");
+const eaLine = document.getElementById("eaLine");
+const eaText = document.getElementById("eaText");
+const transitionDot = document.getElementById("transitionDot");
+const transitionText = document.getElementById("transitionText");
 
 function energyToY(e){
     const min = 50;
@@ -196,16 +205,29 @@ function update(){
       shifting the two energy levels.
     */
 
-    const peakY = Math.min(65, Math.min(yr,yp)-70);
+    const peakX = 370;
+    const peakY = Math.max(60, Math.min(yr,yp)-90);
 
     profile.setAttribute(
         "d",
         `M 120 ${yr}
-         C 190 ${yr}, 210 ${peakY+70}, 290 ${peakY+30}
-         C 365 ${peakY-5}, 405 ${peakY+20}, 445 ${peakY+65}
-         C 490 ${peakY+115}, 505 ${yp}, 560 ${yp}
-         C 625 ${yp}, 665 ${yp}, 730 ${yp}`
+         L 210 ${yr}
+         C 260 ${yr}, 300 ${peakY}, ${peakX} ${peakY}
+         C 440 ${peakY}, 500 ${yp}, 580 ${yp}
+         L 730 ${yp}`
     );
+
+    eaLine.setAttribute("x1",peakX);
+    eaLine.setAttribute("x2",peakX);
+    eaLine.setAttribute("y1",peakY);
+    eaLine.setAttribute("y2",yr);
+    eaText.setAttribute("x",peakX+12);
+    eaText.setAttribute("y",(peakY+yr)/2+5);
+
+    transitionDot.setAttribute("cx",peakX);
+    transitionDot.setAttribute("cy",peakY);
+    transitionText.setAttribute("x",peakX);
+    transitionText.setAttribute("y",peakY-18);
 
     reactGuide.setAttribute("y1",yr);
     reactGuide.setAttribute("y2",yr);
