@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WQDH7H44VB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-WQDH7H44VB");
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Periodic Table Smart Quiz</title>
+</head>
+<body style="margin:0">
+<div id="periodic-smart-quiz">
+  <style>
+    #periodic-smart-quiz{--quiz-bg:var(--background,#f4f7fb);--quiz-card:var(--card,#fff);--quiz-text:var(--card-foreground,#172033);--quiz-muted:var(--muted-foreground,#667085);--quiz-border:var(--border,#d8dee9);--quiz-primary:var(--primary,#3157c8);--quiz-primary-text:var(--primary-foreground,#fff);--quiz-good:var(--green,#16835c);--quiz-bad:var(--red,#b33a3a);font-family:Arial,Helvetica,sans-serif;color:var(--quiz-text);background:var(--quiz-bg);padding:18px;min-height:650px}
+    #periodic-smart-quiz *{box-sizing:border-box}#periodic-smart-quiz .quiz-shell{max-width:900px;margin:auto}#periodic-smart-quiz .quiz-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}#periodic-smart-quiz .quiz-back{color:var(--quiz-primary);text-decoration:none;font-weight:700}#periodic-smart-quiz .quiz-source{color:var(--quiz-muted);font-size:13px}
+    #periodic-smart-quiz .quiz-hero{text-align:center;margin:22px auto 26px;max-width:720px}#periodic-smart-quiz .quiz-hero h1{margin:0 0 8px;font-size:clamp(30px,5vw,46px)}#periodic-smart-quiz .quiz-hero p{margin:0;color:var(--quiz-muted);line-height:1.55}
+    #periodic-smart-quiz .level-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}#periodic-smart-quiz .level-card{display:flex;flex-direction:column;text-align:left;min-height:235px;padding:22px;border:1px solid var(--quiz-border);border-radius:18px;background:var(--quiz-card);color:var(--quiz-text);cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s}#periodic-smart-quiz .level-card:hover{transform:translateY(-3px);border-color:var(--quiz-primary);box-shadow:0 10px 25px color-mix(in srgb,var(--quiz-text) 10%,transparent)}#periodic-smart-quiz .level-icon{font-size:38px;margin-bottom:13px}#periodic-smart-quiz .level-card strong{font-size:22px;margin-bottom:8px}#periodic-smart-quiz .level-card span{color:var(--quiz-muted);line-height:1.5}#periodic-smart-quiz .level-start{margin-top:auto;padding-top:17px;color:var(--quiz-primary)!important;font-weight:700}
+    #periodic-smart-quiz .quiz-card{background:var(--quiz-card);border:1px solid var(--quiz-border);border-radius:20px;padding:clamp(20px,4vw,34px);box-shadow:0 8px 28px color-mix(in srgb,var(--quiz-text) 8%,transparent)}#periodic-smart-quiz .question-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}#periodic-smart-quiz .level-badge{display:inline-block;background:color-mix(in srgb,var(--quiz-primary) 12%,var(--quiz-card));color:var(--quiz-text);border-radius:999px;padding:7px 11px;font-size:12px;font-weight:700}#periodic-smart-quiz .quit-btn{border:0;background:transparent;color:var(--quiz-muted);font-weight:700;cursor:pointer;padding:7px}
+    #periodic-smart-quiz .question-text{font-size:clamp(21px,3vw,28px);line-height:1.4;margin:0 0 22px}#periodic-smart-quiz .options{display:grid;gap:11px}#periodic-smart-quiz .option{display:flex;align-items:flex-start;gap:12px;width:100%;padding:14px 16px;border:1px solid var(--quiz-border);border-radius:13px;background:var(--quiz-card);color:var(--quiz-text);text-align:left;font-size:16px;line-height:1.4;cursor:pointer}#periodic-smart-quiz .option:hover:not(:disabled){border-color:var(--quiz-primary);background:color-mix(in srgb,var(--quiz-primary) 6%,var(--quiz-card))}#periodic-smart-quiz .option.selected{border:2px solid var(--quiz-primary);padding:13px 15px}#periodic-smart-quiz .option.correct{border-color:var(--quiz-good);background:color-mix(in srgb,var(--quiz-good) 12%,var(--quiz-card))}#periodic-smart-quiz .option.wrong{border-color:var(--quiz-bad);background:color-mix(in srgb,var(--quiz-bad) 10%,var(--quiz-card))}#periodic-smart-quiz .option-letter{display:grid;place-items:center;flex:0 0 28px;height:28px;border-radius:50%;background:color-mix(in srgb,var(--quiz-text) 7%,var(--quiz-card));font-weight:700;font-size:13px}
+    #periodic-smart-quiz .quiz-message{min-height:24px;margin:12px 0 0;color:var(--quiz-bad);font-size:14px}#periodic-smart-quiz .answer-box{display:none;margin-top:19px;padding:16px 18px;border-left:4px solid var(--quiz-good);border-radius:10px;background:color-mix(in srgb,var(--quiz-good) 9%,var(--quiz-card));line-height:1.5}#periodic-smart-quiz .answer-box.show{display:block}#periodic-smart-quiz .answer-box strong{display:block;margin-bottom:5px}#periodic-smart-quiz .actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}#periodic-smart-quiz .action-btn{border:1px solid var(--quiz-border);border-radius:11px;padding:11px 18px;background:var(--quiz-primary);color:var(--quiz-primary-text);font-weight:700;cursor:pointer}#periodic-smart-quiz .action-btn:disabled{opacity:.48;cursor:not-allowed}#periodic-smart-quiz .next-btn{display:none}#periodic-smart-quiz .next-btn.show{display:inline-block}
+    #periodic-smart-quiz .result{text-align:center}#periodic-smart-quiz .result-icon{font-size:56px}#periodic-smart-quiz .result h2{font-size:32px;margin:8px 0}#periodic-smart-quiz .score{font-size:50px;font-weight:700;color:var(--quiz-primary);margin:18px 0 5px}#periodic-smart-quiz .result p{color:var(--quiz-muted);line-height:1.5}#periodic-smart-quiz .result-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:22px}#periodic-smart-quiz .secondary{background:var(--quiz-card);color:var(--quiz-text)}#periodic-smart-quiz .hidden{display:none!important}
+    @media(max-width:720px){#periodic-smart-quiz{padding:12px}#periodic-smart-quiz .level-grid{grid-template-columns:1fr}#periodic-smart-quiz .level-card{min-height:185px}#periodic-smart-quiz .quiz-top{align-items:flex-start;flex-direction:column}#periodic-smart-quiz .quiz-card{padding:20px}#periodic-smart-quiz .actions{justify-content:stretch}#periodic-smart-quiz .action-btn{width:100%}}
+  </style>
+  <div class="quiz-shell">
+    <div class="quiz-top"><a class="quiz-back" href="../">← Periodic Table</a><span class="quiz-source">Basic &amp; Intermediate: notes • Advanced: EAPCET resources</span></div>
+    <section id="level-screen">
+      <div class="quiz-hero"><h1>🧠 Periodic Table Smart Quiz</h1><p>Select a difficulty level. Questions appear one at a time, and the correct answer with an explanation is revealed after every response.</p></div>
+      <div class="level-grid">
+        <button class="level-card" data-level="basic"><span class="level-icon">🌱</span><strong>Basic</strong><span>20 definitions, important facts and direct-recall questions from the chapter notes.</span><span class="level-start">Begin quiz →</span></button>
+        <button class="level-card" data-level="intermediate"><span class="level-icon">⚗️</span><strong>Intermediate</strong><span>20 applications and comparisons based only on the chapter notes.</span><span class="level-start">Begin quiz →</span></button>
+        <button class="level-card" data-level="advanced"><span class="level-icon">🚀</span><strong>Advanced</strong><span>30 EAPCET questions from Practice Problems and Previous-Year Questions.</span><span class="level-start">Begin quiz →</span></button>
+      </div>
+    </section>
+    <section id="question-screen" class="hidden">
+      <div class="quiz-card">
+        <div class="question-meta"><span class="level-badge" id="active-level"></span><button class="quit-btn" id="quit" type="button">Change level</button></div>
+        <h2 class="question-text" id="question-text"></h2><div class="options" id="options"></div><div class="quiz-message" id="message" aria-live="polite"></div>
+        <div class="answer-box" id="answer-box" aria-live="polite"><strong id="answer-heading"></strong><span id="explanation"></span></div>
+        <div class="actions"><button class="action-btn" id="submit" type="button">Submit answer</button><button class="action-btn next-btn" id="next" type="button">Next question →</button></div>
+      </div>
+    </section>
+    <section id="result-screen" class="hidden"><div class="quiz-card result"><div class="result-icon" id="result-icon">🏆</div><h2 id="result-title">Quiz complete</h2><div class="score" id="score"></div><p id="result-message"></p><div class="result-actions"><button class="action-btn" id="retry" type="button">Try this level again</button><button class="action-btn secondary" id="levels" type="button">Choose another level</button></div></div></section>
+  </div>
+  <script src="questions.js"></script>
+  <script>
+  (()=>{
+    const root=document.getElementById('periodic-smart-quiz');
+    const questions=window.PERIODIC_TABLE_QUESTIONS;
+    const $=selector=>root.querySelector(selector);const shuffle=array=>{const copy=[...array];for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]]}return copy};
+    let level='',queue=[],index=0,score=0,selected='',answered=false,displayOptions=[];
+    function show(screen){['#level-screen','#question-screen','#result-screen'].forEach(id=>$(id).classList.toggle('hidden',id!==screen))}
+    function start(chosen){level=chosen;queue=shuffle(questions[level]);index=0;score=0;$('#active-level').textContent=level[0].toUpperCase()+level.slice(1)+' level';show('#question-screen');renderQuestion()}
+    function renderQuestion(){const item=queue[index];selected='';answered=false;displayOptions=shuffle(item.o);$('#question-text').textContent=item.q;$('#options').innerHTML='';displayOptions.forEach((option,i)=>{const button=document.createElement('button');button.type='button';button.className='option';button.dataset.value=option;button.innerHTML='<span class="option-letter">'+String.fromCharCode(65+i)+'</span><span></span>';button.lastElementChild.textContent=option;button.addEventListener('click',()=>selectOption(button,option));$('#options').appendChild(button)});$('#message').textContent='';$('#answer-box').classList.remove('show');$('#submit').classList.remove('hidden');$('#submit').disabled=false;$('#next').classList.remove('show')}
+    function selectOption(button,value){if(answered)return;selected=value;root.querySelectorAll('.option').forEach(option=>option.classList.remove('selected'));button.classList.add('selected');$('#message').textContent=''}
+    function submit(){if(!selected){$('#message').textContent='Select an answer before submitting.';return}const item=queue[index];answered=true;const correct=selected===item.a;if(correct)score++;root.querySelectorAll('.option').forEach(button=>{button.disabled=true;if(button.dataset.value===item.a)button.classList.add('correct');else if(button.dataset.value===selected)button.classList.add('wrong')});$('#answer-heading').textContent=correct?'✓ Correct':'Correct answer: '+item.a;$('#explanation').textContent=item.e;$('#answer-box').classList.add('show');$('#submit').classList.add('hidden');$('#next').classList.add('show');$('#next').textContent=index===queue.length-1?'View result →':'Next question →'}
+    function next(){index++;if(index>=queue.length){finish();return}renderQuestion()}
+    function finish(){const percent=Math.round(score/queue.length*100);$('#score').textContent=score+' / '+queue.length;$('#result-icon').textContent=percent>=85?'🏆':percent>=60?'⭐':'🌱';$('#result-title').textContent=level[0].toUpperCase()+level.slice(1)+' quiz complete';$('#result-message').textContent=percent>=85?'Excellent work! You have a strong command of this level.':percent>=60?'Good progress. Review the explanations and try again to improve your score.':level==='advanced'?'Keep practising. Review the EAPCET resources and attempt this level again.':'Keep practising. Re-read the chapter notes and attempt this level again.';show('#result-screen')}
+    root.querySelectorAll('.level-card').forEach(button=>button.addEventListener('click',()=>start(button.dataset.level)));$('#submit').addEventListener('click',submit);$('#next').addEventListener('click',next);$('#quit').addEventListener('click',()=>show('#level-screen'));$('#retry').addEventListener('click',()=>start(level));$('#levels').addEventListener('click',()=>show('#level-screen'));
+  })();
+  </script>
+</div>
+</body>
+</html>
