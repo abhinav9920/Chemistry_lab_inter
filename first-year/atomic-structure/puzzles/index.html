@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WQDH7H44VB"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-WQDH7H44VB");</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Three interactive Atomic Structure puzzles covering electron configuration, hydrogen spectra and quantum numbers.">
+    <title>Atomic Structure Puzzles &amp; Challenges</title>
+    <link rel="stylesheet" href="../../puzzle-lab.css">
+</head>
+<body>
+<header class="topbar">
+    <a href="../">← Atomic Structure</a>
+    <span class="mini-progress" id="topProgress">0 mastery stars earned</span>
+</header>
+<main>
+    <section class="game-head">
+        <div>
+            <p class="eyebrow">Atomic Structure • Puzzle Lab</p>
+            <h1>Crack the Atom</h1>
+            <p>Use configurations, spectral transitions and quantum rules to open each scientific lock.</p>
+        </div>
+        <div class="scoreboard" aria-label="Game score">
+            <div class="score-chip"><span>XP</span><strong id="xpValue">0</strong></div>
+            <div class="score-chip"><span>Streak</span><strong id="streakValue">0</strong></div>
+            <div class="score-chip"><span>Stars</span><strong id="masteryValue">0/9</strong></div>
+        </div>
+    </section>
+    <div class="challenge-picker" id="challengePicker" role="tablist" aria-label="Choose an Atomic Structure challenge"></div>
+    <section class="play-card" id="playArea">
+        <div>
+            <div class="round-line"><span id="roundValue">Round 1 of 5</span><span>Correct answers unlock the next mission</span></div>
+            <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+            <span class="mission-label" id="missionLabel"></span>
+            <h2 class="question" id="questionText"></h2>
+            <div class="clue" id="clueText"></div>
+            <div class="answers" id="answers"></div>
+            <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+            <div class="actions">
+                <button class="btn btn-secondary" id="hintButton" type="button">Use hint −25 XP</button>
+                <button class="btn btn-primary" id="nextButton" type="button" disabled>Next mission</button>
+            </div>
+        </div>
+        <aside class="side-panel">
+            <h3>What this challenge tests</h3>
+            <ul class="goal-list" id="goalList"></ul>
+            <div class="hint-box" id="hintBox"></div>
+            <p class="mastery-note">Three stars require accurate first attempts. A hint helps you learn but reduces the XP for that round.</p>
+            <button class="btn btn-quiet" id="resetProgress" type="button">Reset chapter progress</button>
+        </aside>
+    </section>
+</main>
+<script>
+window.PUZZLE_DATA = {
+ slug: "atomic-structure",
+ challenges: [
+  { id:"orbital-lock", icon:"↿⇂", title:"Orbital Lock", summary:"Choose configurations that obey the filling rules.", goals:["Aufbau filling order","Hund’s rule","Electronic configurations"], rounds:[
+   {question:"Which is the ground-state configuration of sodium (Z = 11)?",clue:"Place all 11 electrons in orbitals from lower to higher energy.",answers:["1s² 2s² 2p⁶ 3s¹","1s² 2s² 2p⁵ 3s²","1s² 2s² 2p⁶ 3p¹"],correct:0,hint:"After neon’s ten electrons, the next electron enters 3s.",explanation:"The first ten electrons form the neon core; the eleventh occupies 3s."},
+   {question:"Which orbital-box pattern correctly represents carbon’s 2p² electrons?",clue:"The three 2p orbitals have equal energy.",answers:["[↑↓] [ ] [ ]","[↑] [↑] [ ]","[↑] [↓] [ ]"],correct:1,hint:"Hund’s rule fills degenerate orbitals singly with parallel spins first.",explanation:"The two electrons occupy separate 2p orbitals with parallel spins."},
+   {question:"Select the correct ground-state configuration of potassium (Z = 19).",clue:"Compare the energies of 4s and 3d using the Aufbau order.",answers:["[Ar] 3d¹","[Ar] 4s¹","[Ne] 3s² 3p⁷"],correct:1,hint:"For a neutral atom, 4s fills before 3d.",explanation:"Potassium’s nineteenth electron enters the 4s orbital."},
+   {question:"Which arrangement violates the Pauli exclusion principle?",clue:"Inspect the two electrons drawn inside a single orbital.",answers:["[↑↓]","[↑] [↑]","[↑↑]"],correct:2,hint:"Two electrons in the same orbital must have opposite spins.",explanation:"[↑↑] places two electrons with identical spin in one orbital, which Pauli forbids."},
+   {question:"An atom has configuration [Ne] 3s² 3p⁵. Identify it.",clue:"Count every electron, including the noble-gas core.",answers:["Sulfur","Chlorine","Argon"],correct:1,hint:"Ne contributes 10 electrons; add 2 and 5.",explanation:"10 + 2 + 5 = 17 electrons, so the atom is chlorine."}
+  ]},
+  { id:"spectrum-code", icon:"🌈", title:"Spectrum Decoder", summary:"Decode hydrogen transitions and spectral series.", goals:["Emission and absorption","Hydrogen spectral series","Energy and wavelength trends"], rounds:[
+   {question:"An electron falls from n = 3 to n = 2. Which series appears?",clue:"Name a series from the lower energy level at which the transition ends.",answers:["Lyman","Balmer","Paschen"],correct:1,hint:"Transitions ending at n = 2 form the visible series.",explanation:"A transition ending at n = 2 belongs to the Balmer series."},
+   {question:"What happens when an electron moves from n = 2 to n = 5?",clue:"The electron finishes at a higher-energy orbit.",answers:["A photon is emitted","A photon is absorbed","No energy is exchanged"],correct:1,hint:"Moving away from the nucleus requires energy.",explanation:"The atom must absorb a photon whose energy matches the energy gap."},
+   {question:"Which transition emits the highest-energy photon?",clue:"A greater drop in energy produces a more energetic photon.",answers:["n = 3 → 2","n = 4 → 2","n = 5 → 2"],correct:2,hint:"All end at n = 2, so compare the starting levels.",explanation:"The 5 → 2 transition has the largest energy difference of these choices."},
+   {question:"A hydrogen line ends at n = 1. Where is it found?",clue:"All transitions ending at n = 1 belong to the same series and region.",answers:["Lyman series, ultraviolet","Balmer series, visible","Paschen series, infrared"],correct:0,hint:"The n = 1 series has the greatest photon energies.",explanation:"Transitions to n = 1 form the ultraviolet Lyman series."},
+   {question:"Within the Balmer series, which line has the longest wavelength?",clue:"Long wavelength means the smallest energy difference.",answers:["n = 3 → 2","n = 4 → 2","n = 5 → 2"],correct:0,hint:"Choose the smallest drop among transitions ending at n = 2.",explanation:"The 3 → 2 transition has the smallest energy gap and therefore the longest wavelength."}
+  ]},
+  { id:"quantum-vault", icon:"🔐", title:"Quantum Vault", summary:"Judge complete quantum addresses for electrons.", goals:["Allowed quantum-number values","Orbital identities","Electron capacity"], rounds:[
+   {question:"Which set of quantum numbers is allowed?",clue:"Use n ≥ 1; l = 0 to n−1; mₗ = −l to +l; mₛ = ±½.",answers:["(2, 2, 0, +½)","(3, 1, −1, −½)","(1, 0, 1, +½)"],correct:1,hint:"Test l first, then mₗ.",explanation:"For n = 3, l = 1 is allowed; mₗ = −1 and spin −½ are also allowed."},
+   {question:"What orbital is described by n = 4 and l = 2?",clue:"The values l = 0, 1, 2, 3 correspond to s, p, d, f.",answers:["4p","4d","3d"],correct:1,hint:"l = 2 identifies a d subshell.",explanation:"n supplies 4 and l = 2 supplies d, giving a 4d orbital."},
+   {question:"How many orbitals are present in a p subshell?",clue:"For p, l = 1 and mₗ runs from −l to +l.",answers:["2","3","6"],correct:1,hint:"List mₗ = −1, 0, +1.",explanation:"The three possible mₗ values represent three p orbitals."},
+   {question:"What is the maximum number of electrons in the n = 3 shell?",clue:"Use the shell-capacity relation 2n².",answers:["8","18","32"],correct:1,hint:"Substitute n = 3 into 2n².",explanation:"2(3²) = 18 electrons."},
+   {question:"Why is (3, 1, +2, +½) impossible?",clue:"Focus on the relationship between l and mₗ.",answers:["n cannot be 3","For l = 1, mₗ cannot be +2","Spin cannot be positive"],correct:1,hint:"mₗ must lie between −l and +l.",explanation:"When l = 1, only mₗ = −1, 0 or +1 is permitted."}
+  ]}
+ ]
+};
+</script>
+<script src="../../puzzle-engine.js"></script>
+</body>
+</html>
