@@ -6,57 +6,128 @@
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-WQDH7H44VB");</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Three interactive Periodic Table puzzles covering element identification, periodic trends and periodic addresses.">
-    <title>Periodic Table Puzzles &amp; Challenges</title>
-    <link rel="stylesheet" href="../../puzzle-lab.css">
+    <meta name="description" content="Investigate clues and identify mystery elements on an interactive periodic table.">
+    <title>The Missing Element | Periodic Table</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header class="topbar"><a href="../">← Periodic Table</a><span class="mini-progress" id="topProgress">0 mastery stars earned</span></header>
+<header class="topbar">
+    <a href="../">← Periodic Table</a>
+    <button class="help-button" id="helpButton" type="button">How to investigate</button>
+</header>
+
 <main>
-    <section class="game-head">
-        <div><p class="eyebrow">Periodic Table • Puzzle Lab</p><h1>Element Detective Bureau</h1><p>Follow chemical clues, compare periodic trends and locate elements from their periodic addresses.</p></div>
-        <div class="scoreboard" aria-label="Game score"><div class="score-chip"><span>XP</span><strong id="xpValue">0</strong></div><div class="score-chip"><span>Streak</span><strong id="streakValue">0</strong></div><div class="score-chip"><span>Stars</span><strong id="masteryValue">0/9</strong></div></div>
-    </section>
-    <div class="challenge-picker" id="challengePicker" role="tablist" aria-label="Choose a Periodic Table challenge"></div>
-    <section class="play-card" id="playArea">
+    <section class="game-header">
         <div>
-            <div class="round-line"><span id="roundValue">Round 1 of 5</span><span>Correct answers unlock the next mission</span></div>
-            <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
-            <span class="mission-label" id="missionLabel"></span><h2 class="question" id="questionText"></h2><div class="clue" id="clueText"></div><div class="answers" id="answers"></div>
-            <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
-            <div class="actions"><button class="btn btn-secondary" id="hintButton" type="button">Use hint −25 XP</button><button class="btn btn-primary" id="nextButton" type="button" disabled>Next mission</button></div>
+            <p class="eyebrow">Periodic Table • Investigation Game</p>
+            <h1>The Missing Element</h1>
+            <p>Study the evidence, eliminate incompatible elements and place your accusation directly on the periodic-table map.</p>
         </div>
-        <aside class="side-panel"><h3>What this challenge tests</h3><ul class="goal-list" id="goalList"></ul><div class="hint-box" id="hintBox"></div><p class="mastery-note">Three stars require accurate first attempts. A hint helps you learn but reduces the XP for that round.</p><button class="btn btn-quiet" id="resetProgress" type="button">Reset chapter progress</button></aside>
+        <div class="detective-badge" aria-label="Quanta, detective assistant">
+            <span class="badge-face" aria-hidden="true">🤖</span>
+            <div><b>QUANTA</b><small>Element Detective</small></div>
+        </div>
+    </section>
+
+    <section class="case-path" aria-label="Investigation progress">
+        <div class="case-step active" data-case-step="0"><span>1</span><b>Block District</b></div>
+        <div class="case-step" data-case-step="1"><span>2</span><b>Electron File</b></div>
+        <div class="case-step" data-case-step="2"><span>3</span><b>Trend Trail</b></div>
+        <div class="case-step" data-case-step="3"><span>4</span><b>Neighbourhood</b></div>
+        <div class="case-step" data-case-step="4"><span>5</span><b>Master Case</b></div>
+    </section>
+
+    <section class="case-heading">
+        <div><p id="caseLabel">CASE 1 OF 5</p><h2 id="caseTitle">The Block District Case</h2></div>
+        <p id="caseBrief">Locate the missing element using its position in the table.</p>
+    </section>
+
+    <section class="investigation-layout">
+        <div class="map-panel">
+            <div class="map-toolbar">
+                <div><strong>Periodic-table map</strong><span id="mapStatus">118 elements under investigation</span></div>
+                <button id="tileSizeButton" type="button" aria-pressed="false">Larger tiles</button>
+            </div>
+            <div class="periodic-scroll" id="periodicScroll">
+                <div class="periodic-table" id="periodicTable" aria-label="Interactive periodic table"></div>
+            </div>
+            <div class="block-legend" aria-label="Periodic table block colours">
+                <span><i class="legend-s"></i>s-block</span><span><i class="legend-p"></i>p-block</span><span><i class="legend-d"></i>d-block</span><span><i class="legend-f"></i>f-block</span><span><i class="legend-out"></i>Eliminated</span>
+            </div>
+            <div class="suspect-bar" id="suspectBar">
+                <div class="suspect-empty" id="suspectEmpty">Select an illuminated element tile to inspect a suspect.</div>
+                <div class="suspect-selected" id="suspectSelected" hidden>
+                    <div class="suspect-tile"><span id="suspectNumber"></span><strong id="suspectSymbol"></strong></div>
+                    <div><small>Current suspect</small><h3 id="suspectName"></h3><p id="suspectAddress"></p></div>
+                    <button class="accuse-button" id="accuseButton" type="button">Accuse this element</button>
+                </div>
+            </div>
+        </div>
+
+        <aside class="notebook">
+            <div class="notebook-top">
+                <div><span>CASE FILE</span><strong id="caseFileNumber">PT–01</strong></div>
+                <div class="attempts"><span>Accusations</span><strong id="attemptsValue">● ● ●</strong></div>
+            </div>
+            <div class="mystery-card"><span>?</span><div><small>Identity</small><strong>UNKNOWN</strong></div></div>
+            <div class="quanta-message" id="quantaMessage" role="status" aria-live="polite">I found the first piece of evidence. Watch which tiles remain illuminated.</div>
+
+            <section class="evidence-section">
+                <h3>Evidence collected</h3>
+                <ol class="evidence-list" id="evidenceList"></ol>
+            </section>
+
+            <section class="evidence-section">
+                <h3>Choose the next investigation</h3>
+                <div class="evidence-buttons" id="evidenceButtons"></div>
+            </section>
+
+            <div class="case-metrics">
+                <div><span>Possible suspects</span><strong id="suspectCount">118</strong></div>
+                <div><span>Cases solved</span><strong id="solvedCount">0 / 5</strong></div>
+            </div>
+        </aside>
     </section>
 </main>
-<script>
-window.PUZZLE_DATA = {
- slug:"periodic-table",
- challenges:[
-  {id:"mystery-element",icon:"🕵️",title:"Mystery Element",summary:"Identify an element from a trail of clues.",goals:["Electronic configuration clues","Group properties","Element recognition"],rounds:[
-   {question:"Which element matches all three clues?",clue:"I am in Period 3, I have seven valence electrons, and I readily form a −1 ion.",answers:["Sulfur","Chlorine","Argon"],correct:1,hint:"Seven valence electrons place a main-group element in Group 17.",explanation:"Period 3, Group 17 identifies chlorine, which commonly forms Cl⁻."},
-   {question:"Find the hidden element.",clue:"My atomic number is 12. I belong to the s-block and form an M²⁺ ion.",answers:["Sodium","Magnesium","Aluminium"],correct:1,hint:"Write the configuration 1s² 2s² 2p⁶ 3s².",explanation:"Z = 12 is magnesium; its two 3s electrons explain Mg²⁺."},
-   {question:"Which element am I?",clue:"I am a Period 2 p-block element. My valence configuration is 2s² 2p³.",answers:["Carbon","Nitrogen","Oxygen"],correct:1,hint:"Count five valence electrons.",explanation:"The configuration 2s² 2p³ belongs to nitrogen in Group 15."},
-   {question:"Identify the noble stranger.",clue:"I complete the third period and have a filled 3s² 3p⁶ valence shell.",answers:["Chlorine","Argon","Potassium"],correct:1,hint:"A filled valence shell is characteristic of Group 18.",explanation:"Argon ends Period 3 with the stable 3s² 3p⁶ configuration."},
-   {question:"Which element fits the case file?",clue:"I am the first d-block element in Period 4 and my atomic number is 21.",answers:["Calcium","Scandium","Titanium"],correct:1,hint:"The 3d series begins immediately after calcium.",explanation:"Scandium, Z = 21, begins the Period 4 d-block."}
-  ]},
-  {id:"trend-trail",icon:"📈",title:"Trend Trail",summary:"Arrange elements using periodic-property evidence.",goals:["Atomic radius","Ionisation enthalpy","Electronegativity and electron gain"],rounds:[
-   {question:"Choose the correct increasing order of atomic radius.",clue:"Na, Mg and Al lie from left to right in Period 3.",answers:["Na < Mg < Al","Al < Mg < Na","Mg < Al < Na"],correct:1,hint:"Across a period, effective nuclear charge increases while the shell remains the same.",explanation:"Radius decreases across Period 3, so the increasing order is Al < Mg < Na."},
-   {question:"Choose the correct increasing order of first ionisation enthalpy.",clue:"Li, Na and K belong to Group 1.",answers:["Li < Na < K","K < Na < Li","Na < K < Li"],correct:1,hint:"Down a group, size and shielding increase.",explanation:"It becomes easier to remove the outer electron down Group 1: K < Na < Li."},
-   {question:"Which atom is most electronegative?",clue:"Compare C, N and O in Period 2.",answers:["Carbon","Nitrogen","Oxygen"],correct:2,hint:"Electronegativity generally increases from left to right.",explanation:"Oxygen lies farthest right and attracts a shared pair most strongly among these three."},
-   {question:"Which has the larger radius?",clue:"Compare Na and Na⁺, which have the same nucleus but different electron counts.",answers:["Na","Na⁺","They are equal"],correct:0,hint:"The cation loses its outermost electron shell.",explanation:"Na⁺ is smaller; losing the 3s electron removes its outer shell and increases attraction per remaining electron."},
-   {question:"Which statement correctly describes shielding down a group?",clue:"Each new period adds another occupied shell.",answers:["Shielding decreases","Shielding increases","Shielding remains exactly constant"],correct:1,hint:"Inner electrons screen outer electrons from the nucleus.",explanation:"More inner shells produce greater shielding down a group."}
-  ]},
-  {id:"periodic-address",icon:"🧭",title:"Periodic Address Lock",summary:"Recover period, group and block coordinates.",goals:["Period from highest n","Block from differentiating electron","Group from valence configuration"],rounds:[
-   {question:"Locate the element with configuration [Ne] 3s² 3p¹.",clue:"Use the highest principal shell, the final subshell and the valence-electron count.",answers:["Period 3, Group 13, p-block","Period 3, Group 3, p-block","Period 2, Group 13, s-block"],correct:0,hint:"The highest n is 3 and s²p¹ gives three valence electrons.",explanation:"The configuration belongs to aluminium: Period 3, Group 13, p-block."},
-   {question:"What is the periodic address of [Ar] 4s¹?",clue:"The element begins a new period after argon.",answers:["Period 4, Group 1, s-block","Period 4, Group 2, s-block","Period 3, Group 1, p-block"],correct:0,hint:"An outer ns¹ configuration marks Group 1.",explanation:"[Ar] 4s¹ is potassium in Period 4, Group 1, s-block."},
-   {question:"Which block contains an element whose last electron enters a 3d orbital?",clue:"A block is named after the subshell receiving the differentiating electron.",answers:["p-block","d-block","f-block"],correct:1,hint:"The subshell letter supplies the block name.",explanation:"Entry of the last electron into 3d identifies a d-block element."},
-   {question:"An element has valence configuration 4s² 4p⁵. Choose its group and period.",clue:"For a p-block element, ns²np⁵ gives seven valence electrons.",answers:["Period 4, Group 15","Period 4, Group 17","Period 5, Group 17"],correct:1,hint:"Highest n = 4; seven valence electrons correspond to Group 17.",explanation:"The element is in Period 4 and Group 17."},
-   {question:"Where are the lanthanoids placed?",clue:"Their differentiating electrons enter the 4f subshell.",answers:["Period 6, f-block","Period 5, d-block","Period 7, p-block"],correct:0,hint:"The 4f series is associated with Period 6.",explanation:"Lanthanoids form the 4f series within Period 6 and are displayed separately below the table."}
-  ]}
- ]
-};
-</script>
-<script src="../../puzzle-engine.js"></script>
+
+<div class="modal-backdrop" id="feedbackModal" hidden>
+    <section class="feedback-card" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+        <div class="feedback-icon" id="feedbackIcon">🔎</div>
+        <p class="eyebrow dark" id="feedbackLabel">INVESTIGATION UPDATE</p>
+        <h2 id="feedbackTitle">Review the evidence</h2>
+        <p id="feedbackText"></p>
+        <div class="answer-reveal" id="answerReveal" hidden></div>
+        <button class="primary-button" id="feedbackContinue" type="button">Continue investigation</button>
+    </section>
+</div>
+
+<div class="modal-backdrop" id="helpModal" hidden>
+    <section class="feedback-card help-card" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+        <p class="eyebrow dark">Detective briefing</p>
+        <h2 id="helpTitle">How to find the missing element</h2>
+        <ol>
+            <li>Read the first clue. Incompatible element tiles become dim.</li>
+            <li>Choose what kind of evidence Quanta should investigate next.</li>
+            <li>Select any illuminated tile to inspect that element.</li>
+            <li>Accuse the element only when the clues support your decision.</li>
+            <li>A wrong accusation gives comparative evidence. Three incorrect accusations close the case, but you can retry with another mystery.</li>
+        </ol>
+        <button class="primary-button" id="closeHelp" type="button">Start investigating</button>
+    </section>
+</div>
+
+<div class="modal-backdrop" id="finishModal" hidden>
+    <section class="feedback-card finish-card" role="dialog" aria-modal="true" aria-labelledby="finishTitle">
+        <div class="feedback-icon">🏅</div>
+        <p class="eyebrow dark">ALL FIVE CASES SOLVED</p>
+        <h2 id="finishTitle">Periodic detective certified!</h2>
+        <p>You used position, electron configuration, periodic trends, neighbouring elements and chemical behaviour to recover every missing element.</p>
+        <div class="final-score"><span>Correct accusations</span><strong id="correctAccusations">5</strong></div>
+        <button class="primary-button" id="playAgain" type="button">Open five new cases</button>
+        <a href="../">Return to Periodic Table</a>
+    </section>
+</div>
+
+<script src="game.js"></script>
 </body>
 </html>
