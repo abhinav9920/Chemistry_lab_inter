@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WQDH7H44VB"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-WQDH7H44VB");</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Three interactive Chemical Bonding puzzles covering molecular geometry, bond formation and molecular polarity.">
+    <title>Chemical Bonding Puzzles &amp; Challenges</title>
+    <link rel="stylesheet" href="../../puzzle-lab.css">
+</head>
+<body>
+<header class="topbar"><a href="../">← Chemical Bonding</a><span class="mini-progress" id="topProgress">0 mastery stars earned</span></header>
+<main>
+    <section class="game-head">
+        <div><p class="eyebrow">Chemical Bonding • Puzzle Lab</p><h1>Molecular Mission Control</h1><p>Decode shapes, investigate how bonds form and decide whether molecular dipoles cancel.</p></div>
+        <div class="scoreboard" aria-label="Game score"><div class="score-chip"><span>XP</span><strong id="xpValue">0</strong></div><div class="score-chip"><span>Streak</span><strong id="streakValue">0</strong></div><div class="score-chip"><span>Stars</span><strong id="masteryValue">0/9</strong></div></div>
+    </section>
+    <div class="challenge-picker" id="challengePicker" role="tablist" aria-label="Choose a Chemical Bonding challenge"></div>
+    <section class="play-card" id="playArea">
+        <div>
+            <div class="round-line"><span id="roundValue">Round 1 of 5</span><span>Correct answers unlock the next mission</span></div>
+            <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+            <span class="mission-label" id="missionLabel"></span><h2 class="question" id="questionText"></h2><div class="clue" id="clueText"></div><div class="answers" id="answers"></div>
+            <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+            <div class="actions"><button class="btn btn-secondary" id="hintButton" type="button">Use hint −25 XP</button><button class="btn btn-primary" id="nextButton" type="button" disabled>Next mission</button></div>
+        </div>
+        <aside class="side-panel"><h3>What this challenge tests</h3><ul class="goal-list" id="goalList"></ul><div class="hint-box" id="hintBox"></div><p class="mastery-note">Three stars require accurate first attempts. A hint helps you learn but reduces the XP for that round.</p><button class="btn btn-quiet" id="resetProgress" type="button">Reset chapter progress</button></aside>
+    </section>
+</main>
+<script>
+window.PUZZLE_DATA = {
+ slug:"chemical-bonding",
+ challenges:[
+  {id:"geometry-decoder",icon:"🧩",title:"Geometry Decoder",summary:"Use electron pairs to reveal molecular shape.",goals:["VSEPR repulsions","Bond pairs and lone pairs","Hybridisation and shape"],rounds:[
+   {question:"Decode the shape of CH₄.",clue:"Carbon has four bond pairs and no lone pairs around it.",answers:["Tetrahedral, sp³","Trigonal planar, sp²","Square planar, dsp²"],correct:0,hint:"Four electron domains point towards the corners of a tetrahedron.",explanation:"Four equivalent C–H bond pairs give sp³ hybridisation and a tetrahedral shape."},
+   {question:"What molecular shape does NH₃ adopt?",clue:"Nitrogen has three bond pairs and one lone pair.",answers:["Trigonal planar","Trigonal pyramidal","T-shaped"],correct:1,hint:"Begin with a tetrahedral electron-pair arrangement, then hide the lone-pair position.",explanation:"One vertex is occupied by a lone pair, leaving a trigonal-pyramidal molecular shape."},
+   {question:"Why is H₂O bent rather than linear?",clue:"Oxygen carries two bond pairs and two lone pairs.",answers:["Lone-pair repulsions change the visible shape","Hydrogen forms a triple bond","Oxygen is sp hybridised"],correct:0,hint:"Lone pair–lone pair repulsion is stronger than bond pair–bond pair repulsion.",explanation:"Two lone pairs occupy two tetrahedral positions and compress the H–O–H angle, producing a bent shape."},
+   {question:"Decode BF₃ around the boron atom.",clue:"There are three bond pairs and no lone pair on boron.",answers:["Trigonal planar, sp²","Trigonal pyramidal, sp³","Linear, sp"],correct:0,hint:"Three electron domains arrange 120° apart in one plane.",explanation:"BF₃ is trigonal planar around sp²-hybridised boron."},
+   {question:"Which shape belongs to IF₇?",clue:"Seven bond pairs surround iodine with no lone pair in the ideal model.",answers:["Octahedral","Pentagonal bipyramidal","Square pyramidal"],correct:1,hint:"Five positions form an equatorial pentagon and two are axial.",explanation:"Seven bonding domains give a pentagonal-bipyramidal arrangement."}
+  ]},
+  {id:"bond-detective",icon:"🔎",title:"Bond Detective",summary:"Infer the bonding mechanism from chemical evidence.",goals:["Ionic and covalent bonding","Coordinate covalent bonds","Fajan’s rules and hydrogen bonding"],rounds:[
+   {question:"Which description best explains bonding in NaCl?",clue:"Sodium loses one electron and chlorine gains it.",answers:["Electron transfer followed by electrostatic attraction","Equal sharing of one electron pair","Donation of a lone pair into an empty orbital"],correct:0,hint:"The particles produced are Na⁺ and Cl⁻.",explanation:"Oppositely charged ions formed by electron transfer attract to create an ionic lattice."},
+   {question:"How is the new N–H bond formed when NH₃ becomes NH₄⁺?",clue:"NH₃ supplies a lone pair to H⁺.",answers:["Both bonding electrons initially come from nitrogen","One electron comes from N and one from H⁺","An electron is completely transferred to H⁺"],correct:0,hint:"A coordinate bond begins with both electrons supplied by one atom.",explanation:"Nitrogen donates its lone pair to H⁺, forming a coordinate covalent bond."},
+   {question:"Which compound has greater covalent character?",clue:"Compare NaCl with AlCl₃ using the polarising power of the cation.",answers:["NaCl","AlCl₃","Both are identical"],correct:1,hint:"Al³⁺ is smaller and more highly charged than Na⁺.",explanation:"Al³⁺ strongly polarises the chloride electron cloud, so AlCl₃ has greater covalent character."},
+   {question:"What is the main intermolecular attraction between HF molecules?",clue:"Hydrogen is directly bonded to highly electronegative fluorine.",answers:["Hydrogen bonding","Metallic bonding","Ionic bonding"],correct:0,hint:"Look for H bonded to F, O or N.",explanation:"The strongly polar H–F bond enables intermolecular hydrogen bonding."},
+   {question:"Which substance contains a non-polar covalent bond?",clue:"Compare the electronegativities of the two bonded atoms.",answers:["HCl","Cl₂","NaCl"],correct:1,hint:"Identical atoms attract the shared pair equally.",explanation:"The two chlorine atoms have equal electronegativity, so the Cl–Cl bond is non-polar covalent."}
+  ]},
+  {id:"polarity-mission",icon:"🧭",title:"Polarity Mission",summary:"Combine bond polarity with molecular symmetry.",goals:["Bond dipoles","Shape and symmetry","Molecular polarity"],rounds:[
+   {question:"CO₂ has polar C=O bonds. Why is the molecule non-polar?",clue:"The molecule is linear and the two bonds point in opposite directions.",answers:["The equal bond dipoles cancel","Carbon and oxygen have equal electronegativity","CO₂ contains ionic bonds"],correct:0,hint:"Add the two dipole vectors, including their directions.",explanation:"The equal, opposite C=O dipoles cancel in the symmetric linear molecule."},
+   {question:"Is H₂O polar or non-polar?",clue:"Its two O–H bonds are polar and the molecular shape is bent.",answers:["Polar, because the dipoles do not cancel","Non-polar, because there are two identical bonds","Non-polar, because oxygen has lone pairs"],correct:0,hint:"In a bent shape, the two bond dipoles are not opposite.",explanation:"The bond dipoles add to a net molecular dipole, so water is polar."},
+   {question:"Why is BF₃ non-polar despite polar B–F bonds?",clue:"Its three bonds are equivalent and separated by 120° in a trigonal plane.",answers:["Its symmetric dipoles cancel","B–F bonds have no dipole","Boron transfers three electrons completely"],correct:0,hint:"Consider the vector sum in a symmetric trigonal-planar shape.",explanation:"The three equal B–F dipoles cancel because of trigonal-planar symmetry."},
+   {question:"Which molecule is expected to have a net dipole?",clue:"Compare tetrahedral CH₄ with trigonal-pyramidal NH₃.",answers:["CH₄ only","NH₃ only","Both must be non-polar"],correct:1,hint:"A lone pair makes the NH₃ shape asymmetric.",explanation:"NH₃ has a net dipole; CH₄’s four identical bond dipoles cancel in its symmetric tetrahedron."},
+   {question:"Which change turns a symmetric non-polar molecule into a polar one?",clue:"Compare CH₄ with CH₃Cl; both are tetrahedral, but their outer atoms differ.",answers:["Replacing one H of CH₄ with Cl","Rotating the whole CH₄ molecule","Drawing CH₄ at a different scale"],correct:0,hint:"Dipole cancellation depends on both geometry and identical surrounding atoms.",explanation:"CH₃Cl lacks the complete symmetry of CH₄, so its bond dipoles do not cancel."}
+  ]}
+ ]
+};
+</script>
+<script src="../../puzzle-engine.js"></script>
+</body>
+</html>
