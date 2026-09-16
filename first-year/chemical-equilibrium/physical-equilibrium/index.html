@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WQDH7H44VB"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-WQDH7H44VB");</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="Observe solid-vapour, liquid-vapour and solid-liquid dynamic physical equilibrium.">
+  <title>Physical Equilibrium Lab | Chemical Equilibrium</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar"><a href="../">← Chemical Equilibrium</a><button id="helpButton" type="button">How to use</button></header>
+<main>
+  <section class="intro">
+    <div><p class="eyebrow">Chemical Equilibrium • Interactive Lab</p><h1>Physical Equilibrium Lab</h1><p>Watch opposing physical processes continue until their rates become equal.</p></div>
+    <div class="principle"><span>Dynamic equilibrium</span><strong>Forward rate = Reverse rate</strong><small>Amounts become constant—not necessarily equal.</small></div>
+  </section>
+
+  <nav class="phenomenon-tabs" id="phenomenonTabs" aria-label="Choose a physical equilibrium">
+    <button class="active" data-system="solid-vapour" type="button"><span>◆ ⇌ ●</span><b>Solid ⇌ Vapour</b><small>Sublimation / Deposition</small></button>
+    <button data-system="liquid-vapour" type="button"><span>≈ ⇌ ●</span><b>Liquid ⇌ Vapour</b><small>Vaporization / Condensation</small></button>
+    <button data-system="solid-liquid" type="button"><span>◆ ⇌ ≈</span><b>Solid ⇌ Liquid</b><small>Melting / Freezing</small></button>
+  </nav>
+
+  <section class="lab-grid">
+    <div class="panel visual-panel">
+      <div class="visual-heading"><div><p id="systemLabel">SOLID ⇌ VAPOUR</p><h2 id="systemTitle">Sublimation–Deposition Equilibrium</h2></div><div class="status waiting" id="equilibriumStatus"><i></i><span>Ready to begin</span></div></div>
+      <div class="chamber" id="chamber"><canvas id="particleCanvas" aria-label="Particle view of physical equilibrium"></canvas><div class="phase-label phase-a" id="phaseALabel">Solid</div><div class="phase-label phase-b" id="phaseBLabel">Vapour</div><div class="exchange-label forward" id="forwardFlash">Sublimation ↑</div><div class="exchange-label reverse" id="reverseFlash">Deposition ↓</div></div>
+      <p class="observation" id="observation">Initially, solid particles sublime while very few vapour particles are available for deposition.</p>
+    </div>
+
+    <aside class="panel control-panel">
+      <div class="control-group"><h3>Run the experiment</h3><div class="button-row"><button class="primary" id="runButton" type="button">▶ Start</button><button id="resetButton" type="button">↺ Reset</button></div></div>
+      <div class="control-group"><div class="label-row"><h3>Simulation speed</h3><strong id="speedValue">Normal</strong></div><div class="segmented" id="speedButtons"><button data-speed="0.55" type="button">Slow</button><button class="active" data-speed="1" type="button">Normal</button><button data-speed="1.8" type="button">Fast</button></div></div>
+      <div class="control-group"><div class="label-row"><h3>Temperature</h3><strong id="temperatureValue">Reference</strong></div><div class="segmented temperature" id="temperatureButtons"><button data-temperature="cool" type="button">Cooler</button><button class="active" data-temperature="reference" type="button">Reference</button><button data-temperature="warm" type="button">Warmer</button></div><p class="control-note" id="temperatureNote">At the reference temperature, both phases can establish dynamic equilibrium.</p></div>
+      <button class="disturb" id="disturbButton" type="button">⚡ Disturb the equilibrium</button>
+      <div class="sample-card"><span>Closed system</span><strong id="sampleName">Iodine-like solid and vapour</strong><p id="sampleEquation">Solid ⇌ Vapour</p></div>
+    </aside>
+  </section>
+
+  <section class="measurement-grid">
+    <div class="panel rate-panel">
+      <div class="section-heading"><div><p>LIVE PROCESS RATES</p><h2>Are the opposing rates equal?</h2></div><span>simulated events s⁻¹</span></div>
+      <div class="rate-cards">
+        <article class="rate-card forward-rate"><div><span>Forward process</span><h3 id="forwardName">Sublimation</h3></div><strong id="forwardRate">0.0</strong><div class="meter"><i id="forwardMeter"></i></div></article>
+        <div class="balance" id="balance"><span>≠</span><small>Not equal</small></div>
+        <article class="rate-card reverse-rate"><div><span>Reverse process</span><h3 id="reverseName">Deposition</h3></div><strong id="reverseRate">0.0</strong><div class="meter"><i id="reverseMeter"></i></div></article>
+      </div>
+    </div>
+
+    <div class="panel amount-panel">
+      <div class="section-heading"><div><p>PHASE AMOUNTS</p><h2>Particles in each phase</h2></div><span>Total: <b id="totalParticles">60</b></span></div>
+      <div class="amount-row"><span class="swatch phase-a-swatch"></span><b id="amountAName">Solid</b><div class="amount-track"><i id="amountABar"></i></div><strong id="amountA">60</strong></div>
+      <div class="amount-row"><span class="swatch phase-b-swatch"></span><b id="amountBName">Vapour</b><div class="amount-track"><i id="amountBBar"></i></div><strong id="amountB">0</strong></div>
+      <p id="amountMessage">The amounts will change until the two process rates become equal.</p>
+    </div>
+  </section>
+
+  <section class="graphs-grid">
+    <div class="panel graph-card"><div class="graph-title"><div><p>RATE GRAPH</p><h2>Forward and reverse rates</h2></div><div class="mini-legend"><span><i class="forward-dot"></i>Forward</span><span><i class="reverse-dot"></i>Reverse</span></div></div><canvas id="rateCanvas" aria-label="Forward and reverse rates over time"></canvas></div>
+    <div class="panel graph-card"><div class="graph-title"><div><p>AMOUNT GRAPH</p><h2>Amounts of the two phases</h2></div><div class="mini-legend"><span><i class="phase-a-dot"></i><b id="amountLegendA">Solid</b></span><span><i class="phase-b-dot"></i><b id="amountLegendB">Vapour</b></span></div></div><canvas id="amountCanvas" aria-label="Amounts of both phases over time"></canvas></div>
+  </section>
+
+  <section class="panel learning-panel"><h2>What should you notice?</h2><div class="learning-grid"><div><span>1</span><p><b>At the beginning</b>The forward and reverse rates are different, so phase amounts change.</p></div><div><span>2</span><p><b>At equilibrium</b>The two rates become equal and the macroscopic amounts become constant.</p></div><div><span>3</span><p><b>Equilibrium is dynamic</b>Particles continue changing phase in both directions even though no overall change is visible.</p></div></div></section>
+</main>
+
+<div class="modal" id="helpModal" hidden><section role="dialog" aria-modal="true" aria-labelledby="helpTitle"><p class="eyebrow dark">Experiment guide</p><h2 id="helpTitle">How to use the Physical Equilibrium Lab</h2><ol><li>Select one of the three physical equilibria.</li><li>Press Start and compare the live forward and reverse rates.</li><li>Watch the rate graph and phase-amount graph together.</li><li>After equilibrium forms, change the temperature or press Disturb.</li><li>Notice that particles still exchange when the amounts appear constant.</li></ol><button class="primary" id="closeHelp" type="button">Begin experiment</button></section></div>
+<script src="simulation.js"></script>
+</body>
+</html>
