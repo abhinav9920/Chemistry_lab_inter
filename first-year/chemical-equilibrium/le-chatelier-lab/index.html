@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WQDH7H44VB"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-WQDH7H44VB");</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="Explore concentration, pressure, volume, temperature, catalyst and inert-gas effects on equilibrium.">
+  <title>Le Chatelier's Principle Lab | Chemical Equilibrium</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar"><a href="../">← Chemical Equilibrium</a><button id="helpButton" type="button">How to investigate</button></header>
+<main>
+  <section class="hero">
+    <div><p class="eyebrow">Chemical Equilibrium • Interactive Simulation</p><h1>Le Chatelier’s Principle Lab</h1><p>Apply one external stress, watch the immediate imbalance, and follow the system until a new equilibrium forms.</p></div>
+    <div class="principle"><span>Le Chatelier’s principle</span><strong>The system opposes an applied change.</strong><small>It reduces the stress; it does not necessarily cancel it completely.</small></div>
+  </section>
+
+  <section class="reaction-strip">
+    <span class="reaction-label">MODEL REACTION</span>
+    <div class="reaction"><b class="species-a">A(g)</b><span>+</span><b class="species-b">2B(g)</b><div class="equilibrium-arrows" id="reactionArrows"><i>⇌</i></div><b class="species-c">C(g)</b><span>+</span><b class="heat">Heat</b></div>
+    <p>Forward reaction: exothermic • Left side: 3 gaseous particles • Right side: 1 gaseous particle</p>
+  </section>
+
+  <nav class="factor-tabs" id="factorTabs" aria-label="Choose an equilibrium factor">
+    <button class="active" data-factor="concentration" type="button"><span>1</span><b>Concentration</b><small>Add or remove a species</small></button>
+    <button data-factor="pressure" type="button"><span>2</span><b>Pressure &amp; Volume</b><small>Compress or expand</small></button>
+    <button data-factor="temperature" type="button"><span>3</span><b>Temperature</b><small>Add or remove heat</small></button>
+    <button data-factor="no-shift" type="button"><span>4</span><b>No-shift Cases</b><small>Catalyst and inert gas</small></button>
+  </nav>
+
+  <section class="lab-layout">
+    <div class="visual-stack">
+      <section class="panel vessel-panel">
+        <div class="panel-heading"><div><p>REACTION VESSEL</p><h2 id="vesselTitle">Change the concentration</h2></div><div class="equilibrium-status stable" id="equilibriumStatus"><i></i><span>At equilibrium</span></div></div>
+        <div class="vessel" id="vessel"><canvas id="particleCanvas" aria-label="Particles responding to an equilibrium stress"></canvas><div class="piston" id="piston"><span>Movable piston</span></div><div class="temperature-badge" id="temperatureBadge">Reference temperature</div><div class="catalyst-badge" id="catalystBadge" hidden>⚡ Catalyst present</div></div>
+        <div class="particle-legend"><span><i class="a-dot"></i>Reactant A</span><span><i class="b-dot"></i>Reactant B</span><span><i class="c-dot"></i>Product C</span><span><i class="inert-dot"></i>Inert gas</span></div>
+      </section>
+
+      <section class="panel shift-panel">
+        <div class="shift-scale"><div class="side left"><b>Favours reactants</b><span>A + 2B</span></div><div class="track"><i id="positionMarker"></i><span class="track-left">←</span><span class="track-centre">Equilibrium position</span><span class="track-right">→</span></div><div class="side right"><b>Favours products</b><span>C + heat</span></div></div>
+        <div class="shift-announcement neutral" id="shiftAnnouncement"><span>⇌</span><div><small>SYSTEM RESPONSE</small><strong>Equilibrium has not shifted</strong><p>Choose a change to disturb the system.</p></div></div>
+      </section>
+    </div>
+
+    <aside class="panel controls-panel">
+      <div class="factor-panel active" data-panel="concentration">
+        <p class="step-label">CONCENTRATION</p><h2>Change one species</h2><p class="instruction">Adding a substance makes the system consume some of it. Removing a substance makes the system replace some of it.</p>
+        <div class="species-controls"><div><b>A</b><button data-action="remove-a" type="button">− Remove</button><button data-action="add-a" type="button">+ Add</button></div><div><b>B</b><button data-action="remove-b" type="button">− Remove</button><button data-action="add-b" type="button">+ Add</button></div><div><b>C</b><button data-action="remove-c" type="button">− Remove</button><button data-action="add-c" type="button">+ Add</button></div></div>
+      </div>
+      <div class="factor-panel" data-panel="pressure">
+        <p class="step-label">PRESSURE &amp; VOLUME</p><h2>Move the piston</h2><p class="instruction">For a gaseous equilibrium, increasing pressure favours the side containing fewer gaseous particles.</p>
+        <div class="large-actions"><button data-action="compress" type="button"><span>⇩</span><b>Compress</b><small>Volume ↓ • Pressure ↑</small></button><button data-action="expand" type="button"><span>⇧</span><b>Expand</b><small>Volume ↑ • Pressure ↓</small></button></div>
+        <div class="mole-comparison"><div><span>Left side</span><strong>3 gas particles</strong></div><div><span>Right side</span><strong>1 gas particle</strong></div></div>
+      </div>
+      <div class="factor-panel" data-panel="temperature">
+        <p class="step-label">TEMPERATURE</p><h2>Treat heat as a substance</h2><p class="instruction">The forward reaction is exothermic, so heat appears on the product side of the model equation.</p>
+        <div class="large-actions"><button data-action="cool" type="button"><span>❄</span><b>Cool system</b><small>Remove heat</small></button><button data-action="heat" type="button"><span>♨</span><b>Heat system</b><small>Add heat</small></button></div>
+      </div>
+      <div class="factor-panel" data-panel="no-shift">
+        <p class="step-label">COMMON MISCONCEPTIONS</p><h2>Changes that may not shift equilibrium</h2><p class="instruction">A catalyst changes how quickly equilibrium is reached. An inert gas has different effects depending on the condition.</p>
+        <div class="no-shift-actions"><button data-action="catalyst" type="button"><b>⚡ Add catalyst</b><small>Speeds both reactions equally</small></button><button data-action="inert-volume" type="button"><b>● Inert gas at constant volume</b><small>Partial pressures do not change</small></button><button data-action="inert-pressure" type="button"><b>● Inert gas at constant pressure</b><small>Volume expands</small></button></div>
+      </div>
+      <div class="action-footer"><button id="resetButton" type="button">↺ Reset equilibrium</button><label>Animation speed<select id="speedSelect"><option value="0.7">Slow</option><option value="1" selected>Normal</option><option value="1.6">Fast</option></select></label></div>
+      <div class="teacher-note" id="factorRule"><b>Rule:</b> Adding a reactant shifts equilibrium towards products; removing it shifts equilibrium towards reactants.</div>
+    </aside>
+  </section>
+
+  <section class="evidence-grid">
+    <section class="panel process-panel"><div class="panel-heading"><div><p>THREE-STAGE EXPLANATION</p><h2>How the system responds</h2></div></div><div class="response-flow"><article class="active" id="stageStress"><span>1</span><div><b>External stress</b><p id="stressText">No stress applied</p></div></article><i>→</i><article id="stageImbalance"><span>2</span><div><b>Immediate imbalance</b><p id="imbalanceText">Forward and reverse rates are equal</p></div></article><i>→</i><article id="stageResponse"><span>3</span><div><b>New equilibrium</b><p id="responseText">Composition is constant</p></div></article></div></section>
+    <section class="panel rates-panel"><div class="panel-heading"><div><p>LIVE RATES</p><h2>Forward versus reverse</h2></div><span>simulated events s⁻¹</span></div><div class="rate-row"><b>Forward →</b><div><i id="forwardBar"></i></div><strong id="forwardRate">4.0</strong></div><div class="rate-row"><b>← Reverse</b><div><i id="reverseBar"></i></div><strong id="reverseRate">4.0</strong></div><p id="rateMessage">Equal rates maintain dynamic equilibrium.</p></section>
+  </section>
+
+  <section class="data-grid">
+    <section class="panel composition-panel"><div class="panel-heading"><div><p>COMPOSITION</p><h2>Amounts in the vessel</h2></div><span id="volumeReadout">Volume: 1.00 V</span></div><div class="composition-cards"><div class="a-card"><span>A</span><strong id="amountA">16.0</strong><div><i id="barA"></i></div></div><div class="b-card"><span>B</span><strong id="amountB">32.0</strong><div><i id="barB"></i></div></div><div class="c-card"><span>C</span><strong id="amountC">16.0</strong><div><i id="barC"></i></div></div></div></section>
+    <section class="panel graph-panel"><div class="panel-heading"><div><p>COMPOSITION HISTORY</p><h2>Before and after the stress</h2></div><div class="graph-legend"><span><i class="a-dot"></i>A</span><span><i class="b-dot"></i>B</span><span><i class="c-dot"></i>C</span></div></div><canvas id="historyCanvas" aria-label="Composition changing after a stress"></canvas></section>
+  </section>
+
+  <section class="panel summary-panel"><h2>Le Chatelier’s principle summary for this model</h2><div class="summary-grid"><div><b>Concentration</b><p>Add reactant → right. Add product → left. Removal produces the opposite response.</p></div><div><b>Pressure/volume</b><p>Compression → fewer gas particles (right). Expansion → more gas particles (left).</p></div><div><b>Temperature</b><p>Heating an exothermic equilibrium → left. Cooling → right.</p></div><div><b>Catalyst</b><p>Both reaction rates increase equally. Equilibrium position and composition do not change.</p></div></div></section>
+</main>
+
+<div class="modal" id="helpModal" hidden><section role="dialog" aria-modal="true" aria-labelledby="helpTitle"><p class="eyebrow dark">Investigation guide</p><h2 id="helpTitle">Follow the disturbance in three stages</h2><ol><li>Select a factor tab.</li><li>Apply one change and watch the large shift arrow.</li><li>Compare the forward and reverse rate bars immediately after the change.</li><li>Follow the composition marker and graph until a new equilibrium is established.</li><li>Reset before comparing a different factor.</li></ol><button id="closeHelp" type="button">Start investigating</button></section></div>
+<script src="simulation.js"></script>
+</body>
+</html>
